@@ -7,6 +7,20 @@
   "errors": {
     "invalidEmail": "Invalid email address."
   },
+  "searchScreen": {
+    "title": "Search",
+    "searchField": {
+      "label": "label",
+      "placeholder": "Placeholder"
+    },
+    "noResults": "",
+    "canEvolveInto": ""
+  },
+  "infoScreen": {
+    "version": "",
+    "developer": "",
+    "projectPage": ""
+  },
   "welcomeScreen": {
     "poweredBy": "POWERED BY IGNITE",
     "readyForLaunch": "Ready for launch.",
