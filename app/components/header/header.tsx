@@ -4,7 +4,7 @@ import { HeaderProps } from "./header.props"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import { Icon } from "../icon/icon"
-import { spacing } from "../../theme"
+import { spacing, color } from "../../theme"
 import { translate } from "../../i18n/"
 
 // static styles
@@ -20,6 +20,7 @@ const TITLE: TextStyle = { textAlign: "center" }
 const TITLE_MIDDLE: ViewStyle = { flex: 1, justifyContent: "center" }
 const LEFT: ViewStyle = { width: 32 }
 const RIGHT: ViewStyle = { width: 32 }
+const ICON: ImageStyle = { tintColor: color.palette.white }
 
 /**
  * Header that appears on many screens. Will hold navigation buttons and screen title.
@@ -41,7 +42,7 @@ export function Header(props: HeaderProps) {
     <View style={[ROOT, style]}>
       {leftIcon ? (
         <Button preset="link" onPress={onLeftPress}>
-          <Icon icon={leftIcon} />
+          <Icon icon={leftIcon} style={ICON} />
         </Button>
       ) : (
         <View style={LEFT} />

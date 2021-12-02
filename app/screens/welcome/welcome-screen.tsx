@@ -42,7 +42,7 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
       <View testID="WelcomeScreen" style={FULL}>
         {/* <GradientBackground colors={["#422443", "#281b34"]} /> */}
         <Screen style={CONTAINER} preset="fixed" backgroundColor={color.palette.black}>
-          <Header headerTx="welcomeScreen.title" style={HEADER} titleStyle={HEADER_TITLE} />
+          <Header headerTx="welcomeScreen.title" style={HEADER} titleStyle={HEADER_TITLE} leftIcon="menu" onPressLeft={() => navigation.toggleDrawer()} />
         </Screen>
       </View>
     )
