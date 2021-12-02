@@ -11,7 +11,7 @@ const ROOT: ViewStyle = {
   flex: 1,
 }
 
-export const InfoScreen = observer(function InfoScreen() {
+export const AboutScreen = observer(function AboutScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
 

@@ -1,12 +1,10 @@
 import React, { FC } from "react"
-import { View, ViewStyle, TextStyle, SafeAreaView } from "react-native"
+import { View, ViewStyle, TextStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
   Header,
   Screen,
-  Text,
-  GradientBackground,
 } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
@@ -42,7 +40,7 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
       <View testID="WelcomeScreen" style={FULL}>
         {/* <GradientBackground colors={["#422443", "#281b34"]} /> */}
         <Screen style={CONTAINER} preset="fixed" backgroundColor={color.palette.black}>
-          <Header headerTx="welcomeScreen.title" style={HEADER} titleStyle={HEADER_TITLE} leftIcon="menu" onPressLeft={() => navigation.toggleDrawer()} />
+          <Header headerTx="welcomeScreen.title" style={HEADER} titleStyle={HEADER_TITLE} leftIcon="menu" onLeftPress={() => navigation.navigate('about')} />
         </Screen>
       </View>
     )
