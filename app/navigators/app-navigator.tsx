@@ -8,9 +8,8 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { WelcomeScreen, DemoScreen, DemoListScreen, SearchScreen, InfoScreen } from "../screens"
+import { WelcomeScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
-import { color } from "../theme"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -26,10 +25,6 @@ import { color } from "../theme"
  */
 export type NavigatorParamList = {
   welcome: undefined
-  demo: undefined
-  demoList: undefined
-  search: undefined
-  info: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -41,17 +36,9 @@ const AppStack = () => {
       screenOptions={{
         headerShown: false
       }}
-      initialRouteName="search"
+      initialRouteName="welcome"
     >
-      <Stack.Group>
-        <Stack.Screen name="search" component={SearchScreen} />
-      </Stack.Group>
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="info" component={InfoScreen} />
-      </Stack.Group>
       <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-      <Stack.Screen name="demoList" component={DemoListScreen} />
     </Stack.Navigator>
   )
 }
