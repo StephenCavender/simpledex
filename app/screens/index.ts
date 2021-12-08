@@ -1,4 +1,5 @@
-export * from "./welcome/welcome-screen"
 export * from "./error/error-boundary"
 // export other screens here
 export * from "./about/about-screen"
+export * from "./evolutions/evolutions-screen"
+export * from "./locations/locations-screen"

@@ -8,7 +8,7 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { WelcomeScreen, AboutScreen } from "../screens"
+import { EvolutionsScreen, LocationsScreen, AboutScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
 
 /**
@@ -24,7 +24,8 @@ import { navigationRef } from "./navigation-utilities"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type NavigatorParamList = {
-  welcome: undefined
+  evolutions: undefined
+  locations: undefined
   about: undefined
 }
 
@@ -37,9 +38,10 @@ const AppStack = () => {
       screenOptions={{
         headerShown: false
       }}
-      initialRouteName="welcome"
+      initialRouteName="evolutions"
     >
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
+      <Stack.Screen name="evolutions" component={EvolutionsScreen} />
+      <Stack.Screen name="locations" component={LocationsScreen} />
       <Stack.Screen name="about" component={AboutScreen} screenOptions={{ presentation: "modal" }} />
     </Stack.Navigator>
   )
