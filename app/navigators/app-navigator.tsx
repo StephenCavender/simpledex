@@ -7,9 +7,26 @@
 import React from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { EvolutionsScreen, LocationsScreen, AboutScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
+
+export type TabParamList = {
+  evolutions: undefined
+  locations: undefined
+}
+
+const Tab = createBottomTabNavigator<TabParamList>()
+
+const AppTabs = () => {
+  return (
+    <Tab.Navigator screenOptions={{ headerShown: false }}>
+      <Tab.Screen name="evolutions" component={EvolutionsScreen} />
+      <Tab.Screen name="locations" component={LocationsScreen} />
+    </Tab.Navigator>
+  )
+}
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -23,26 +40,24 @@ import { navigationRef } from "./navigation-utilities"
  *   https://reactnavigation.org/docs/params/
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
-export type NavigatorParamList = {
-  evolutions: undefined
-  locations: undefined
+export type StackParamList = {
+  tabs: undefined
   about: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createNativeStackNavigator<NavigatorParamList>()
+const Stack = createNativeStackNavigator<StackParamList>()
 
 const AppStack = () => {
   return (
     <Stack.Navigator
+      initialRouteName="tabs"
       screenOptions={{
-        headerShown: false
+        headerTitle: "SimpleDex",
       }}
-      initialRouteName="evolutions"
     >
-      <Stack.Screen name="evolutions" component={EvolutionsScreen} />
-      <Stack.Screen name="locations" component={LocationsScreen} />
-      <Stack.Screen name="about" component={AboutScreen} screenOptions={{ presentation: "modal" }} />
+      <Stack.Screen name="tabs" component={AppTabs} />
+      <Stack.Screen name="about" component={AboutScreen} />
     </Stack.Navigator>
   )
 }
