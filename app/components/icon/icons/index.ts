@@ -6,6 +6,8 @@ export const icons = {
   chevronLeft: require("./chevronLeft.png"),
   chevronRight: require("./chevronRight.png"),
   x: require("./x.png"),
+  shuffle: require("./shuffle.png"),
+  search: require("./search.png")
 }
 
 export type IconTypes = keyof typeof icons
