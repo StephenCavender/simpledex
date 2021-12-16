@@ -11,6 +11,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { EvolutionsScreen, LocationsScreen, AboutScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
+import { Header } from "../components";
 
 export type TabParamList = {
   evolutions: undefined
@@ -53,7 +54,7 @@ const AppStack = () => {
     <Stack.Navigator
       initialRouteName="tabs"
       screenOptions={{
-        headerTitle: "SimpleDex",
+        header: () => ( <Header /> )
       }}
     >
       <Stack.Screen name="tabs" component={AppTabs} />

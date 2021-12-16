@@ -1,5 +1,5 @@
 import React from "react"
-import { View, ViewStyle, TextStyle } from "react-native"
+import { View, ViewStyle, TextStyle, ImageStyle } from "react-native"
 import { HeaderProps } from "./header.props"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
@@ -9,54 +9,55 @@ import { translate } from "../../i18n/"
 
 // static styles
 const ROOT: ViewStyle = {
+  paddingTop: spacing[7],
+  paddingBottom: spacing[5],
+  backgroundColor: color.background,
+}
+const ROW: ViewStyle = {
   flexDirection: "row",
   paddingHorizontal: spacing[4],
   alignItems: "center",
-  paddingTop: spacing[5],
-  paddingBottom: spacing[5],
   justifyContent: "flex-start",
+}
+const SELECTOR: ViewStyle = {
+  marginTop: spacing[2]
 }
 const TITLE: TextStyle = { textAlign: "center" }
 const TITLE_MIDDLE: ViewStyle = { flex: 1, justifyContent: "center" }
-const LEFT: ViewStyle = { width: 32 }
 const RIGHT: ViewStyle = { width: 32 }
-const ICON: ImageStyle = { tintColor: color.palette.white }
+const ICON: ImageStyle = { tintColor: color.text }
+const SELECTOR_ICON: ImageStyle = { width: 20 }
 
-/**
- * Header that appears on many screens. Will hold navigation buttons and screen title.
- */
-export function Header(props: HeaderProps) {
-  const {
-    onLeftPress,
-    onRightPress,
-    rightIcon,
-    leftIcon,
-    headerText,
-    headerTx,
-    style,
-    titleStyle,
-  } = props
-  const header = headerText || (headerTx && translate(headerTx)) || ""
+export function Header() {
 
   return (
-    <View style={[ROOT, style]}>
-      {leftIcon ? (
-        <Button preset="link" onPress={onLeftPress}>
-          <Icon icon={leftIcon} style={ICON} />
+    <View style={ROOT}>
+      <View style={ROW}>
+        <Button preset="link" onPress={null}>
+          <Icon icon="menu" style={ICON} />
         </Button>
-      ) : (
-        <View style={LEFT} />
-      )}
-      <View style={TITLE_MIDDLE}>
-        <Text style={[TITLE, titleStyle]} text={header} />
-      </View>
-      {rightIcon ? (
-        <Button preset="link" onPress={onRightPress}>
-          <Icon icon={rightIcon} />
-        </Button>
-      ) : (
+        <View style={TITLE_MIDDLE}>
+          <Text style={TITLE} text="SimpleDex" />
+        </View>
         <View style={RIGHT} />
-      )}
+      </View>
+      <View style={[ROW, SELECTOR]}>
+        <Button preset="link" onPress={null}>
+          <Icon icon="search" style={[ICON, SELECTOR_ICON]} />
+        </Button>
+        <Button preset="link" onPress={null}>
+          <Icon icon="chevronLeft" style={[ICON, SELECTOR_ICON]} />
+        </Button>
+        <View style={TITLE_MIDDLE}>
+          <Text style={TITLE} text="poke" />
+        </View>
+        <Button preset="link" onPress={null}>
+          <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON]} />
+        </Button>
+        <Button preset="link" onPress={null}>
+          <Icon icon="shuffle" style={[ICON, SELECTOR_ICON]} />
+        </Button>
+      </View>
     </View>
   )
 }
