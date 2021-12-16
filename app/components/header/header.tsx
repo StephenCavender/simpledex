@@ -1,11 +1,11 @@
 import React from "react"
 import { View, ViewStyle, TextStyle, ImageStyle } from "react-native"
-import { HeaderProps } from "./header.props"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import { Icon } from "../icon/icon"
 import { spacing, color } from "../../theme"
-import { translate } from "../../i18n/"
+import { observer } from "mobx-react-lite"
+import { useStores } from "../../models"
 
 // static styles
 const ROOT: ViewStyle = {
@@ -28,7 +28,9 @@ const RIGHT: ViewStyle = { width: 32 }
 const ICON: ImageStyle = { tintColor: color.text }
 const SELECTOR_ICON: ImageStyle = { width: 20 }
 
-export function Header() {
+export const Header = observer(function Header() {
+  const { speciesStore } = useStores()
+  const { selectedSpecies } = speciesStore
 
   return (
     <View style={ROOT}>
@@ -49,7 +51,7 @@ export function Header() {
           <Icon icon="chevronLeft" style={[ICON, SELECTOR_ICON]} />
         </Button>
         <View style={TITLE_MIDDLE}>
-          <Text style={TITLE} text="poke" />
+          <Text style={TITLE} text={selectedSpecies} />
         </View>
         <Button preset="link" onPress={null}>
           <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON]} />
@@ -60,4 +62,4 @@ export function Header() {
       </View>
     </View>
   )
-}
+})

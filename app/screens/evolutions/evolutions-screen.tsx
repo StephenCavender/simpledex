@@ -28,6 +28,10 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
     fetchData()
   }, [])
 
+  const select = (species: string) => {
+    speciesStore.select(species)
+  }
+
   const onChangeText = debounce((filter: string) => {
     setFilteredSpecies(species.filter((species: Species) =>
       species.name.toLowerCase().includes(filter.toLowerCase())
@@ -35,7 +39,8 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
   )}, 500)
 
   const renderItem = ({item}) => (
-    <Pressable onPress={() => alert(`clicked on ${item.name}`)}>
+    // TODO: try button
+    <Pressable onPress={() => select(item.name)}>
       <Text>{item.name}</Text>
     </Pressable>
   )

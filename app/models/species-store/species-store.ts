@@ -9,13 +9,17 @@ import { SpeciesModel, SpeciesSnapshot } from "../species/species"
 export const SpeciesStoreModel = types
   .model("SpeciesStore")
   .props({
-    species: types.optional(types.array(SpeciesModel), [])
+    species: types.optional(types.array(SpeciesModel), []),
+    selectedSpecies: types.optional(types.string, "")
   })
   .extend(withEnvironment)
   .actions((self) => ({
     save: (speciesSnapshot: SpeciesSnapshot[]) => {
       self.species.replace(speciesSnapshot)
     },
+    select: (species: string) => {
+      self.selectedSpecies = species
+    }
   }))
   .actions((self) => ({
     get: async () => {
