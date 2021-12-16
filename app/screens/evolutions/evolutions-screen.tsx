@@ -1,10 +1,12 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, ViewStyle } from "react-native"
+import { FlatList, Pressable, ViewStyle } from "react-native"
 import { Screen, Text, TextField } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../models"
 import { color } from "../../theme"
+import { debounce } from "lodash"
+import { Species } from "../../models/species/species"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
@@ -16,6 +18,8 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
   const { speciesStore } = useStores()
   const { species } = speciesStore
 
+  const [filteredSpecies, setFilteredSpecies] = useState([])
+
   useEffect(() => {
     async function fetchData() {
       await speciesStore.get()
@@ -24,15 +28,29 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
     fetchData()
   }, [])
 
+  const onChangeText = debounce((filter: string) => {
+    setFilteredSpecies(species.filter((species: Species) =>
+      species.name.toLowerCase().includes(filter.toLowerCase())
+    )
+  )}, 500)
+
+  const renderItem = ({item}) => (
+    <Pressable onPress={() => alert(`clicked on ${item.name}`)}>
+      <Text>{item.name}</Text>
+    </Pressable>
+  )
+
   // Pull in navigation via hook
   // const navigation = useNavigation()
   return (
     <Screen style={ROOT} preset="fixed">
-      <Text preset="header" text="asdf" />
-      <TextField placeholder="Pika" />
+      <TextField
+        placeholder="Pika"
+        onChangeText={onChangeText}
+        autoCapitalize="none" />
       <FlatList
-        data={[...species]}
-        renderItem={({item}) => <Text>{item.name}</Text>} />
+        data={[...filteredSpecies]}
+        renderItem={renderItem} />
     </Screen>
   )
 })
