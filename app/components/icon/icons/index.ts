@@ -7,7 +7,9 @@ export const icons = {
   chevronRight: require("./chevronRight.png"),
   x: require("./x.png"),
   shuffle: require("./shuffle.png"),
-  search: require("./search.png")
+  search: require("./search.png"),
+  refreshCw: require("./refresh-cw.png"),
+  mapPin: require("./map-pin.png")
 }
 
 export type IconTypes = keyof typeof icons

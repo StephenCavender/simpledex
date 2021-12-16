@@ -11,7 +11,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { EvolutionsScreen, LocationsScreen, AboutScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
-import { Header } from "../components";
+import { Header, Icon } from "../components";
+import { color } from "../theme"
 
 export type TabParamList = {
   evolutions: undefined
@@ -22,9 +23,20 @@ const Tab = createBottomTabNavigator<TabParamList>()
 
 const AppTabs = () => {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
-      <Tab.Screen name="evolutions" component={EvolutionsScreen} />
-      <Tab.Screen name="locations" component={LocationsScreen} />
+    <Tab.Navigator screenOptions={{
+      headerShown: false,
+      tabBarStyle: { backgroundColor: color.background },
+      tabBarActiveTintColor: color.primary }}>
+      <Tab.Screen
+        name="evolutions"
+        component={EvolutionsScreen}
+        options={{
+          tabBarIcon: ({color}) => (<Icon icon="refreshCw" style={{ tintColor: color, width: 24 }} />)}}/>
+      <Tab.Screen
+        name="locations"
+        component={LocationsScreen}
+        options={{
+          tabBarIcon: ({color}) => (<Icon icon="mapPin" style={{ tintColor: color, width: 24 }} />)}}/>
     </Tab.Navigator>
   )
 }
