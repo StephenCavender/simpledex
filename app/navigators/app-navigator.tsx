@@ -8,7 +8,6 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { EvolutionsScreen, LocationsScreen, AboutScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
 import { Header, Icon } from "../components";
@@ -17,6 +16,7 @@ import { color } from "../theme"
 export type TabParamList = {
   evolutions: undefined
   locations: undefined
+  about: undefined
 }
 
 const Tab = createBottomTabNavigator<TabParamList>()
@@ -24,54 +24,30 @@ const Tab = createBottomTabNavigator<TabParamList>()
 const AppTabs = () => {
   return (
     <Tab.Navigator screenOptions={{
-      headerShown: false,
+      header: () => ( <Header /> ),
       tabBarStyle: { backgroundColor: color.background },
       tabBarActiveTintColor: color.primary }}>
       <Tab.Screen
         name="evolutions"
         component={EvolutionsScreen}
         options={{
-          tabBarIcon: ({color}) => (<Icon icon="refreshCw" style={{ tintColor: color, width: 24 }} />)}}/>
+          tabBarIcon: ({color}) => (<Icon icon="refreshCw" style={{ tintColor: color, width: 24 }} />)
+        }}/>
       <Tab.Screen
         name="locations"
         component={LocationsScreen}
         options={{
-          tabBarIcon: ({color}) => (<Icon icon="mapPin" style={{ tintColor: color, width: 24 }} />)}}/>
+          tabBarIcon: ({color}) => (<Icon icon="mapPin" style={{ tintColor: color, width: 24 }} />),
+          
+        }}/>
+        <Tab.Screen
+          name="about"
+          component={AboutScreen}
+          options={{
+            tabBarIcon: ({color}) => (<Icon icon="info" style={{ tintColor: color, width: 24 }} />),
+            headerShown: false
+          }}/>
     </Tab.Navigator>
-  )
-}
-
-/**
- * This type allows TypeScript to know what routes are defined in this navigator
- * as well as what properties (if any) they might take when navigating to them.
- *
- * If no params are allowed, pass through `undefined`. Generally speaking, we
- * recommend using your MobX-State-Tree store(s) to keep application state
- * rather than passing state through navigation params.
- *
- * For more information, see this documentation:
- *   https://reactnavigation.org/docs/params/
- *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
- */
-export type StackParamList = {
-  tabs: undefined
-  about: undefined
-}
-
-// Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createNativeStackNavigator<StackParamList>()
-
-const AppStack = () => {
-  return (
-    <Stack.Navigator
-      initialRouteName="tabs"
-      screenOptions={{
-        header: () => ( <Header /> )
-      }}
-    >
-      <Stack.Screen name="tabs" component={AppTabs} />
-      <Stack.Screen name="about" component={AboutScreen} />
-    </Stack.Navigator>
   )
 }
 
@@ -85,7 +61,7 @@ export const AppNavigator = (props: NavigationProps) => {
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      <AppStack />
+      <AppTabs />
     </NavigationContainer>
   )
 }
