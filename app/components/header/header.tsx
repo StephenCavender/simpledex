@@ -33,6 +33,22 @@ export const Header = observer(function Header() {
   const { speciesStore } = useStores()
   const { selectedSpecies } = speciesStore
 
+  const toggleSearch = () => {
+    alert("toggle teh search")
+  }
+
+  const previous = () => {
+    alert("previous")
+  }
+
+  const next = () => {
+    alert("next")
+  }
+
+  const shuffle = () => {
+    alert("shuffle")
+  }
+
   return (
     <View style={ROOT}>
       <View style={ROW}>
@@ -43,19 +59,19 @@ export const Header = observer(function Header() {
         <View style={OUTSIDE} />
       </View>
       <View style={[ROW, SELECTOR_ROW]}>
-        <Button preset="link" onPress={null} style={SELECTOR}>
+        <Button preset="link" onPress={toggleSearch} style={SELECTOR}>
           <Icon icon="search" style={[ICON, SELECTOR_ICON]} />
         </Button>
-        <Button preset="link" onPress={null} style={SELECTOR}>
+        <Button preset="link" onPress={previous} style={SELECTOR}>
           <Icon icon="chevronLeft" style={[ICON, SELECTOR_ICON]} />
         </Button>
         <View style={TITLE_MIDDLE}>
           <Text style={TITLE} text={selectedSpecies} />
         </View>
-        <Button preset="link" onPress={null} style={SELECTOR}>
+        <Button preset="link" onPress={next} style={SELECTOR}>
           <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON]} />
         </Button>
-        <Button preset="link" onPress={null} style={SELECTOR}>
+        <Button preset="link" onPress={shuffle} style={SELECTOR}>
           <Icon icon="shuffle" style={[ICON, SELECTOR_ICON]} />
         </Button>
       </View>
