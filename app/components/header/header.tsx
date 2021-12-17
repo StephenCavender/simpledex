@@ -19,14 +19,15 @@ const ROW: ViewStyle = {
   alignItems: "center",
   justifyContent: "flex-start",
 }
-const SELECTOR: ViewStyle = {
+const SELECTOR_ROW: ViewStyle = {
   marginTop: spacing[2]
 }
 const TITLE: TextStyle = { textAlign: "center" }
 const TITLE_MIDDLE: ViewStyle = { flex: 1, justifyContent: "center" }
-const RIGHT: ViewStyle = { width: 32 }
+const OUTSIDE: ViewStyle = { width: 32 }
 const ICON: ImageStyle = { tintColor: color.text }
 const SELECTOR_ICON: ImageStyle = { width: 20 }
+const SELECTOR: ViewStyle = { flex: 1, alignItems: "center" }
 
 export const Header = observer(function Header() {
   const { speciesStore } = useStores()
@@ -35,28 +36,26 @@ export const Header = observer(function Header() {
   return (
     <View style={ROOT}>
       <View style={ROW}>
-        <Button preset="link" onPress={null}>
-          <Icon icon="menu" style={ICON} />
-        </Button>
+        <View style={OUTSIDE} />
         <View style={TITLE_MIDDLE}>
           <Text style={TITLE} text="SimpleDex" />
         </View>
-        <View style={RIGHT} />
+        <View style={OUTSIDE} />
       </View>
-      <View style={[ROW, SELECTOR]}>
-        <Button preset="link" onPress={null}>
+      <View style={[ROW, SELECTOR_ROW]}>
+        <Button preset="link" onPress={null} style={SELECTOR}>
           <Icon icon="search" style={[ICON, SELECTOR_ICON]} />
         </Button>
-        <Button preset="link" onPress={null}>
+        <Button preset="link" onPress={null} style={SELECTOR}>
           <Icon icon="chevronLeft" style={[ICON, SELECTOR_ICON]} />
         </Button>
         <View style={TITLE_MIDDLE}>
           <Text style={TITLE} text={selectedSpecies} />
         </View>
-        <Button preset="link" onPress={null}>
+        <Button preset="link" onPress={null} style={SELECTOR}>
           <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON]} />
         </Button>
-        <Button preset="link" onPress={null}>
+        <Button preset="link" onPress={null} style={SELECTOR}>
           <Icon icon="shuffle" style={[ICON, SELECTOR_ICON]} />
         </Button>
       </View>
