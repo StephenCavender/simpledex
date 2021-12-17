@@ -8,7 +8,8 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { EvolutionsScreen, LocationsScreen, AboutScreen } from "../screens"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { EvolutionsScreen, LocationsScreen, AboutScreen, SearchScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
 import { Header, Icon } from "../components";
 import { color } from "../theme"
@@ -45,9 +46,43 @@ const AppTabs = () => {
           component={AboutScreen}
           options={{
             tabBarIcon: ({color}) => (<Icon icon="info" style={{ tintColor: color, width: 24 }} />),
-            headerShown: false
+            headerShown: false,
           }}/>
     </Tab.Navigator>
+  )
+}
+
+/**
+ * This type allows TypeScript to know what routes are defined in this navigator
+ * as well as what properties (if any) they might take when navigating to them.
+ *
+ * If no params are allowed, pass through `undefined`. Generally speaking, we
+ * recommend using your MobX-State-Tree store(s) to keep application state
+ * rather than passing state through navigation params.
+ *
+ * For more information, see this documentation:
+ *   https://reactnavigation.org/docs/params/
+ *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
+ */
+export type StackParamList = {
+  tabs: undefined
+  search: undefined
+}
+
+// Documentation: https://reactnavigation.org/docs/stack-navigator/
+const Stack = createNativeStackNavigator<StackParamList>()
+
+const AppStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="tabs"
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <Stack.Screen name="tabs" component={AppTabs} />
+      <Stack.Screen options={{ presentation: "modal"}} name="search" component={SearchScreen} />
+    </Stack.Navigator>
   )
 }
 
@@ -61,7 +96,7 @@ export const AppNavigator = (props: NavigationProps) => {
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      <AppTabs />
+      <AppStack />
     </NavigationContainer>
   )
 }
