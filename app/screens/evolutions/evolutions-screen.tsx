@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, Pressable, ViewStyle } from "react-native"
-import { Screen, Text, TextField } from "../../components"
+import { ViewStyle } from "react-native"
+import { Screen, Text } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../models"
 import { color } from "../../theme"
-import { debounce } from "lodash"
-import { Species } from "../../models/species/species"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
@@ -16,9 +14,7 @@ const ROOT: ViewStyle = {
 export const EvolutionsScreen = observer(function EvolutionsScreen() {
   // Pull in one of our MST stores
   const { speciesStore } = useStores()
-  const { species } = speciesStore
-
-  const [filteredSpecies, setFilteredSpecies] = useState([])
+  const { selectedSpecies } = speciesStore
 
   useEffect(() => {
     async function fetchData() {
@@ -28,34 +24,11 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
     fetchData()
   }, [])
 
-  const select = (species: string) => {
-    speciesStore.select(species)
-  }
-
-  const onChangeText = debounce((filter: string) => {
-    setFilteredSpecies(species.filter((species: Species) =>
-      species.name.toLowerCase().includes(filter.toLowerCase())
-    )
-  )}, 500)
-
-  const renderItem = ({item}) => (
-    // TODO: try button
-    <Pressable onPress={() => select(item.name)}>
-      <Text>{item.name}</Text>
-    </Pressable>
-  )
-
   // Pull in navigation via hook
   // const navigation = useNavigation()
   return (
     <Screen style={ROOT} preset="fixed">
-      <TextField
-        placeholder="Pika"
-        onChangeText={onChangeText}
-        autoCapitalize="none" />
-      <FlatList
-        data={[...filteredSpecies]}
-        renderItem={renderItem} />
+      <Text>hello</Text>
     </Screen>
   )
 })

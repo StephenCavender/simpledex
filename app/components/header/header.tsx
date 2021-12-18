@@ -6,6 +6,8 @@ import { Icon } from "../icon/icon"
 import { spacing, color } from "../../theme"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../models"
+import { useNavigation } from '@react-navigation/native';
+import { SearchScreen } from "../../screens"
 
 // static styles
 const ROOT: ViewStyle = {
@@ -33,8 +35,10 @@ export const Header = observer(function Header() {
   const { speciesStore } = useStores()
   const { selectedSpecies } = speciesStore
 
+  const navigation = useNavigation();
+
   const toggleSearch = () => {
-    alert("toggle teh search")
+    navigation.navigate("search")
   }
 
   const previous = () => {

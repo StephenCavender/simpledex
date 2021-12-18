@@ -12,14 +12,23 @@
     "developer": "",
     "projectPage": ""
   },
-  "welcomeScreen": {
-    "title": "SimpleDex",
+  "searchScreen": {
+    "title": "Search",
+    "currentlySelected": "is currently selected.",
+    "noSelection": "No selection has been made.",
     "searchField": {
-      "label": "label",
-      "placeholder": "Placeholder"
+      "label": "Species",
+      "placeholder": "Pika"
     },
-    "noResults": "",
-    "canEvolveInto": ""
+    "noResults": "No result for this search..."
+  },
+  "evolutionsScreen": {
+    "title": "Evolutions",
+    "noEvolutions": "does not evolve",
+    "hasEvolutions": "can evolve into"
+  },
+  "locationsScreen": {
+    "title": "Locations"
   },
   "errorScreen": {
     "title": "Something went wrong!",
