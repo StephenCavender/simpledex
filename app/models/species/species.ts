@@ -6,8 +6,9 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 export const SpeciesModel = types
   .model("Species")
   .props({
-    evolutionChain: types.maybe(types.string),
-    name: types.maybe(types.string)
+    id: types.maybe(types.identifierNumber),
+    name: types.maybe(types.string),
+    evolution_chain: types.maybe(types.string),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
