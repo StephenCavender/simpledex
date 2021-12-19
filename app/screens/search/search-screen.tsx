@@ -44,6 +44,7 @@ export const SearchScreen = observer(function SearchScreen() {
         <Text tx="searchScreen.noSelection" /> :
         <Text txOptions={{ species: selected.name }} tx="searchScreen.currentlySelected" />
       }
+      {/* // TODO: get image */}
       {/* // TODO: style text field */}
       <TextField
         placeholder="Pika"
