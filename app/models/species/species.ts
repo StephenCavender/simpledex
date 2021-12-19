@@ -10,7 +10,20 @@ export const SpeciesModel = types
     name: types.maybe(types.string),
     evolution_chain: types.maybe(types.string),
   })
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((self) => ({
+    evolvesTo: async () => {
+      // TODO: return array of species this can evolve to
+      
+      // const speciesApi = new SpeciesApi(self.environment.api)
+      // const result = await speciesApi.getAll()
+
+      // if (result.kind === "ok") {
+      //   self.save(result.species)
+      // } else {
+      //   __DEV__ && console.tron.log(result.kind)
+      // }
+    }
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type SpeciesType = Instance<typeof SpeciesModel>
