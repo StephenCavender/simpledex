@@ -10,8 +10,6 @@ import { Species } from "../../models/species/species"
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
   flex: 1,
-}
-const CENTER: ViewStyle = {
   alignItems: "center"
 }
 
@@ -34,32 +32,26 @@ export const SearchScreen = observer(function SearchScreen() {
   const renderItem = ({item}) => (
     // TODO: try button
     <Pressable onPress={() => select(item.name)}>
-      <Text>{item.name}</Text>
+      <Text text={item.name} />
     </Pressable>
   )
 
-
   return (
     <Screen style={ROOT} preset="fixed">
-      <View style={CENTER}>
-        <Text preset="header" tx="searchScreen.title" text="Search" />
-        {!selectedSpecies ?
-          <Text text="No selection has been made." tx="searchScreen.noSelection" /> :
-          <>
-            <Text text={selectedSpecies} />
-            <Text text=" is currently selected." tx="searchScreen.currentlySelected" />
-          </>
-        }
-        {/* TODO: style text field */}
-        <TextField
-          placeholder="Pika"
-          placeholderTx="searchScreen.searchField.placeholder"
-          onChangeText={onChangeText}
-          autoCapitalize="none" />
-        <FlatList
-          data={[...filteredSpecies]}
-          renderItem={renderItem} />
-      </View>
+      <Text preset="header" tx="searchScreen.title" />
+      {!selectedSpecies ?
+        <Text tx="searchScreen.noSelection" /> :
+        <Text txOptions={{ species: selectedSpecies }} tx="searchScreen.currentlySelected" />
+      }
+      {/* TODO: style text field */}
+      <TextField
+        placeholder="Pika"
+        placeholderTx="searchScreen.searchField.placeholder"
+        onChangeText={onChangeText}
+        autoCapitalize="none" />
+      <FlatList
+        data={[...filteredSpecies]}
+        renderItem={renderItem} />
     </Screen>
   )
 })

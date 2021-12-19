@@ -9,6 +9,7 @@ import { color } from "../../theme"
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
   flex: 1,
+  alignItems: "center"
 }
 
 export const AboutScreen = observer(function AboutScreen() {
@@ -19,7 +20,7 @@ export const AboutScreen = observer(function AboutScreen() {
   // const navigation = useNavigation()
   return (
     <Screen style={ROOT} preset="scroll">
-      <Text preset="header" text="" />
+    <Text preset="header" tx="aboutScreen.title" />
     </Screen>
   )
 })

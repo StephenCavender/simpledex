@@ -7,14 +7,15 @@
   "errors": {
     "invalidEmail": "Invalid email address."
   },
-  "infoScreen": {
+  "aboutScreen": {
+    "title": "SimpleDex",
     "version": "",
     "developer": "",
     "projectPage": ""
   },
   "searchScreen": {
     "title": "Search",
-    "currentlySelected": "is currently selected.",
+    "currentlySelected": "%{species} is currently selected.",
     "noSelection": "No selection has been made.",
     "searchField": {
       "label": "Species",
