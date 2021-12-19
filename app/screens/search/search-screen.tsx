@@ -4,7 +4,7 @@ import { FlatList, Pressable, ViewStyle } from "react-native"
 import { Screen, Text, TextField } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
-import { debounce } from "lodash"
+import { debounce, capitalize } from "lodash"
 import { Species } from "../../models/species/species"
 
 const ROOT: ViewStyle = {
@@ -42,7 +42,7 @@ export const SearchScreen = observer(function SearchScreen() {
       <Text preset="header" tx="searchScreen.title" />
       {!selected ?
         <Text tx="searchScreen.noSelection" /> :
-        <Text txOptions={{ species: selected.name }} tx="searchScreen.currentlySelected" />
+        <Text txOptions={{ species: capitalize(selected.name) }} tx="searchScreen.currentlySelected" />
       }
       {/* // TODO: get image */}
       {/* // TODO: style text field */}
