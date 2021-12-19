@@ -13,7 +13,7 @@ const ROOT: ViewStyle = {
 
 export const LocationsScreen = observer(function LocationsScreen() {
   const { speciesStore } = useStores()
-  const { selectedSpecies } = speciesStore
+  const { selected } = speciesStore
 
   useEffect(() => {
     async function fetchData() {
@@ -21,7 +21,7 @@ export const LocationsScreen = observer(function LocationsScreen() {
     }
 
     fetchData()
-  }, [selectedSpecies])
+  }, [selected])
 
   return (
     <Screen style={ROOT} preset="fixed">

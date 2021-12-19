@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, Pressable, View, ViewStyle } from "react-native"
+import { FlatList, Pressable, ViewStyle } from "react-native"
 import { Screen, Text, TextField } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
@@ -15,7 +15,7 @@ const ROOT: ViewStyle = {
 
 export const SearchScreen = observer(function SearchScreen() {
   const { speciesStore } = useStores()
-  const { selectedSpecies, species } = speciesStore
+  const { selected, species } = speciesStore
 
   const [filteredSpecies, setFilteredSpecies] = useState([])
 
@@ -38,12 +38,13 @@ export const SearchScreen = observer(function SearchScreen() {
 
   return (
     <Screen style={ROOT} preset="fixed">
+      {/* // TODO: swipe indicator */}
       <Text preset="header" tx="searchScreen.title" />
-      {!selectedSpecies ?
+      {!selected ?
         <Text tx="searchScreen.noSelection" /> :
-        <Text txOptions={{ species: selectedSpecies }} tx="searchScreen.currentlySelected" />
+        <Text txOptions={{ species: selected.name }} tx="searchScreen.currentlySelected" />
       }
-      {/* TODO: style text field */}
+      {/* // TODO: style text field */}
       <TextField
         placeholder="Pika"
         placeholderTx="searchScreen.searchField.placeholder"

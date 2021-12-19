@@ -33,7 +33,7 @@ const SELECTOR: ViewStyle = { flex: 1, alignItems: "center" }
 
 export const Header = observer(function Header() {
   const { speciesStore } = useStores()
-  const { selectedSpecies } = speciesStore
+  const { selected } = speciesStore
 
   const navigation = useNavigation();
 
@@ -70,7 +70,7 @@ export const Header = observer(function Header() {
           <Icon icon="chevronLeft" style={[ICON, SELECTOR_ICON]} />
         </Button>
         <View style={TITLE_MIDDLE}>
-          <Text style={TITLE} text={selectedSpecies} />
+          <Text style={TITLE} text={selected.name} />
         </View>
         <Button preset="link" onPress={next} style={SELECTOR}>
           <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON]} />
