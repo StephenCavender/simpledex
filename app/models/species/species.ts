@@ -6,7 +6,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 export const SpeciesModel = types
   .model("Species")
   .props({
-    id: types.maybe(types.identifierNumber),
+    // id
     name: types.maybe(types.string),
     evolution_chain: types.maybe(types.string),
   })

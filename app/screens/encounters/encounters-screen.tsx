@@ -11,13 +11,13 @@ const ROOT: ViewStyle = {
   alignItems: "center"
 }
 
-export const LocationsScreen = observer(function LocationsScreen() {
+export const EncountersScreen = observer(function EncountersScreen() {
   const { speciesStore } = useStores()
   const { selected } = speciesStore
 
   useEffect(() => {
     async function fetchData() {
-      // TODO: get location data
+      // TODO: get encounter data
     }
 
     fetchData()
@@ -25,7 +25,7 @@ export const LocationsScreen = observer(function LocationsScreen() {
 
   return (
     <Screen style={ROOT} preset="fixed">
-      <Text preset="header" tx="locationsScreen.title" />
+      <Text preset="header" tx="encountersScreen.title" />
     </Screen>
   )
 })

@@ -9,7 +9,7 @@ import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { EvolutionsScreen, LocationsScreen, AboutScreen, SearchScreen } from "../screens"
+import { EvolutionsScreen, EncountersScreen, AboutScreen, SearchScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
 import { Header, Icon } from "../components";
 import { color } from "../theme"
@@ -35,8 +35,8 @@ const AppTabs = () => {
           tabBarIcon: ({color}) => (<Icon icon="refreshCw" style={{ tintColor: color, width: 24 }} />)
         }}/>
       <Tab.Screen
-        name="locations"
-        component={LocationsScreen}
+        name="encounters"
+        component={EncountersScreen}
         options={{
           tabBarIcon: ({color}) => (<Icon icon="mapPin" style={{ tintColor: color, width: 24 }} />),
           

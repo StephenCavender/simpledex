@@ -28,8 +28,8 @@
     "noEvolutions": "does not evolve",
     "hasEvolutions": "can evolve into"
   },
-  "locationsScreen": {
-    "title": "Locations"
+  "encountersScreen": {
+    "title": "Encounters"
   },
   "errorScreen": {
     "title": "Something went wrong!",
