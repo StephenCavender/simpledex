@@ -1,5 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { SpeciesStoreModel } from "../species-store/species-store"
+import { SpeciesStoreModel } from "../species/species-store"
 
 /**
  * A RootStore model.

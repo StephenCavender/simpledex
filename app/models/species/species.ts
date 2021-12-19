@@ -1,5 +1,11 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
+const EvolutionChainModel = types
+  .model("EvolutionChain")
+  .props({
+    url: types.maybe(types.string)
+  })
+
 /**
  * Model description here for TypeScript hints.
  */
@@ -8,12 +14,12 @@ export const SpeciesModel = types
   .props({
     // id
     name: types.maybe(types.string),
-    evolution_chain: types.maybe(types.string),
+    evolution_chain: types.maybe(EvolutionChainModel),
   })
   .views((self) => ({
     evolvesTo: async () => {
       // TODO: return array of species this can evolve to
-      
+
       // const speciesApi = new SpeciesApi(self.environment.api)
       // const result = await speciesApi.getAll()
 
