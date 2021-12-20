@@ -1,10 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-
-const EvolutionChainModel = types
-  .model("EvolutionChain")
-  .props({
-    url: types.maybe(types.string)
-  })
+import { EvolutionChainModel } from "../evolution/evolution-chain"
+import { VarietyModel } from "../pokemon/variety"
 
 /**
  * Model description here for TypeScript hints.
@@ -12,9 +8,10 @@ const EvolutionChainModel = types
 export const SpeciesModel = types
   .model("Species")
   .props({
-    // id
+    id: types.maybe(types.number),
     name: types.maybe(types.string),
     evolution_chain: types.maybe(EvolutionChainModel),
+    varieties: types.maybe(types.array(VarietyModel)),
   })
   .views((self) => ({
     evolvesTo: async () => {

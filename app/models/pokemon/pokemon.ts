@@ -1,11 +1,17 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { SpriteModel } from "../sprite/sprite"
 
 /**
  * Model description here for TypeScript hints.
  */
 export const PokemonModel = types
   .model("Pokemon")
-  .props({})
+  .props({
+    name: types.maybe(types.string),
+    location_area_encounters: types.maybe(types.string),
+    sprites: types.maybe(SpriteModel),
+    url: types.maybe(types.string)
+  })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
