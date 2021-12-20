@@ -6,7 +6,7 @@ import { useStores } from "../../models"
 import { color } from "../../theme"
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
+  backgroundColor: color.background,
   flex: 1,
   alignItems: "center"
 }
@@ -25,7 +25,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
 
   return (
     <Screen style={ROOT} preset="fixed">
-    <Text preset="header" tx="evolutionsScreen.title" />
+      <Text preset="header" tx="evolutionsScreen.title" />
     </Screen>
   )
 })

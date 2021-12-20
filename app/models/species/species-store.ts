@@ -29,7 +29,7 @@ export const SpeciesStoreModel = types
         __DEV__ && console.tron.log(result.kind)
       }
     },
-    get: async (species: string) => {
+    get: async (species: string | number) => {
       const speciesApi = new SpeciesApi(self.environment.api)
       const result = await speciesApi.get(species)
 

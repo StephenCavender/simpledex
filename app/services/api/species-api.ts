@@ -29,7 +29,7 @@ export class SpeciesApi {
     }
   }
 
-  async get(species: string): Promise<GetSpeciesResult> {
+  async get(species: string | number): Promise<GetSpeciesResult> {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.get(`/pokemon-species/${species}`)
 

@@ -1,6 +1,8 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { PokemonApi } from "../../services/api/pokemon-api"
 import { EvolutionChainModel } from "../evolution/evolution-chain"
 import { VarietyModel } from "../pokemon/variety"
+import { withEnvironment } from "../extensions/with-environment"
 
 /**
  * Model description here for TypeScript hints.
@@ -13,6 +15,7 @@ export const SpeciesModel = types
     evolution_chain: types.maybe(EvolutionChainModel),
     varieties: types.maybe(types.array(VarietyModel)),
   })
+  .extend(withEnvironment)
   .views((self) => ({
     evolvesTo: async () => {
       // TODO: return array of species this can evolve to
@@ -25,6 +28,17 @@ export const SpeciesModel = types
       // } else {
       //   __DEV__ && console.tron.log(result.kind)
       // }
+    },
+    sprite: async (): Promise<string> => {
+      const pokemonApi = new PokemonApi(self.environment.api)
+      const result = await pokemonApi.get(self.id)
+
+      if (result.kind === "ok") {
+        return result.pokemon.sprites.front_default
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+        return ""
+      }
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

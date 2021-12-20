@@ -1,14 +1,14 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { FlatList, Pressable, ViewStyle } from "react-native"
-import { Screen, Text, TextField } from "../../components"
+import { Screen, Text, TextField, AutoImage } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
 import { debounce, capitalize } from "lodash"
 import { Species } from "../../models/species/species"
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
+  backgroundColor: color.background,
   flex: 1,
   alignItems: "center"
 }
@@ -42,7 +42,10 @@ export const SearchScreen = observer(function SearchScreen() {
       <Text preset="header" tx="searchScreen.title" />
       {!selected ?
         <Text tx="searchScreen.noSelection" /> :
-        <Text txOptions={{ species: capitalize(selected.name) }} tx="searchScreen.currentlySelected" />
+        <>
+          <Text txOptions={{ species: capitalize(selected.name) }} tx="searchScreen.currentlySelected" />
+          {/* <AutoImage source={{ uri: selected.sprite }} /> */}
+        </>
       }
       {/* // TODO: get image */}
       {/* // TODO: style text field */}

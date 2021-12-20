@@ -7,7 +7,7 @@ import { Screen, Text } from "../../components"
 import { color } from "../../theme"
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
+  backgroundColor: color.background,
   flex: 1,
   alignItems: "center"
 }
@@ -20,7 +20,7 @@ export const AboutScreen = observer(function AboutScreen() {
   // const navigation = useNavigation()
   return (
     <Screen style={ROOT} preset="scroll">
-    <Text preset="header" tx="aboutScreen.title" />
+      <Text preset="header" tx="aboutScreen.title" />
     </Screen>
   )
 })
