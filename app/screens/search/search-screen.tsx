@@ -51,7 +51,7 @@ export const SearchScreen = observer(function SearchScreen() {
     <Screen style={ROOT} preset="fixed">
       {/* // TODO: swipe indicator */}
       <Text preset="header" tx="searchScreen.title" />
-      {!selected ?
+      {!selected.name ?
         <Text tx="searchScreen.noSelection" /> :
         <>
           <Text txOptions={{ species: capitalize(selected.name) }} tx="searchScreen.currentlySelected" />

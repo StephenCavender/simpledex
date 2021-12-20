@@ -31,6 +31,9 @@ export const SpeciesStoreModel = types
     }
   }))
   .actions((self) => ({
+    afterCreate: async () => {
+      await self.get()
+    },
     select: async (species: string) => {
       await self.selected.get(species)
     }
