@@ -1,8 +1,10 @@
 import { Instance, SnapshotOut, types, applySnapshot } from "mobx-state-tree"
+import { PokemonApi } from "../../services/api/pokemon-api"
+import { withEnvironment } from "../extensions/with-environment"
 import { SpriteModel } from "../sprite/sprite"
 
 /**
- * Model description here for TypeScript hints.
+ * A Pokemon
  */
 export const PokemonModel = types
   .model("Pokemon")
@@ -11,12 +13,11 @@ export const PokemonModel = types
     location_area_encounters: types.maybe(types.string),
     sprites: types.maybe(SpriteModel),
   })
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .extend(withEnvironment)
   .actions((self) => ({
-    afterCreate: async () => {
-      console.tron.log('pokemon afterCreate called')
+    get: async (species: string | number) => {
       const pokemonApi = new PokemonApi(self.environment.api)
-      const result = await pokemonApi.get(self.id)
+      const result = await pokemonApi.get(species)
 
       if (result.kind === "ok") {
         applySnapshot(self, result.pokemon)

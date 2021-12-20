@@ -37,6 +37,8 @@ export const SpeciesModel = types
 
       if (result.kind === "ok") {
         applySnapshot(self, result.species)
+        const variety = self.varieties.find(variety => variety.is_default)
+        variety.pokemon.get(species)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
