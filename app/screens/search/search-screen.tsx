@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, Pressable, ViewStyle } from "react-native"
-import { Screen, Text, TextField, AutoImage } from "../../components"
+import { FlatList, Pressable, ViewStyle, Image } from "react-native"
+import { Screen, Text, TextField } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
 import { debounce, capitalize } from "lodash"
@@ -36,6 +36,17 @@ export const SearchScreen = observer(function SearchScreen() {
     </Pressable>
   )
 
+  const renderSprite = () => {
+    console.tron.log('selected:')
+    console.tron.log(selected)
+    const variety = selected.varieties.find(variety => variety.is_default)
+    console.tron.log('variety:')
+    console.tron.log(variety)
+    return (
+      <Image source={{ uri: variety.pokemon.sprite.front_default }} />
+    )
+  }
+
   return (
     <Screen style={ROOT} preset="fixed">
       {/* // TODO: swipe indicator */}
@@ -44,7 +55,7 @@ export const SearchScreen = observer(function SearchScreen() {
         <Text tx="searchScreen.noSelection" /> :
         <>
           <Text txOptions={{ species: capitalize(selected.name) }} tx="searchScreen.currentlySelected" />
-          {/* <AutoImage source={{ uri: selected.sprite }} /> */}
+          {renderSprite()}
         </>
       }
       {/* // TODO: get image */}
