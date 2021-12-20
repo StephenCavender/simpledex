@@ -4,7 +4,7 @@ import { withEnvironment } from "../extensions/with-environment"
 import { SpeciesModel, SpeciesSnapshot } from "./species"
 
 /**
- * Model description here for TypeScript hints.
+ * Store for holding list of Pokemon species.
  */
 export const SpeciesStoreModel = types
   .model("SpeciesStore")
@@ -19,7 +19,7 @@ export const SpeciesStoreModel = types
     },
   }))
   .actions((self) => ({
-    getAll: async () => {
+    get: async () => {
       const speciesApi = new SpeciesApi(self.environment.api)
       const result = await speciesApi.getAll()
 
@@ -28,21 +28,11 @@ export const SpeciesStoreModel = types
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
-    },
-    get: async (species: string | number) => {
-      const speciesApi = new SpeciesApi(self.environment.api)
-      const result = await speciesApi.get(species)
-
-      if (result.kind === "ok") {
-        applySnapshot(self.selected, result.species)
-      } else {
-        __DEV__ && console.tron.log(result.kind)
-      }
     }
   }))
   .actions((self) => ({
     select: async (species: string) => {
-      await self.get(species)
+      await self.selected.get(species)
     }
   }))
 

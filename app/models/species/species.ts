@@ -1,11 +1,11 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { PokemonApi } from "../../services/api/pokemon-api"
+import { Instance, SnapshotOut, types, applySnapshot } from "mobx-state-tree"
+import { SpeciesApi } from "../../services/api/species-api"
 import { EvolutionChainModel } from "../evolution/evolution-chain"
 import { VarietyModel } from "../pokemon/variety"
 import { withEnvironment } from "../extensions/with-environment"
 
 /**
- * Model description here for TypeScript hints.
+ * A species of Pokemon
  */
 export const SpeciesModel = types
   .model("Species")
@@ -29,19 +29,19 @@ export const SpeciesModel = types
       //   __DEV__ && console.tron.log(result.kind)
       // }
     },
-    sprite: async (): Promise<string> => {
-      const pokemonApi = new PokemonApi(self.environment.api)
-      const result = await pokemonApi.get(self.id)
+  }))
+  .actions((self) => ({
+    get: async (species: string | number) => {
+      const speciesApi = new SpeciesApi(self.environment.api)
+      const result = await speciesApi.get(species)
 
       if (result.kind === "ok") {
-        return result.pokemon.sprites.front_default
+        applySnapshot(self, result.species)
       } else {
         __DEV__ && console.tron.log(result.kind)
-        return ""
       }
     }
-  })) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  }))
 
 type SpeciesType = Instance<typeof SpeciesModel>
 export interface Species extends SpeciesType {}
