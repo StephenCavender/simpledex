@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, Pressable, ViewStyle, Image } from "react-native"
+import { FlatList, Pressable, ViewStyle, Image, ImageStyle } from "react-native"
 import { Screen, Text, TextField } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
@@ -11,6 +11,10 @@ const ROOT: ViewStyle = {
   backgroundColor: color.background,
   flex: 1,
   alignItems: "center"
+}
+const SPRITE: ImageStyle = {
+  height: 125,
+  width: 125
 }
 
 export const SearchScreen = observer(function SearchScreen() {
@@ -37,13 +41,11 @@ export const SearchScreen = observer(function SearchScreen() {
   )
 
   const renderSprite = () => {
-    console.tron.log('selected:')
-    console.tron.log(selected)
     const variety = selected.varieties.find(variety => variety.is_default)
-    console.tron.log('variety:')
-    console.tron.log(variety)
+    console.tron.log('sprite uri')
+    console.tron.log(variety.pokemon.sprites.front_default)
     return (
-      <Image source={{ uri: variety.pokemon.sprite.front_default }} />
+      <Image style={SPRITE} source={{ uri: variety.pokemon.sprites.front_default }}  />
     )
   }
 
@@ -55,10 +57,9 @@ export const SearchScreen = observer(function SearchScreen() {
         <Text tx="searchScreen.noSelection" /> :
         <>
           <Text txOptions={{ species: capitalize(selected.name) }} tx="searchScreen.currentlySelected" />
-          {/* {renderSprite()} */}
+          {renderSprite()}
         </>
       }
-      {/* // TODO: get image */}
       {/* // TODO: style text field */}
       <TextField
         placeholder="Pika"
