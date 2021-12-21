@@ -1,7 +1,8 @@
 import { Instance, SnapshotOut, types, applySnapshot, swapWith } from "mobx-state-tree"
 import { SpeciesApi } from "../../services/api/species-api"
+import { PokemonApi } from "../../services/api/pokemon-api"
 import { withEnvironment } from "../extensions/with-environment"
-import { SpeciesModel, SpeciesSnapshot } from "./species"
+import { SpeciesModel, SpeciesSnapshot, Species } from "./species"
 
 /**
  * Store for holding list of Pokemon species.
@@ -17,7 +18,7 @@ export const SpeciesStoreModel = types
     save: (speciesSnapshot: SpeciesSnapshot[]) => {
       self.species.replace(speciesSnapshot)
     },
-    setSelected: (species: SpeciesModel) => {
+    setSelected: (species: Species) => {
       self.selected = species
     }
   }))
@@ -40,6 +41,18 @@ export const SpeciesStoreModel = types
         return result.species
       } else {
         __DEV__ && console.tron.log(result.kind)
+        throw result
+      }
+    },
+    getPokemon: async (pokemon: string | number) => {
+      const pokemonApi = new PokemonApi(self.environment.api)
+      const result = await pokemonApi.get(pokemon)
+
+      if (result.kind === "ok") {
+        return result.pokemon
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+        throw result
       }
     }
   }))
@@ -48,13 +61,16 @@ export const SpeciesStoreModel = types
       await self.getAll()
     },
     select: async (species: string) => {
-      const toSelect = self.species.find(s => s.name === species)
-      applySnapshot(toSelect, await self.get(species))
-      self.setSelected(toSelect)
-      // const variety = self.selected.varieties.find(variety => variety.is_default)
-      // console.tron.log('speciesStore select: variety')
-      // console.tron.log(variety)
-      // applySnapshot(self.selected, variety.pokemon.get(species))
+      try {
+        const toSelect = self.species.find(s => s.name === species)
+        const toApply = await self.get(species)
+        const variety = toApply.varieties.find(variety => variety.is_default)
+        variety.pokemon = await self.getPokemon(species)
+        applySnapshot(toSelect, toApply)
+        self.setSelected(toSelect)
+      } catch (error) {
+        __DEV__ && console.tron.log(error)
+      }
     }
   }))
 
