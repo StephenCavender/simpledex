@@ -19,7 +19,7 @@
     "noSelection": "No selection has been made.",
     "searchField": {
       "label": "Species",
-      "placeholder": "Pika"
+      "placeholder": "char"
     },
     "noResults": "No result for this search..."
   },
