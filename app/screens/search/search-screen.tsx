@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { FlatList, Pressable, ViewStyle, Image, ImageStyle } from "react-native"
-import { Screen, Text, TextField } from "../../components"
+import { Button, Screen, Text, TextField } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
 import { debounce, capitalize } from "lodash"
@@ -34,16 +34,17 @@ export const SearchScreen = observer(function SearchScreen() {
   )}, 500)
 
   const renderItem = ({item}) => (
-    // TODO: try button
+    // TODO: pick a style
+    <>
     <Pressable onPress={() => select(item.name)}>
-      <Text text={item.name} />
+      <Text text={capitalize(item.name)} />
     </Pressable>
+    <Button text={capitalize(item.name)} onPress={() => select(item.name)} />
+    </>
   )
 
   const renderSprite = () => {
     const variety = selected.varieties.find(variety => variety.is_default)
-    console.tron.log('sprite uri')
-    console.tron.log(variety.pokemon.sprites.front_default)
     return (
       <Image style={SPRITE} source={{ uri: variety.pokemon.sprites.front_default }}  />
     )
@@ -62,10 +63,11 @@ export const SearchScreen = observer(function SearchScreen() {
       }
       {/* // TODO: style text field */}
       <TextField
-        placeholder="Pika"
         placeholderTx="searchScreen.searchField.placeholder"
         onChangeText={onChangeText}
-        autoCapitalize="none" />
+        autoCapitalize="none"
+        autoCompleteType="off"
+        autoCorrect={false} />
       <FlatList
         data={[...filteredSpecies]}
         renderItem={renderItem} />
