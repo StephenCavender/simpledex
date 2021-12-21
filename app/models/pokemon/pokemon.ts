@@ -20,7 +20,8 @@ export const PokemonModel = types
       const result = await pokemonApi.get(species)
 
       if (result.kind === "ok") {
-        applySnapshot(self, result.pokemon)
+        return result.pokemon
+        // applySnapshot(self, result.pokemon)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }

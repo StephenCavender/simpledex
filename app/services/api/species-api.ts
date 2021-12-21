@@ -10,7 +10,7 @@ export class SpeciesApi {
     this.api = api
   }
 
-  async getAll(): Promise<GetSpeciesResult> {
+  async getAll(): Promise<GetAllSpeciesResult> {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.get("/pokemon-species?limit=-1")
 

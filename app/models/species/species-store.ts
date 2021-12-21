@@ -1,4 +1,4 @@
-import { Instance, SnapshotOut, types, applySnapshot } from "mobx-state-tree"
+import { Instance, SnapshotOut, types, applySnapshot, swapWith } from "mobx-state-tree"
 import { SpeciesApi } from "../../services/api/species-api"
 import { withEnvironment } from "../extensions/with-environment"
 import { SpeciesModel, SpeciesSnapshot } from "./species"
@@ -10,16 +10,19 @@ export const SpeciesStoreModel = types
   .model("SpeciesStore")
   .props({
     species: types.optional(types.array(SpeciesModel), []),
-    selected: types.optional(SpeciesModel, {})
+    selected: types.maybe(types.reference(types.late(() => SpeciesModel)))
   })
   .extend(withEnvironment)
   .actions((self) => ({
     save: (speciesSnapshot: SpeciesSnapshot[]) => {
       self.species.replace(speciesSnapshot)
     },
+    setSelected: (species: SpeciesModel) => {
+      self.selected = species
+    }
   }))
   .actions((self) => ({
-    get: async () => {
+    getAll: async () => {
       const speciesApi = new SpeciesApi(self.environment.api)
       const result = await speciesApi.getAll()
 
@@ -28,14 +31,30 @@ export const SpeciesStoreModel = types
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
+    },
+    get: async (species: string | number) => {
+      const speciesApi = new SpeciesApi(self.environment.api)
+      const result = await speciesApi.get(species)
+
+      if (result.kind === "ok") {
+        return result.species
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
     }
   }))
   .actions((self) => ({
     afterCreate: async () => {
-      await self.get()
+      await self.getAll()
     },
     select: async (species: string) => {
-      await self.selected.get(species)
+      const toSelect = self.species.find(s => s.name === species)
+      applySnapshot(toSelect, await self.get(species))
+      self.setSelected(toSelect)
+      // const variety = self.selected.varieties.find(variety => variety.is_default)
+      // console.tron.log('speciesStore select: variety')
+      // console.tron.log(variety)
+      // applySnapshot(self.selected, variety.pokemon.get(species))
     }
   }))
 

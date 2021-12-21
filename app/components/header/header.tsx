@@ -71,7 +71,7 @@ export const Header = observer(function Header() {
           <Icon icon="chevronLeft" style={[ICON, SELECTOR_ICON]} />
         </Button>
         <View style={TITLE_MIDDLE}>
-          <Text style={TITLE} text={capitalize(selected.name)} />
+          {!!selected && <Text style={TITLE} text={capitalize(selected.name)} />}
         </View>
         <Button preset="link" onPress={next} style={SELECTOR}>
           <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON]} />

@@ -10,5 +10,6 @@ export interface User {
 export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem
 export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
 
-export type GetSpeciesResult = { kind: "ok"; species: Species[] } | GeneralApiProblem
+export type GetAllSpeciesResult = { kind: "ok"; species: Species[] } | GeneralApiProblem
+export type GetSpeciesResult = { kind: "ok"; species: Species } | GeneralApiProblem
 export type GetPokemonResult = { kind: "ok"; pokemon: Pokemon } | GeneralApiProblem

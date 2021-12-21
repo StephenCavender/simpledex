@@ -10,8 +10,8 @@ import { withEnvironment } from "../extensions/with-environment"
 export const SpeciesModel = types
   .model("Species")
   .props({
+    name: types.identifier,
     id: types.maybe(types.number),
-    name: types.maybe(types.string),
     evolution_chain: types.maybe(EvolutionChainModel),
     varieties: types.maybe(types.array(VarietyModel)),
   })
@@ -29,20 +29,6 @@ export const SpeciesModel = types
       //   __DEV__ && console.tron.log(result.kind)
       // }
     },
-  }))
-  .actions((self) => ({
-    get: async (species: string | number) => {
-      const speciesApi = new SpeciesApi(self.environment.api)
-      const result = await speciesApi.get(species)
-
-      if (result.kind === "ok") {
-        applySnapshot(self, result.species)
-        const variety = self.varieties.find(variety => variety.is_default)
-        variety.pokemon.get(species)
-      } else {
-        __DEV__ && console.tron.log(result.kind)
-      }
-    }
   }))
 
 type SpeciesType = Instance<typeof SpeciesModel>

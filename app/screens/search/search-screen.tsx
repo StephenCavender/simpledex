@@ -51,11 +51,11 @@ export const SearchScreen = observer(function SearchScreen() {
     <Screen style={ROOT} preset="fixed">
       {/* // TODO: swipe indicator */}
       <Text preset="header" tx="searchScreen.title" />
-      {!selected.name ?
+      {!selected ?
         <Text tx="searchScreen.noSelection" /> :
         <>
           <Text txOptions={{ species: capitalize(selected.name) }} tx="searchScreen.currentlySelected" />
-          {renderSprite()}
+          {/* {renderSprite()} */}
         </>
       }
       {/* // TODO: get image */}
