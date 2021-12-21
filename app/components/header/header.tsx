@@ -1,5 +1,5 @@
 import React from "react"
-import { View, ViewStyle, TextStyle, ImageStyle } from "react-native"
+import { View, ViewStyle, TextStyle, ImageStyle, Pressable } from "react-native"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import { Icon } from "../icon/icon"
@@ -71,7 +71,7 @@ export const Header = observer(function Header() {
           <Icon icon="chevronLeft" style={[ICON, SELECTOR_ICON]} />
         </Button>
         <View style={TITLE_MIDDLE}>
-          {!!selected && <Text style={TITLE} text={capitalize(selected.name)} />}
+          {!!selected && <Pressable onLongPress={toggleSearch}><Text style={TITLE} text={capitalize(selected.name)} /></Pressable>}
         </View>
         <Button preset="link" onPress={next} style={SELECTOR}>
           <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON]} />
