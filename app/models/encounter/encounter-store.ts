@@ -1,11 +1,14 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { EncounterModel } from "./encounter"
 
 /**
  * Model description here for TypeScript hints.
  */
 export const EncounterStoreModel = types
   .model("EncounterStore")
-  .props({})
+  .props({
+    encounters: types.array(EncounterModel)
+  })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 

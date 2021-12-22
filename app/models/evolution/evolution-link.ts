@@ -1,4 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { EvolutionDetailsModel } from "./evolution-details"
+import { EvolutionLinkModel } from "./evolution-link"
+import { SpeciesModel } from "../species/species"
 
 /**
  * Model description here for TypeScript hints.
