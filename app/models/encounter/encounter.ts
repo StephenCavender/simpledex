@@ -5,7 +5,10 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
  */
 export const EncounterModel = types
   .model("Encounter")
-  .props({})
+  .props({
+    location_area: types.string,
+    version_details: types.array(VersionDetailModel)
+  })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
