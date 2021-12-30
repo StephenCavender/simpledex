@@ -1,6 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { EvolutionDetailsModel } from "./evolution-details"
-import { EvolutionLinkModel } from "./evolution-link"
 import { SpeciesModel } from "../species/species"
 
 /**
@@ -10,7 +9,7 @@ export const EvolutionLinkModel = types
   .model("EvolutionLink")
   .props({
     evolution_details: types.array(EvolutionDetailsModel),
-    evolves_to: types.array(EvolutionLinkModel),
+    evolves_to: types.optional(types.array(types.late(() => EvolutionLinkModel)), []),
     species: types.maybe(SpeciesModel)
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
