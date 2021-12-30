@@ -5,7 +5,7 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import { useColorScheme } from "react-native"
+import { ImageStyle, useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
@@ -16,36 +16,45 @@ import { color } from "../theme"
 
 export type TabParamList = {
   evolutions: undefined
-  locations: undefined
+  encounters: undefined
   about: undefined
 }
 
 const Tab = createBottomTabNavigator<TabParamList>()
 
+const ICON: ImageStyle = { tintColor: color.primary, width: 24 }
+
 const AppTabs = () => {
   return (
     <Tab.Navigator screenOptions={{
-      header: () => ( <Header /> ),
+      header: function header() {
+        return ( <Header /> )
+      },
       tabBarStyle: { backgroundColor: color.background },
       tabBarActiveTintColor: color.primary }}>
       <Tab.Screen
         name="evolutions"
         component={EvolutionsScreen}
         options={{
-          tabBarIcon: ({color}) => (<Icon icon="refreshCw" style={{ tintColor: color, width: 24 }} />)
+          tabBarIcon: function tabBarIcon({ color }) {
+            return (<Icon icon="refreshCw" style={[ICON, {tintColor: color}]} />)
+          }
         }}/>
       <Tab.Screen
         name="encounters"
         component={EncountersScreen}
         options={{
-          tabBarIcon: ({color}) => (<Icon icon="mapPin" style={{ tintColor: color, width: 24 }} />),
-          
+          tabBarIcon: function tabBarIcon({ color }) {
+            return (<Icon icon="mapPin" style={[ICON, {tintColor: color}]} />)
+          }
         }}/>
         <Tab.Screen
           name="about"
           component={AboutScreen}
           options={{
-            tabBarIcon: ({color}) => (<Icon icon="info" style={{ tintColor: color, width: 24 }} />),
+            tabBarIcon: function tabBarIcon({ color }) {
+              return (<Icon icon="info" style={[ICON, {tintColor: color}]} />)
+            },
             headerShown: false,
           }}/>
     </Tab.Navigator>
