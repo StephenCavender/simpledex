@@ -1,6 +1,4 @@
-import { Instance, SnapshotOut, types, applySnapshot } from "mobx-state-tree"
-import { SpeciesApi } from "../../services/api/species-api"
-import { EvolutionChainModel } from "../evolution/evolution-chain"
+import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { VarietyModel } from "../pokemon/variety"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -12,7 +10,7 @@ export const SpeciesModel = types
   .props({
     name: types.identifier,
     id: types.maybe(types.number),
-    evolution_chain: types.maybe(EvolutionChainModel),
+    evolution_chain: types.maybe(types.number),
     varieties: types.maybe(types.array(VarietyModel)),
   })
   .extend(withEnvironment)

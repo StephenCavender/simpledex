@@ -1,4 +1,4 @@
-import { Instance, SnapshotOut, types, applySnapshot, swapWith } from "mobx-state-tree"
+import { Instance, SnapshotOut, types, applySnapshot } from "mobx-state-tree"
 import { SpeciesApi } from "../../services/api/species-api"
 import { PokemonApi } from "../../services/api/pokemon-api"
 import { withEnvironment } from "../extensions/with-environment"

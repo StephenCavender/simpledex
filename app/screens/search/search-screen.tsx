@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { FlatList, Pressable, ViewStyle, Image, ImageStyle } from "react-native"
-import { Button, Screen, Text, TextField } from "../../components"
+import { Screen, Text, TextField } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
 import { debounce, capitalize } from "lodash"
@@ -34,13 +34,9 @@ export const SearchScreen = observer(function SearchScreen() {
   )}, 500)
 
   const renderItem = ({item}) => (
-    // TODO: pick a style
-    <>
     <Pressable onPress={() => select(item.name)}>
       <Text text={capitalize(item.name)} />
     </Pressable>
-    <Button text={capitalize(item.name)} onPress={() => select(item.name)} />
-    </>
   )
 
   const renderSprite = () => {

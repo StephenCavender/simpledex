@@ -1,7 +1,8 @@
 import { ApiResponse } from "apisauce"
 import { Api } from "./api"
-import { GetSpeciesResult } from "./api.types"
+import { GetAllSpeciesResult, GetSpeciesResult } from "./api.types"
 import { getGeneralApiProblem } from "./api-problem"
+import { result } from "validate.js"
 
 export class SpeciesApi {
   private api: Api
@@ -39,7 +40,14 @@ export class SpeciesApi {
         if (problem) return problem
       }
 
-      return { kind: "ok", species: response.data }
+      const split = response.data.evolution_chain.url.split('/')
+
+      const resultSpecies: any = {
+        ...response.data,
+        evolution_chain: split[split.legnth - 2],
+      }
+
+      return { kind: "ok", species: resultSpecies }
     } catch (e) {
       __DEV__ && console.tron.log(e.message)
       return { kind: "bad-data" }
