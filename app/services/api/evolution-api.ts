@@ -12,6 +12,7 @@ const recurseEvolutions = (name: string, chain: GetEvolutionChainResult): any =>
       details.trigger = details.trigger.name
     })
     evolution.evolves_to = []
+    evolution.species = evolution.species.name
   })
   return chain.evolves_to
 }
@@ -34,7 +35,8 @@ export class EvolutionApi {
       }
 
       const chain = recurseEvolutions(species, response.data.chain)
-      // chain.evolves_to = []
+      console.tron.log('chain:')
+      console.tron.log(chain)
 
       return { kind: "ok", chain }
     } catch (e) {

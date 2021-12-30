@@ -10,7 +10,7 @@ export const EvolutionLinkModel = types
   .props({
     evolution_details: types.array(EvolutionDetailsModel),
     evolves_to: types.optional(types.array(types.late(() => EvolutionLinkModel)), []),
-    species: types.maybe(SpeciesModel)
+    species: types.maybe(types.reference(types.late(() => SpeciesModel)))
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
