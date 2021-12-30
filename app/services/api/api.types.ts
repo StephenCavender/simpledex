@@ -1,8 +1,7 @@
 import { GeneralApiProblem } from "./api-problem"
 import { Species } from "../../models/species/species"
 import { Pokemon } from "../../models/pokemon/pokemon"
-import { EvolutionChain } from "../../models/evolution/evolution-chain"
-import { EvolutionTrigger } from "../../models/evolution/evolution-trigger"
+import { EvolutionLink } from "../../models/evolution/evolution-link"
 
 // Species
 export type GetAllSpeciesResult = { kind: "ok"; species: Species[] } | GeneralApiProblem
@@ -12,5 +11,4 @@ export type GetSpeciesResult = { kind: "ok"; species: Species } | GeneralApiProb
 export type GetPokemonResult = { kind: "ok"; pokemon: Pokemon } | GeneralApiProblem
 
 // Evolution
-export type GetEvolutionChainResult = { kind: "ok"; chain: EvolutionChain } | GeneralApiProblem
-export type GetEvolutionTriggerResult = { kind: "ok"; trigger: EvolutionTrigger } | GeneralApiProblem
+export type GetEvolutionChainResult = { kind: "ok"; chain: EvolutionLink } | GeneralApiProblem

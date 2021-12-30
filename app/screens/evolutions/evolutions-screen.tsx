@@ -1,31 +1,50 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
+import { ViewStyle, Pressable, FlatList, TextStyle } from "react-native"
 import { Screen, Text } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
+import { capitalize } from "lodash"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
   flex: 1,
   alignItems: "center"
 }
+const TEXT: TextStyle = {
+  textAlign: "center"
+}
 
 export const EvolutionsScreen = observer(function EvolutionsScreen() {
-  const { speciesStore } = useStores()
+  const { speciesStore, evolutionStore } = useStores()
   const { selected } = speciesStore
+  const { evolutions } = evolutionStore
 
   useEffect(() => {
+    if (!selected) return
+
     async function fetchData() {
-      // TODO: get evolution data
+      evolutionStore.getChain(selected.evolution_chain, selected.name)
     }
 
     fetchData()
   }, [selected])
 
+  const renderItem = ({item}) => (
+    <Pressable onPress={() => speciesStore.select(item.name)}>
+      <Text text={capitalize(item.species.name)} />
+    </Pressable>
+  )
+
   return (
     <Screen style={ROOT} preset="fixed">
       <Text preset="header" tx="evolutionsScreen.title" />
+      { selected ? 
+        <FlatList
+        data={[...evolutions]}
+        renderItem={renderItem} /> :
+      <Text style={TEXT} tx="evolutionsScreen.noSelection" />
+    }
     </Screen>
   )
 })

@@ -44,7 +44,7 @@ export class SpeciesApi {
 
       const resultSpecies: any = {
         ...response.data,
-        evolution_chain: split[split.legnth - 2],
+        evolution_chain: parseInt(split[split.length - 2])
       }
 
       return { kind: "ok", species: resultSpecies }

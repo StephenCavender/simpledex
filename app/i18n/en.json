@@ -26,7 +26,8 @@
   "evolutionsScreen": {
     "title": "Evolutions",
     "noEvolutions": "does not evolve",
-    "hasEvolutions": "can evolve into"
+    "hasEvolutions": "can evolve into",
+    "noSelection": "search for a pokemon or shuffle to show possible evolutions"
   },
   "encountersScreen": {
     "title": "Encounters"

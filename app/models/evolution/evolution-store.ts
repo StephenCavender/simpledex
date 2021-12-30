@@ -1,5 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { EvolutionLinkModel } from "../evolution/evolution-link"
+import { withEnvironment } from "../extensions/with-environment"
+import { EvolutionApi } from "../../services/api/evolution-api"
+import { EvolutionLinkModel, EvolutionLinkSnapshot } from "../evolution/evolution-link"
 
 /**
  * Model description here for TypeScript hints.
@@ -9,8 +11,25 @@ export const EvolutionStoreModel = types
   .props({
     evolutions: types.array(EvolutionLinkModel)
   })
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .extend(withEnvironment)
+  .actions((self) => ({
+    save: (evolutionLinkSnapshot: EvolutionLinkSnapshot[]) => {
+      self.evolutions.replace(evolutionLinkSnapshot)
+    },
+  }))
+  .actions((self) => ({
+    getChain: async (evolutionChain: number, species: string) => {
+      const evolutionApi = new EvolutionApi(self.environment.api)
+      const result = await evolutionApi.getChain(evolutionChain, species)
+
+      if (result.kind === "ok") {
+        self.save(result.chain)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+        throw result
+      }
+    },
+  }))
 
 type EvolutionStoreType = Instance<typeof EvolutionStoreModel>
 export interface EvolutionStore extends EvolutionStoreType {}

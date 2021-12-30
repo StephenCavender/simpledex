@@ -70,7 +70,7 @@ export const SpeciesStoreModel = types
         applySnapshot(toSelect, toApply)
         self.setSelected(toSelect)
       } catch (error) {
-        __DEV__ && console.tron.log(error)
+        __DEV__ && console.tron.log(`err: ${error}`)
       }
     }
   }))

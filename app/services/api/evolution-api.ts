@@ -1,7 +1,20 @@
 import { ApiResponse } from "apisauce"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
-import { GetEvolutionChainResult, GetEvolutionTriggerResult } from "."
+import { GetEvolutionChainResult } from "./api-types"
+
+const recurseEvolutions = (name: string, chain: GetEvolutionChainResult): any => {
+  if (name.toLowerCase() !== chain.species.name.toLowerCase()) {
+    return recurseEvolutions(name, chain.evolves_to[0])
+  }
+  chain.evolves_to.forEach(evolution => {
+    evolution.evolution_details.forEach(details => {
+      details.trigger = details.trigger.name
+    })
+    evolution.evolves_to = []
+  })
+  return chain.evolves_to
+}
 
 export class EvolutionApi {
   private api: Api
@@ -10,7 +23,7 @@ export class EvolutionApi {
     this.api = api
   }
 
-  async getChain(id: number): Promise<GetEvolutionChainResult> {
+  async getChain(id: number, species: string): Promise<GetEvolutionChainResult> {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.get(`/evolution-chain/${id}`)
 
@@ -20,24 +33,10 @@ export class EvolutionApi {
         if (problem) return problem
       }
 
-      return { kind: "ok", chain: response.data }
-    } catch (e) {
-      __DEV__ && console.tron.log(e.message)
-      return { kind: "bad-data" }
-    }
-  }
+      const chain = recurseEvolutions(species, response.data.chain)
+      // chain.evolves_to = []
 
-  async getTrigger(trigger: string | number): Promise<GetEvolutionTriggerResult> {
-    try {
-      const response: ApiResponse<any> = await this.api.apisauce.get(`/evolution-trigger/${trigger}`)
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: "ok", trigger: response.data }
+      return { kind: "ok", chain }
     } catch (e) {
       __DEV__ && console.tron.log(e.message)
       return { kind: "bad-data" }

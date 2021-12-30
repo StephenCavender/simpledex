@@ -23,10 +23,6 @@ export const SearchScreen = observer(function SearchScreen() {
 
   const [filteredSpecies, setFilteredSpecies] = useState([])
 
-  const select = (species: string) => {
-    speciesStore.select(species)
-  }
-
   const onChangeText = debounce((filter: string) => {
     setFilteredSpecies(species.filter((species: Species) =>
       species.name.toLowerCase().includes(filter.toLowerCase())
@@ -34,7 +30,7 @@ export const SearchScreen = observer(function SearchScreen() {
   )}, 500)
 
   const renderItem = ({item}) => (
-    <Pressable onPress={() => select(item.name)}>
+    <Pressable onPress={() => speciesStore.select(item.name)}>
       <Text text={capitalize(item.name)} />
     </Pressable>
   )
