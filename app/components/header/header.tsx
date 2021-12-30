@@ -25,7 +25,7 @@ const SELECTOR_ROW: ViewStyle = {
   marginTop: spacing[2]
 }
 const TITLE: TextStyle = { textAlign: "center" }
-const TITLE_MIDDLE: ViewStyle = { flex: 1, justifyContent: "center" }
+const TITLE_MIDDLE: ViewStyle = { flex: 2, justifyContent: "center" }
 const OUTSIDE: ViewStyle = { width: 32 }
 const ICON: ImageStyle = { tintColor: color.text }
 const SELECTOR_ICON: ImageStyle = { width: 20 }
