@@ -2,7 +2,6 @@ import { ApiResponse } from "apisauce"
 import { Api } from "./api"
 import { GetAllSpeciesResult, GetSpeciesResult } from "./api.types"
 import { getGeneralApiProblem } from "./api-problem"
-import { result } from "validate.js"
 
 export class SpeciesApi {
   private api: Api
@@ -13,7 +12,8 @@ export class SpeciesApi {
 
   async getAll(): Promise<GetAllSpeciesResult> {
     try {
-      const response: ApiResponse<any> = await this.api.apisauce.get("/pokemon-species?limit=-1")
+      const countResponse: ApiResponse<any> = await (await this.api.apisauce.get("/pokemon-species?limit=1"))
+      const response: ApiResponse<any> = await this.api.apisauce.get(`/pokemon-species?limit=${countResponse.data.count}`)
 
       // the typical ways to die when calling an api
       if (!response.ok) {
