@@ -35,8 +35,6 @@ export class EvolutionApi {
       }
 
       const chain = recurseEvolutions(species, response.data.chain)
-      console.tron.log('chain:')
-      console.tron.log(chain)
 
       return { kind: "ok", chain }
     } catch (e) {
