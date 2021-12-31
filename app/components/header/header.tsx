@@ -28,6 +28,7 @@ const TITLE: TextStyle = { textAlign: "center" }
 const TITLE_MIDDLE: ViewStyle = { flex: 2, justifyContent: "center" }
 const OUTSIDE: ViewStyle = { width: 32 }
 const ICON: ImageStyle = { tintColor: color.text }
+const ICON_DISABLED: ImageStyle = { tintColor: color.dim }
 const SELECTOR_ICON: ImageStyle = { width: 20 }
 const SELECTOR: ViewStyle = { flex: 1, alignItems: "center" }
 
@@ -66,14 +67,14 @@ export const Header = observer(function Header() {
         <Button preset="link" onPress={toggleSearch} style={SELECTOR}>
           <Icon icon="search" style={[ICON, SELECTOR_ICON]} />
         </Button>
-        <Button preset="link" onPress={previous} style={SELECTOR}>
-          <Icon icon="chevronLeft" style={[ICON, SELECTOR_ICON]} />
+        <Button disabled={!selected} preset="link" onPress={previous} style={SELECTOR}>
+          <Icon icon="chevronLeft" style={[ICON, SELECTOR_ICON, selected ? null : ICON_DISABLED]} />
         </Button>
         <View style={TITLE_MIDDLE}>
           {!!selected && <Pressable onLongPress={toggleSearch}><Text style={TITLE} text={capitalize(selected.name)} /></Pressable>}
         </View>
-        <Button preset="link" onPress={next} style={SELECTOR}>
-          <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON]} />
+        <Button disabled={!selected} preset="link" onPress={next} style={SELECTOR}>
+          <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON, selected ? null : ICON_DISABLED]} />
         </Button>
         <Button preset="link" onPress={shuffle} style={SELECTOR}>
           <Icon icon="shuffle" style={[ICON, SELECTOR_ICON]} />
