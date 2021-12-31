@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { View, ViewStyle, TextStyle, ImageStyle, Pressable } from "react-native"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
@@ -33,6 +33,9 @@ const SELECTOR_ICON: ImageStyle = { width: 20 }
 const SELECTOR: ViewStyle = { flex: 1, alignItems: "center" }
 
 export const Header = observer(function Header() {
+  const [previousDisabled, setPreviousDisabled] = useState(true)
+  const [nextDisabled, setNextDisabled] = useState(true)
+  
   const { speciesStore } = useStores()
   const { species, selected } = speciesStore
 
@@ -42,15 +45,35 @@ export const Header = observer(function Header() {
     navigation.navigate("search")
   }
 
+  useEffect(() => {
+    if (selected) {
+      if (selected.id > 1) {
+        setPreviousDisabled(false)
+      }
+      if (selected.id < species.length) {
+        setNextDisabled(false)
+      }
+    } else {
+      setPreviousDisabled(true)
+      setNextDisabled(true)
+    }
+    return () => {
+      setPreviousDisabled(true)
+      setNextDisabled(true)
+    }
+  }, [selected])
+
   const previous = () => {
-    alert("previous")
+    const index = species.findIndex(s => s.name.toLowerCase() === selected.name.toLowerCase())
+    alert(`previous, index: ${index}`)
   }
 
   const next = () => {
-    alert("next")
+    const index = species.findIndex(s => s.name.toLowerCase() === selected.name.toLowerCase())
+    alert(`next, index: ${index}`)
   }
 
-  const selectRandom = () => {
+  const random = () => {
     const { name }: Species = sample(species)
     speciesStore.select(name)
   }
@@ -68,16 +91,16 @@ export const Header = observer(function Header() {
         <Button preset="link" onPress={toggleSearch} style={SELECTOR}>
           <Icon icon="search" style={[ICON, SELECTOR_ICON]} />
         </Button>
-        <Button disabled={!selected} preset="link" onPress={previous} style={SELECTOR}>
-          <Icon icon="chevronLeft" style={[ICON, SELECTOR_ICON, selected ? null : ICON_DISABLED]} />
+        <Button disabled={previousDisabled} preset="link" onPress={previous} style={SELECTOR}>
+          <Icon icon="chevronLeft" style={[ICON, SELECTOR_ICON, previousDisabled ? ICON_DISABLED : null]} />
         </Button>
         <View style={TITLE_MIDDLE}>
           {!!selected && <Pressable onLongPress={toggleSearch}><Text style={TITLE} text={capitalize(selected.name)} /></Pressable>}
         </View>
-        <Button disabled={!selected} preset="link" onPress={next} style={SELECTOR}>
-          <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON, selected ? null : ICON_DISABLED]} />
+        <Button disabled={nextDisabled} preset="link" onPress={next} style={SELECTOR}>
+          <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON, nextDisabled ? ICON_DISABLED : null]} />
         </Button>
-        <Button preset="link" onPress={selectRandom} style={SELECTOR}>
+        <Button preset="link" onPress={random} style={SELECTOR}>
           <Icon icon="shuffle" style={[ICON, SELECTOR_ICON]} />
         </Button>
       </View>
