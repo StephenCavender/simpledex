@@ -5,9 +5,9 @@ import { Text } from "../text/text"
 import { Icon } from "../icon/icon"
 import { spacing, color } from "../../theme"
 import { observer } from "mobx-react-lite"
-import { useStores } from "../../models"
+import { Species, useStores } from "../../models"
 import { useNavigation } from '@react-navigation/native';
-import { capitalize } from "lodash"
+import { capitalize, sample } from "lodash"
 
 // static styles
 const ROOT: ViewStyle = {
@@ -34,7 +34,7 @@ const SELECTOR: ViewStyle = { flex: 1, alignItems: "center" }
 
 export const Header = observer(function Header() {
   const { speciesStore } = useStores()
-  const { selected } = speciesStore
+  const { species, selected } = speciesStore
 
   const navigation = useNavigation();
 
@@ -50,8 +50,9 @@ export const Header = observer(function Header() {
     alert("next")
   }
 
-  const shuffle = () => {
-    alert("shuffle")
+  const selectRandom = () => {
+    const { name }: Species = sample(species)
+    speciesStore.select(name)
   }
 
   return (
@@ -76,7 +77,7 @@ export const Header = observer(function Header() {
         <Button disabled={!selected} preset="link" onPress={next} style={SELECTOR}>
           <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON, selected ? null : ICON_DISABLED]} />
         </Button>
-        <Button preset="link" onPress={shuffle} style={SELECTOR}>
+        <Button preset="link" onPress={selectRandom} style={SELECTOR}>
           <Icon icon="shuffle" style={[ICON, SELECTOR_ICON]} />
         </Button>
       </View>
