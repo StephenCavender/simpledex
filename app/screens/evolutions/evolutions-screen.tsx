@@ -44,9 +44,9 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
       <Text style={TEXT_CONTAINER} preset="header" tx="evolutionsScreen.title" />
       { !!selected ? 
         <FlatList
-        data={[...evolutions]}
-        renderItem={renderItem}
-        ListEmptyComponent={<Text txOptions={{ species: capitalize(selected.name) }} tx="evolutionsScreen.noEvolutions" />} /> :
+          data={[...evolutions]}
+          renderItem={renderItem}
+          listEmptyComponent={<Text txOptions={{ species: capitalize(selected.name) }} tx="evolutionsScreen.noEvolutions" />} /> :
       <Text style={TEXT} tx="evolutionsScreen.noSelection" />
     }
     </Screen>
