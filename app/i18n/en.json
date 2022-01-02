@@ -25,8 +25,8 @@
   },
   "evolutionsScreen": {
     "title": "Evolutions",
-    "noEvolutions": "does not evolve",
-    "hasEvolutions": "can evolve into",
+    "noEvolutions": "%{species} does not evolve",
+    "hasEvolutions": "%{species} can evolve into",
     "noSelection": "search for a pokemon or shuffle to show possible evolutions"
   },
   "encountersScreen": {
