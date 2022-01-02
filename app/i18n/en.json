@@ -10,8 +10,9 @@
   "aboutScreen": {
     "title": "SimpleDex",
     "version": "",
-    "developer": "",
-    "projectPage": ""
+    "developer": "Developer",
+    "project": "Project",
+    "poweredBy": "Powered by"
   },
   "searchScreen": {
     "title": "Search",
