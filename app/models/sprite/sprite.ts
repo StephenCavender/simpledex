@@ -1,7 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 /**
- * Model description here for TypeScript hints.
+ * Image properties for a pokemon
  */
 export const SpriteModel = types
   .model("Sprite")
