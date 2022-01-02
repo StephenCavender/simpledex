@@ -2,7 +2,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { EncounterModel } from "./encounter"
 
 /**
- * Model description here for TypeScript hints.
+ * Store for pokemon encounters
  */
 export const EncounterStoreModel = types
   .model("EncounterStore")

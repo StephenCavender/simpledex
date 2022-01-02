@@ -1,7 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 /**
- * Model description here for TypeScript hints.
+ * Details for a pokemon encounter
  */
 export const EncounterDetailModel = types
   .model("EncounterDetail")

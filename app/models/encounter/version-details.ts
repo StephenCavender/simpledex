@@ -2,7 +2,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { EncounterDetailModel } from "./encounter-detail"
 
 /**
- * Model description here for TypeScript hints.
+ * Details for which version an encounter is for
  */
 export const VersionDetailsModel = types
   .model("VersionDetails")
