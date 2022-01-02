@@ -11,6 +11,9 @@ const ROOT: ViewStyle = {
   flex: 1,
   alignItems: "center"
 }
+const TEXT_CONTAINER: ViewStyle = {
+  marginBottom: 10
+}
 const TEXT: TextStyle = {
   textAlign: "center"
 }
@@ -38,11 +41,12 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
 
   return (
     <Screen style={ROOT} preset="fixed">
-      <Text preset="header" tx="evolutionsScreen.title" />
-      { selected ? 
+      <Text style={TEXT_CONTAINER} preset="header" tx="evolutionsScreen.title" />
+      { !!selected ? 
         <FlatList
         data={[...evolutions]}
-        renderItem={renderItem} /> :
+        renderItem={renderItem}
+        ListEmptyComponent={<Text txOptions={{ species: capitalize(selected.name) }} tx="evolutionsScreen.noEvolutions" />} /> :
       <Text style={TEXT} tx="evolutionsScreen.noSelection" />
     }
     </Screen>
