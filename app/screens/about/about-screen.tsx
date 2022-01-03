@@ -4,6 +4,7 @@ import { ViewStyle, ImageStyle, TextStyle, Pressable, View, Linking, TouchableOp
 import { Screen, Text, Icon, AutoImage as Image } from "../../components"
 import { TxKeyPath } from "../../i18n"
 import { color } from "../../theme"
+import { getVersion } from "react-native-device-info"
 
 const appLogo = require("./app-logo.png")
 const pokeapiLogo = require("./pokeapi-logo.png")
@@ -77,7 +78,7 @@ export const AboutScreen = observer(function AboutScreen() {
     <Screen style={ROOT} preset="fixed">
       <Text preset="header" tx="aboutScreen.title" />
       <Image source={appLogo} style={[LOGO, APP_LOGO]} />
-      {/* Version */}
+      <Text txOptions={{ version: getVersion() }} tx="aboutScreen.version" />
       <View style={LINKS_CONTAINER}>
         <Link
           titleTx="aboutScreen.developer"
