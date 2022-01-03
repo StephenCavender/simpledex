@@ -10,6 +10,14 @@ const recurseEvolutions = (name: string, chain: GetEvolutionChainResult): any =>
   chain.evolves_to.forEach((evolution) => {
     evolution.evolution_details.forEach((details) => {
       details.trigger = details.trigger.name
+      if (details.item) details.item = details.item.name
+      if (details.held_item) details.held_item = details.held_item.name
+      if (details.known_move) details.known_move = details.known_move.name
+      if (details.known_move_type) details.known_move_type = details.known_move_type.name
+      if (details.location) details.location = details.location.name
+      if (details.party_species) details.party_species = details.party_species.name
+      if (details.party_type) details.party_type = details.party_type.name
+      if (details.trade_species) details.trade_species = details.trade_species.name
     })
     evolution.evolves_to = []
     evolution.species = evolution.species.name
