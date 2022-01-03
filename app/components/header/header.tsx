@@ -25,6 +25,7 @@ const SELECTOR_ROW: ViewStyle = {
   marginTop: spacing[2],
 }
 const TITLE: TextStyle = { textAlign: "center" }
+const BOLD: TextStyle = { fontWeight: "bold" }
 const TITLE_MIDDLE: ViewStyle = { flex: 2, justifyContent: "center" }
 const OUTSIDE: ViewStyle = { width: 32 }
 const ICON: ImageStyle = { tintColor: color.text }
@@ -83,7 +84,7 @@ export const Header = observer(function Header() {
       <View style={ROW}>
         <View style={OUTSIDE} />
         <View style={TITLE_MIDDLE}>
-          <Text style={TITLE} text="SimpleDex" />
+          <Text style={[TITLE, BOLD]} text="SimpleDex" />
         </View>
         <View style={OUTSIDE} />
       </View>
