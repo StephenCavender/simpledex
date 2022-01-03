@@ -7,8 +7,8 @@ const recurseEvolutions = (name: string, chain: GetEvolutionChainResult): any =>
   if (name.toLowerCase() !== chain.species.name.toLowerCase()) {
     return recurseEvolutions(name, chain.evolves_to[0])
   }
-  chain.evolves_to.forEach(evolution => {
-    evolution.evolution_details.forEach(details => {
+  chain.evolves_to.forEach((evolution) => {
+    evolution.evolution_details.forEach((details) => {
       details.trigger = details.trigger.name
     })
     evolution.evolves_to = []

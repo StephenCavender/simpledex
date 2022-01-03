@@ -6,7 +6,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 export const SpriteModel = types
   .model("Sprite")
   .props({
-    front_default: types.maybe(types.string)
+    front_default: types.maybe(types.string),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

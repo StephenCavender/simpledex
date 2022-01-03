@@ -7,11 +7,11 @@
 import React from "react"
 import { ImageStyle, useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { EvolutionsScreen, EncountersScreen, AboutScreen, SearchScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
-import { Header, Icon } from "../components";
+import { Header, Icon } from "../components"
 import { color } from "../theme"
 
 export type TabParamList = {
@@ -26,37 +26,43 @@ const ICON: ImageStyle = { tintColor: color.primary, width: 24 }
 
 const AppTabs = () => {
   return (
-    <Tab.Navigator screenOptions={{
-      header: function header() {
-        return ( <Header /> )
-      },
-      tabBarStyle: { backgroundColor: color.background },
-      tabBarActiveTintColor: color.primary }}>
+    <Tab.Navigator
+      screenOptions={{
+        header: function header() {
+          return <Header />
+        },
+        tabBarStyle: { backgroundColor: color.background },
+        tabBarActiveTintColor: color.primary,
+      }}
+    >
       <Tab.Screen
         name="evolutions"
         component={EvolutionsScreen}
         options={{
           tabBarIcon: function tabBarIcon({ color }) {
-            return (<Icon icon="refreshCw" style={[ICON, {tintColor: color}]} />)
-          }
-        }}/>
+            return <Icon icon="refreshCw" style={[ICON, { tintColor: color }]} />
+          },
+        }}
+      />
       <Tab.Screen
         name="encounters"
         component={EncountersScreen}
         options={{
           tabBarIcon: function tabBarIcon({ color }) {
-            return (<Icon icon="mapPin" style={[ICON, {tintColor: color}]} />)
-          }
-        }}/>
-        <Tab.Screen
-          name="about"
-          component={AboutScreen}
-          options={{
-            tabBarIcon: function tabBarIcon({ color }) {
-              return (<Icon icon="info" style={[ICON, {tintColor: color}]} />)
-            },
-            headerShown: false,
-          }}/>
+            return <Icon icon="mapPin" style={[ICON, { tintColor: color }]} />
+          },
+        }}
+      />
+      <Tab.Screen
+        name="about"
+        component={AboutScreen}
+        options={{
+          tabBarIcon: function tabBarIcon({ color }) {
+            return <Icon icon="info" style={[ICON, { tintColor: color }]} />
+          },
+          headerShown: false,
+        }}
+      />
     </Tab.Navigator>
   )
 }
@@ -86,11 +92,11 @@ const AppStack = () => {
     <Stack.Navigator
       initialRouteName="tabs"
       screenOptions={{
-        headerShown: false
+        headerShown: false,
       }}
     >
       <Stack.Screen name="tabs" component={AppTabs} />
-      <Stack.Screen options={{ presentation: "modal"}} name="search" component={SearchScreen} />
+      <Stack.Screen options={{ presentation: "modal" }} name="search" component={SearchScreen} />
     </Stack.Navigator>
   )
 }

@@ -9,7 +9,7 @@ import { EvolutionLinkModel, EvolutionLinkSnapshot } from "../evolution/evolutio
 export const EvolutionStoreModel = types
   .model("EvolutionStore")
   .props({
-    evolutions: types.array(EvolutionLinkModel)
+    evolutions: types.array(EvolutionLinkModel),
   })
   .extend(withEnvironment)
   .actions((self) => ({

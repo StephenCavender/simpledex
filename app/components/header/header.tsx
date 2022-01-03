@@ -6,7 +6,7 @@ import { Icon } from "../icon/icon"
 import { spacing, color } from "../../theme"
 import { observer } from "mobx-react-lite"
 import { Species, useStores } from "../../models"
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native"
 import { capitalize, sample } from "lodash"
 
 // static styles
@@ -22,7 +22,7 @@ const ROW: ViewStyle = {
   justifyContent: "flex-start",
 }
 const SELECTOR_ROW: ViewStyle = {
-  marginTop: spacing[2]
+  marginTop: spacing[2],
 }
 const TITLE: TextStyle = { textAlign: "center" }
 const TITLE_MIDDLE: ViewStyle = { flex: 2, justifyContent: "center" }
@@ -35,11 +35,11 @@ const SELECTOR: ViewStyle = { flex: 1, alignItems: "center" }
 export const Header = observer(function Header() {
   const [previousDisabled, setPreviousDisabled] = useState(true)
   const [nextDisabled, setNextDisabled] = useState(true)
-  
+
   const { speciesStore } = useStores()
   const { species, selected } = speciesStore
 
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   const toggleSearch = () => {
     navigation.navigate("search")
@@ -64,12 +64,12 @@ export const Header = observer(function Header() {
   }, [selected])
 
   const previous = () => {
-    const index = species.findIndex(s => s.name.toLowerCase() === selected.name.toLowerCase())
+    const index = species.findIndex((s) => s.name.toLowerCase() === selected.name.toLowerCase())
     alert(`previous, index: ${index}`)
   }
 
   const next = () => {
-    const index = species.findIndex(s => s.name.toLowerCase() === selected.name.toLowerCase())
+    const index = species.findIndex((s) => s.name.toLowerCase() === selected.name.toLowerCase())
     alert(`next, index: ${index}`)
   }
 
@@ -92,13 +92,23 @@ export const Header = observer(function Header() {
           <Icon icon="search" style={[ICON, SELECTOR_ICON]} />
         </Button>
         <Button disabled={previousDisabled} preset="link" onPress={previous} style={SELECTOR}>
-          <Icon icon="chevronLeft" style={[ICON, SELECTOR_ICON, previousDisabled ? ICON_DISABLED : null]} />
+          <Icon
+            icon="chevronLeft"
+            style={[ICON, SELECTOR_ICON, previousDisabled ? ICON_DISABLED : null]}
+          />
         </Button>
         <View style={TITLE_MIDDLE}>
-          {!!selected && <Pressable onLongPress={toggleSearch}><Text style={TITLE} text={capitalize(selected.name)} /></Pressable>}
+          {!!selected && (
+            <Pressable onLongPress={toggleSearch}>
+              <Text style={TITLE} text={capitalize(selected.name)} />
+            </Pressable>
+          )}
         </View>
         <Button disabled={nextDisabled} preset="link" onPress={next} style={SELECTOR}>
-          <Icon icon="chevronRight" style={[ICON, SELECTOR_ICON, nextDisabled ? ICON_DISABLED : null]} />
+          <Icon
+            icon="chevronRight"
+            style={[ICON, SELECTOR_ICON, nextDisabled ? ICON_DISABLED : null]}
+          />
         </Button>
         <Button preset="link" onPress={random} style={SELECTOR}>
           <Icon icon="shuffle" style={[ICON, SELECTOR_ICON]} />

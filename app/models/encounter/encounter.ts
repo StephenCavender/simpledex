@@ -8,7 +8,7 @@ export const EncounterModel = types
   .model("Encounter")
   .props({
     location_area: types.string,
-    version_details: types.array(VersionDetailsModel)
+    version_details: types.array(VersionDetailsModel),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

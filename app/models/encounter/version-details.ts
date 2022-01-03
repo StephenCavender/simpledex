@@ -9,7 +9,7 @@ export const VersionDetailsModel = types
   .props({
     encounter_details: types.array(EncounterDetailModel),
     max_chance: types.number, // TODO: needed??
-    version: types.string
+    version: types.string,
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

@@ -4,14 +4,12 @@ import { VarietyModel } from "../pokemon/variety"
 /**
  * A species of Pokemon
  */
-export const SpeciesModel = types
-  .model("Species")
-  .props({
-    name: types.identifier,
-    id: types.maybe(types.number),
-    evolution_chain: types.maybe(types.number),
-    varieties: types.maybe(types.array(VarietyModel)),
-  })
+export const SpeciesModel = types.model("Species").props({
+  name: types.identifier,
+  id: types.maybe(types.number),
+  evolution_chain: types.maybe(types.number),
+  varieties: types.maybe(types.array(VarietyModel)),
+})
 
 type SpeciesType = Instance<typeof SpeciesModel>
 export interface Species extends SpeciesType {}

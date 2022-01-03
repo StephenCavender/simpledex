@@ -11,7 +11,7 @@ export const icons = {
   refreshCw: require("./refresh-cw.png"),
   mapPin: require("./map-pin.png"),
   info: require("./info.png"),
-  externalLink: require("./external-link.png")
+  externalLink: require("./external-link.png"),
 }
 
 export type IconTypes = keyof typeof icons

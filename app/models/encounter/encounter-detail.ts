@@ -7,7 +7,7 @@ export const EncounterDetailModel = types
   .model("EncounterDetail")
   .props({
     chance: types.number,
-    method: types.string
+    method: types.string,
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

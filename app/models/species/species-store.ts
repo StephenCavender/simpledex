@@ -11,7 +11,7 @@ export const SpeciesStoreModel = types
   .model("SpeciesStore")
   .props({
     species: types.optional(types.array(SpeciesModel), []),
-    selected: types.maybe(types.reference(types.late(() => SpeciesModel)))
+    selected: types.maybe(types.reference(types.late(() => SpeciesModel))),
   })
   .extend(withEnvironment)
   .actions((self) => ({
@@ -20,7 +20,7 @@ export const SpeciesStoreModel = types
     },
     setSelected: (species: Species) => {
       self.selected = species
-    }
+    },
   }))
   .actions((self) => ({
     getAll: async () => {
@@ -54,7 +54,7 @@ export const SpeciesStoreModel = types
         __DEV__ && console.tron.log(result.kind)
         throw result
       }
-    }
+    },
   }))
   .actions((self) => ({
     afterCreate: async () => {
@@ -63,16 +63,16 @@ export const SpeciesStoreModel = types
     },
     select: async (species: string) => {
       try {
-        const toSelect = self.species.find(s => s.name === species)
+        const toSelect = self.species.find((s) => s.name === species)
         const toApply = await self.get(species)
-        const variety = toApply.varieties.find(variety => variety.is_default)
+        const variety = toApply.varieties.find((variety) => variety.is_default)
         variety.pokemon = await self.getPokemon(species)
         applySnapshot(toSelect, toApply)
         self.setSelected(toSelect)
       } catch (error) {
         __DEV__ && console.tron.log(`err: ${error}`)
       }
-    }
+    },
   }))
 
 type SpeciesStoreType = Instance<typeof SpeciesStoreModel>

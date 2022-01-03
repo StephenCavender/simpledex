@@ -12,8 +12,12 @@ export class SpeciesApi {
 
   async getAll(): Promise<GetAllSpeciesResult> {
     try {
-      const countResponse: ApiResponse<any> = await this.api.apisauce.get("/pokemon-species?limit=1")
-      const response: ApiResponse<any> = await this.api.apisauce.get(`/pokemon-species?limit=${countResponse.data.count}`)
+      const countResponse: ApiResponse<any> = await this.api.apisauce.get(
+        "/pokemon-species?limit=1",
+      )
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/pokemon-species?limit=${countResponse.data.count}`,
+      )
 
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -40,11 +44,11 @@ export class SpeciesApi {
         if (problem) return problem
       }
 
-      const split = response.data.evolution_chain.url.split('/')
+      const split = response.data.evolution_chain.url.split("/")
 
       const resultSpecies: any = {
         ...response.data,
-        evolution_chain: parseInt(split[split.length - 2])
+        evolution_chain: parseInt(split[split.length - 2]),
       }
 
       return { kind: "ok", species: resultSpecies }

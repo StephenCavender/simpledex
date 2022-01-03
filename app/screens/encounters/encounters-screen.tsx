@@ -8,7 +8,7 @@ import { color } from "../../theme"
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
   flex: 1,
-  alignItems: "center"
+  alignItems: "center",
 }
 
 export const EncountersScreen = observer(function EncountersScreen() {

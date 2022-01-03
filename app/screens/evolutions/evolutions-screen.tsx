@@ -9,13 +9,13 @@ import { capitalize } from "lodash"
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
   flex: 1,
-  alignItems: "center"
+  alignItems: "center",
 }
 const TEXT_CONTAINER: ViewStyle = {
-  marginBottom: 10
+  marginBottom: 10,
 }
 const TEXT: TextStyle = {
-  textAlign: "center"
+  textAlign: "center",
 }
 
 export const EvolutionsScreen = observer(function EvolutionsScreen() {
@@ -33,7 +33,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
     fetchData()
   }, [selected])
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <Pressable onPress={() => speciesStore.select(item.name)}>
       <Text text={capitalize(item.species.name)} />
     </Pressable>
@@ -42,13 +42,20 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
   return (
     <Screen style={ROOT} preset="fixed">
       <Text style={TEXT_CONTAINER} preset="header" tx="evolutionsScreen.title" />
-      { !!selected ? 
+      {!!selected ? (
         <FlatList
           data={[...evolutions]}
           renderItem={renderItem}
-          listEmptyComponent={<Text txOptions={{ species: capitalize(selected.name) }} tx="evolutionsScreen.noEvolutions" />} /> :
-      <Text style={TEXT} tx="evolutionsScreen.noSelection" />
-    }
+          listEmptyComponent={
+            <Text
+              txOptions={{ species: capitalize(selected.name) }}
+              tx="evolutionsScreen.noEvolutions"
+            />
+          }
+        />
+      ) : (
+        <Text style={TEXT} tx="evolutionsScreen.noSelection" />
+      )}
     </Screen>
   )
 })

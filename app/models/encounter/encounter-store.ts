@@ -7,7 +7,7 @@ import { EncounterModel } from "./encounter"
 export const EncounterStoreModel = types
   .model("EncounterStore")
   .props({
-    encounters: types.array(EncounterModel)
+    encounters: types.array(EncounterModel),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
