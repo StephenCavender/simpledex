@@ -12,7 +12,7 @@ export class SpeciesApi {
 
   async getAll(): Promise<GetAllSpeciesResult> {
     try {
-      const countResponse: ApiResponse<any> = await (await this.api.apisauce.get("/pokemon-species?limit=1"))
+      const countResponse: ApiResponse<any> = await this.api.apisauce.get("/pokemon-species?limit=1")
       const response: ApiResponse<any> = await this.api.apisauce.get(`/pokemon-species?limit=${countResponse.data.count}`)
 
       // the typical ways to die when calling an api
