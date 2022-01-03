@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, Pressable, FlatList, TextStyle } from "react-native"
-import { Screen, Text } from "../../components"
-import { useStores } from "../../models"
+import { ViewStyle, Pressable, FlatList, TextStyle, ImageStyle } from "react-native"
+import { Screen, Text, AutoImage as Image } from "../../components"
+import { EvolutionDetails, Species, useStores } from "../../models"
 import { color } from "../../theme"
 import { capitalize } from "lodash"
 
@@ -16,6 +16,10 @@ const TEXT_CONTAINER: ViewStyle = {
 }
 const TEXT: TextStyle = {
   textAlign: "center",
+}
+const SPRITE: ImageStyle = {
+  height: 125,
+  width: 125,
 }
 
 export const EvolutionsScreen = observer(function EvolutionsScreen() {
@@ -33,9 +37,26 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
     fetchData()
   }, [selected])
 
+  const renderSprite = (species: Species) => {
+    const variety = species.varieties.find((variety) => variety.is_default)
+    return <Image style={SPRITE} source={{ uri: variety.pokemon.sprites.front_default }} />
+  }
+
+  const renderDetails = (details: EvolutionDetails[]) => {
+    details.forEach(detail => {
+      // TODO: render card for these deets
+      for (const [key, value] of Object.entries(detail)) {
+        console.tron.log(`${key}: ${value}`);
+      }
+    })
+  }
+
   const renderItem = ({ item }) => (
-    <Pressable onPress={() => speciesStore.select(item.name)}>
+    <Pressable onPress={() => speciesStore.select(item.species.name)}>
       <Text text={capitalize(item.species.name)} />
+      {/* TODO: fix, causing errors */}
+      {/* {renderSprite(item.species)} */}
+      {/* {renderDetails(item.evolution_details)} */}
     </Pressable>
   )
 
@@ -46,7 +67,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
         <FlatList
           data={[...evolutions]}
           renderItem={renderItem}
-          listEmptyComponent={
+          ListEmptyComponent={
             <Text
               txOptions={{ species: capitalize(selected.name) }}
               tx="evolutionsScreen.noEvolutions"
