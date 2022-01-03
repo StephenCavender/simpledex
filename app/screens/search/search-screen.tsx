@@ -65,7 +65,7 @@ export const SearchScreen = observer(function SearchScreen() {
         autoCompleteType="off"
         autoCorrect={false}
       />
-      <FlatList data={[...filteredSpecies]} renderItem={renderItem} />
+      <FlatList data={[...filteredSpecies]} renderItem={renderItem} keyExtractor={(item, index) => String(index)} />
     </Screen>
   )
 })
