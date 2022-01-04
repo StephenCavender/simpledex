@@ -1,5 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withEnvironment } from "../extensions/with-environment"
+import { withRootStore } from "../extensions/with-root-store"
 import { EvolutionApi } from "../../services/api/evolution-api"
 import { EvolutionLinkModel, EvolutionLinkSnapshot } from "../evolution/evolution-link"
 
@@ -12,8 +13,12 @@ export const EvolutionStoreModel = types
     evolutions: types.array(EvolutionLinkModel),
   })
   .extend(withEnvironment)
+  .extend(withRootStore)
   .actions((self) => ({
     save: (evolutionLinkSnapshot: EvolutionLinkSnapshot[]) => {
+      evolutionLinkSnapshot.forEach(async evolution => {
+        await self.rootStore.speciesStore.getPokemonData(evolution.species)
+      })
       self.evolutions.replace(evolutionLinkSnapshot)
     },
   }))

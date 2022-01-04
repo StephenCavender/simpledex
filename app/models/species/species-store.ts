@@ -73,6 +73,13 @@ export const SpeciesStoreModel = types
         __DEV__ && console.tron.log(`err: ${error}`)
       }
     },
+    getPokemonData: async (species: string) => {
+      const model = self.species.find((s) => s.name === species)
+      const snapshot = await self.get(species)
+      const variety = snapshot.varieties.find((variety) => variety.is_default)
+      variety.pokemon = await self.getPokemon(species)
+      applySnapshot(model, snapshot)
+    }
   }))
 
 type SpeciesStoreType = Instance<typeof SpeciesStoreModel>

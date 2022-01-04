@@ -31,11 +31,22 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
     if (!selected) return
 
     async function fetchData() {
-      evolutionStore.getChain(selected.evolution_chain, selected.name)
+      await evolutionStore.getChain(selected.evolution_chain, selected.name)
     }
 
     fetchData()
   }, [selected])
+
+  // useEffect(() => {
+  //   if (!evolutions.length || !selected) return
+
+  //   async function fetchData() {
+  //     console.tron.log(`fetching data: ${selected.name}`)
+  //     await speciesStore.getPokemonData(selected.name)
+  //   }
+
+  //   fetchData()
+  // }, [evolutions])
 
   const renderSprite = (species: Species) => {
     const variety = species.varieties.find((variety) => variety.is_default)
@@ -46,7 +57,8 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
     details.forEach(detail => {
       // TODO: render card for these deets
       for (const [key, value] of Object.entries(detail)) {
-        console.tron.log(`${key}: ${value}`);
+        // TODO: rm null pairs
+        // console.tron.log(`${key}: ${value}`);
       }
     })
   }
@@ -56,7 +68,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
       <Text text={capitalize(item.species.name)} />
       {/* TODO: fix, causing errors */}
       {/* {renderSprite(item.species)} */}
-      {/* {renderDetails(item.evolution_details)} */}
+      {renderDetails(item.evolution_details)}
     </Pressable>
   )
 
