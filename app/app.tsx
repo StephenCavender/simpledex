@@ -57,7 +57,9 @@ function App() {
 
   // otherwise, we're ready to render the app
   return (
-    <ToggleStorybook>
+    // TODO: Re-enable when this issue is resolved
+    // * https://github.com/infinitered/ignite/issues/1705
+    // <ToggleStorybook>
       <RootStoreProvider value={rootStore}>
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
           <ErrorBoundary catchErrors={"always"}>
@@ -68,7 +70,7 @@ function App() {
           </ErrorBoundary>
         </SafeAreaProvider>
       </RootStoreProvider>
-    </ToggleStorybook>
+    // </ToggleStorybook>
   )
 }
 
