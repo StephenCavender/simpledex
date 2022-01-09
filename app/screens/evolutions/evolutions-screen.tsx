@@ -73,7 +73,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
   )
 
   return (
-    <Screen style={ROOT} preset="fixed">
+    <Screen style={ROOT} preset="fixed" unsafe={true}>
       <Text style={TEXT_CONTAINER} preset="header" tx="evolutionsScreen.title" />
       {!!selected ? (
         <FlatList

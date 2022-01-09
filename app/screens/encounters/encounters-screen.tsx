@@ -24,7 +24,7 @@ export const EncountersScreen = observer(function EncountersScreen() {
   }, [selected])
 
   return (
-    <Screen style={ROOT} preset="fixed">
+    <Screen style={ROOT} preset="fixed" unsafe={true}>
       <Text preset="header" tx="encountersScreen.title" />
     </Screen>
   )
