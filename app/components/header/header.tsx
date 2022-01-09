@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { View, ViewStyle, TextStyle, ImageStyle, Pressable } from "react-native"
+import { View, ViewStyle, TextStyle, ImageStyle, TouchableOpacity } from "react-native"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import { Icon } from "../icon/icon"
@@ -100,9 +100,9 @@ export const Header = observer(function Header() {
         </Button>
         <View style={TITLE_MIDDLE}>
           {!!selected && (
-            <Pressable onLongPress={toggleSearch}>
+            <TouchableOpacity onLongPress={toggleSearch}>
               <Text style={TITLE} text={capitalize(selected.name)} />
-            </Pressable>
+            </TouchableOpacity>
           )}
         </View>
         <Button disabled={nextDisabled} preset="link" onPress={next} style={SELECTOR}>
