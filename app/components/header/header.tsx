@@ -11,18 +11,18 @@ import { capitalize, sample } from "lodash"
 
 // static styles
 const ROOT: ViewStyle = {
-  paddingTop: spacing[7],
-  paddingBottom: spacing[5],
+  paddingTop: spacing.huge,
+  paddingBottom: spacing.large,
   backgroundColor: color.background,
 }
 const ROW: ViewStyle = {
   flexDirection: "row",
-  paddingHorizontal: spacing[4],
+  paddingHorizontal: spacing.medium,
   alignItems: "center",
   justifyContent: "flex-start",
 }
 const SELECTOR_ROW: ViewStyle = {
-  marginTop: spacing[2],
+  marginTop: spacing.smaller,
 }
 const TITLE: TextStyle = { textAlign: "center" }
 const BOLD: TextStyle = { fontWeight: "bold" }
