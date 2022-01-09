@@ -52,7 +52,6 @@ export const SearchScreen = observer(function SearchScreen() {
 
   return (
     <Screen style={ROOT} preset="fixed" unsafe={true}>
-      {/* // TODO: swipe indicator */}
       <View style={DISMISS_INDICATOR} />
       <Text preset="header" tx="searchScreen.title" />
       {!selected ? (
