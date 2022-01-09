@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, ViewStyle, Image, ImageStyle } from "react-native"
+import { View, FlatList, ViewStyle, Image, ImageStyle } from "react-native"
 import { Screen, Text, TextField, Button } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
@@ -15,6 +15,14 @@ const ROOT: ViewStyle = {
 const SPRITE: ImageStyle = {
   height: 125,
   width: 125,
+}
+const DISMISS_INDICATOR: ViewStyle = {
+  backgroundColor: color.dim,
+  height: 5,
+  width: 50,
+  borderRadius: 20,
+  marginTop: 5,
+  marginBottom: 15
 }
 
 export const SearchScreen = observer(function SearchScreen() {
@@ -43,8 +51,9 @@ export const SearchScreen = observer(function SearchScreen() {
   }
 
   return (
-    <Screen style={ROOT} preset="fixed">
+    <Screen style={ROOT} preset="fixed" unsafe={true}>
       {/* // TODO: swipe indicator */}
+      <View style={DISMISS_INDICATOR} />
       <Text preset="header" tx="searchScreen.title" />
       {!selected ? (
         <Text tx="searchScreen.noSelection" />

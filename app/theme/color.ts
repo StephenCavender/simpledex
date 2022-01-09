@@ -43,7 +43,7 @@ export const color = {
   /**
    * Secondary information.
    */
-  dim: palette.lightGrey,
+  dim: palette.grey,
   /**
    * Error messages and icons.
    */
