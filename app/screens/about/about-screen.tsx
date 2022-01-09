@@ -4,7 +4,7 @@ import {
   ViewStyle,
   ImageStyle,
   TextStyle,
-  Pressable,
+  TouchableOpacity,
   View,
   Linking,
   TouchableOpacityProps,
@@ -72,19 +72,20 @@ export const AboutScreen = observer(function AboutScreen() {
   function Link(props: LinkProps) {
     const subtitle = props.url.replace(/^(https?:|)\/\//, "")
     return (
-      <Pressable style={LINK_CONTAINER} onPress={() => Linking.openURL(props.url)}>
+      <TouchableOpacity style={LINK_CONTAINER} onPress={() => Linking.openURL(props.url)}>
         <View>
           <Text preset="bold" tx={props.titleTx} />
           <Text preset="fieldLabel" text={subtitle} />
         </View>
         <Icon containerStyle={LINK_ICON_CONTAINER} icon="externalLink" style={LINK_ICON} />
-      </Pressable>
+      </TouchableOpacity>
     )
   }
 
   return (
     <Screen style={ROOT} preset="fixed">
       <Text preset="header" tx="aboutScreen.title" />
+      {/* // TODO: missingno easter egg */}
       <Image source={appLogo} style={[LOGO, APP_LOGO]} />
       <Text txOptions={{ version: getVersion() }} tx="aboutScreen.version" />
       <View style={LINKS_CONTAINER}>
