@@ -66,12 +66,12 @@ export const Header = observer(function Header() {
 
   const previous = () => {
     const index = species.findIndex((s) => s.name.toLowerCase() === selected.name.toLowerCase())
-    alert(`previous, index: ${index}`)
+    alert(`implement previous, index: ${index}`)
   }
 
   const next = () => {
     const index = species.findIndex((s) => s.name.toLowerCase() === selected.name.toLowerCase())
-    alert(`next, index: ${index}`)
+    alert(`implement next, index: ${index}`)
   }
 
   const random = () => {

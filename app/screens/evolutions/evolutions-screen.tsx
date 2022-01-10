@@ -66,7 +66,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
   const renderItem = ({ item }) => (
     <Pressable onPress={() => speciesStore.select(item.species.name)}>
       <Text text={capitalize(item.species.name)} />
-      {/* TODO: fix, causing errors */}
+      {/* // TODO: fix, causing errors */}
       {/* {renderSprite(item.species)} */}
       {renderDetails(item.evolution_details)}
     </Pressable>
@@ -75,7 +75,11 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
   return (
     <Screen style={ROOT} preset="fixed" unsafe={true}>
       <Text style={TEXT_CONTAINER} preset="header" tx="evolutionsScreen.title" />
-      {!!selected ? (
+      {!selected ? (
+        <Text style={TEXT} tx="evolutionsScreen.noSelection" />
+      ) : (
+        // TODO: Style a card
+        // TODO: impl swiper
         <FlatList
           data={[...evolutions]}
           renderItem={renderItem}
@@ -86,8 +90,6 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
             />
           }
         />
-      ) : (
-        <Text style={TEXT} tx="evolutionsScreen.noSelection" />
       )}
     </Screen>
   )
