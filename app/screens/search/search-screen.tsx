@@ -24,6 +24,9 @@ const DISMISS_INDICATOR: ViewStyle = {
   marginTop: 5,
   marginBottom: 15
 }
+const LIST_ITEM: TextStyle = {
+  fontSize: 18
+}
 
 export const SearchScreen = observer(function SearchScreen() {
   const { speciesStore } = useStores()
@@ -32,16 +35,21 @@ export const SearchScreen = observer(function SearchScreen() {
   const [filteredSpecies, setFilteredSpecies] = useState([])
 
   const onChangeText = debounce((filter: string) => {
-    setFilteredSpecies(
-      species.filter((species: Species) =>
-        species.name.toLowerCase().includes(filter.toLowerCase()),
-      ),
-    )
+    if (filter) {
+      setFilteredSpecies(
+        species.filter((species: Species) =>
+          species.name.toLowerCase().includes(filter.toLowerCase()),
+        ),
+      )
+    } else {
+      setFilteredSpecies([])
+    }
+    
   }, 500)
 
   const renderItem = ({ item }) => (
     <Button preset="link" onPress={() => speciesStore.select(item.name)}>
-      <Text text={capitalize(item.name)} />
+      <Text style={LIST_ITEM} text={capitalize(item.name)} />
     </Button>
   )
 
@@ -55,7 +63,10 @@ export const SearchScreen = observer(function SearchScreen() {
       <View style={DISMISS_INDICATOR} />
       <Text preset="header" tx="searchScreen.title" />
       {!selected ? (
-        <Text tx="searchScreen.noSelection" />
+        <>
+          <Text tx="searchScreen.noSelection" />
+          <Image style={SPRITE} source={{ uri: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png" }} />
+        </>
       ) : (
         <>
           <Text
@@ -65,7 +76,6 @@ export const SearchScreen = observer(function SearchScreen() {
           {renderSprite()}
         </>
       )}
-      {/* // TODO: style text field */}
       <TextField
         placeholderTx="searchScreen.searchField.placeholder"
         onChangeText={onChangeText}
@@ -73,7 +83,10 @@ export const SearchScreen = observer(function SearchScreen() {
         autoCompleteType="off"
         autoCorrect={false}
       />
-      <FlatList data={[...filteredSpecies]} renderItem={renderItem} keyExtractor={(item, index) => String(index)} />
+      <FlatList
+        data={[...filteredSpecies]}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => String(index)} />
     </Screen>
   )
 })
