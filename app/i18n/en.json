@@ -29,7 +29,8 @@
     "title": "Evolutions",
     "noEvolutions": "%{species} does not evolve",
     "hasEvolutions": "%{species} can evolve into",
-    "noSelection": "search for a pokemon or shuffle to show possible evolutions"
+    "noSelection": "search for a pokemon or shuffle to show possible evolutions",
+    "detailTitle": "Method %{num}"
   },
   "encountersScreen": {
     "title": "Encounters"

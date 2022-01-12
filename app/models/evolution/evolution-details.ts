@@ -1,4 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { identity, pickBy } from 'lodash'
 
 /**
  * Model description here for TypeScript hints.
@@ -25,7 +26,11 @@ export const EvolutionDetailsModel = types
     turn_updside_down: types.maybeNull(types.boolean), // turn system upside down (switch handheld mode)
     trigger: types.enumeration<string>(["level-up", "trade", "use-item", "shed", "other"]),
   })
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((self) => ({
+    clean: () => {
+      return pickBy(self, identity)
+    }
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type EvolutionDetailsType = Instance<typeof EvolutionDetailsModel>
