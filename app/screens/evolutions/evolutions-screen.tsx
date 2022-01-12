@@ -1,6 +1,6 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle, TouchableOpacity, FlatList, TextStyle, ImageStyle, useWindowDimensions } from "react-native"
+import { View, ViewStyle, TouchableOpacity, TextStyle, ImageStyle, useWindowDimensions, ActivityIndicator } from "react-native"
 import { Screen, Text, AutoImage as Image } from "../../components"
 import { EvolutionDetails, Species, useStores } from "../../models"
 import { color, spacing } from "../../theme"
@@ -22,6 +22,7 @@ const CARD: ViewStyle = {
   borderWidth: 2,
   borderColor: color.primary,
   borderRadius: 5,
+  paddingBottom: spacing.smaller
 }
 const CARD_HEADER: ViewStyle = {
   backgroundColor: color.primary,
@@ -54,12 +55,15 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
 
   const { width } = useWindowDimensions();
 
+  const [loading, setLoading] = useState(false)
+
   useEffect(() => {
     if (!selected) return
-    console.tron.log('new seelction made, do stuff')
 
+    setLoading(true)
     async function fetchData() {
       await evolutionStore.getChain(selected.evolution_chain, selected.name)
+      setLoading(false)
     }
 
     fetchData()
@@ -102,12 +106,11 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
     })
   )
 
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({ item }) => (
     <TouchableOpacity style={CARD} onPress={() => speciesStore.select(item.species.name)}>
       <View style={CARD_HEADER}>
         <Text preset="bold" style={TEXT} text={capitalize(item.species.name)} />
       </View>
-      {/* // TODO: fix, causing errors */}
       {renderSprite(item.species)}
       {renderDetails(item.evolution_details)}
     </TouchableOpacity>
@@ -116,7 +119,28 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
   return (
     <Screen style={ROOT} preset="fixed" unsafe={true}>
       <Text style={TEXT_CONTAINER} preset="header" tx="evolutionsScreen.title" />
-      {!selected ? (
+      {loading ? <ActivityIndicator /> : 
+      <>
+        {!selected ? (
+          <Text style={TEXT} tx="evolutionsScreen.noSelection" />
+        ) : (
+          <>
+            {evolutions.length ? 
+            <Carousel
+              data={evolutions}
+              renderItem={renderItem}
+              sliderWidth={width}
+              itemWidth={width - 100} /> :
+            <Text
+              txOptions={{ species: capitalize(selected.name) }}
+              tx="evolutionsScreen.noEvolutions"
+            />
+          }
+          </>
+        )}
+      </>
+      }
+      {/* {!selected ? (
         <Text style={TEXT} tx="evolutionsScreen.noSelection" />
       ) : (
         <Carousel
@@ -124,7 +148,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
           renderItem={renderItem}
           sliderWidth={width}
           itemWidth={width - 100} />
-      )}
+      )} */}
     </Screen>
   )
 })
