@@ -81,6 +81,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
   // }, [evolutions])
 
   const renderSprite = (species: Species) => {
+    // TODO: sprite not loading on selection
     const variety = species.varieties?.find((variety) => variety.is_default)
     return variety ? 
     <Image style={SPRITE} source={{ uri: variety.pokemon.sprites.front_default }} /> :
