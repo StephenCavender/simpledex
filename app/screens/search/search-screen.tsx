@@ -82,6 +82,7 @@ export const SearchScreen = observer(function SearchScreen() {
         autoCapitalize="none"
         autoCompleteType="off"
         autoCorrect={false}
+        autoFocus
       />
       <FlatList
         data={[...filteredSpecies]}
