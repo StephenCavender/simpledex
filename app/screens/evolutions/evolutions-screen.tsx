@@ -1,10 +1,11 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, Pressable, FlatList, TextStyle, ImageStyle } from "react-native"
+import { ViewStyle, TouchableOpacity, FlatList, TextStyle, ImageStyle, useWindowDimensions } from "react-native"
 import { Screen, Text, AutoImage as Image } from "../../components"
 import { EvolutionDetails, Species, useStores } from "../../models"
 import { color } from "../../theme"
 import { capitalize } from "lodash"
+import Carousel from "react-native-snap-carousel"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -26,6 +27,8 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
   const { speciesStore, evolutionStore } = useStores()
   const { selected } = speciesStore
   const { evolutions } = evolutionStore
+
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     if (!selected) return
@@ -63,13 +66,13 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
     })
   }
 
-  const renderItem = ({ item }) => (
-    <Pressable onPress={() => speciesStore.select(item.species.name)}>
-      <Text text={capitalize(item.species.name)} />
+  const renderItem = ({ item, index }) => (
+    <TouchableOpacity onPress={() => speciesStore.select(item.species.name)}>
+      <Text style={TEXT} text={capitalize(item.species.name)} />
       {/* // TODO: fix, causing errors */}
       {/* {renderSprite(item.species)} */}
       {renderDetails(item.evolution_details)}
-    </Pressable>
+    </TouchableOpacity>
   )
 
   return (
@@ -80,6 +83,12 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
       ) : (
         // TODO: Style a card
         // TODO: impl swiper
+        <>
+        <Carousel
+          data={evolutions}
+          renderItem={renderItem}
+          sliderWidth={width}
+          itemWidth={width} />
         <FlatList
           data={[...evolutions]}
           renderItem={renderItem}
@@ -90,6 +99,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
             />
           }
         />
+        </>
       )}
     </Screen>
   )
