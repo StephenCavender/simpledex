@@ -1,6 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { EvolutionStoreModel } from "../evolution/evolution-store"
 import { SpeciesStoreModel } from "../species/species-store"
+import { EncounterStoreModel } from "../encounter/encounter-store"
 
 /**
  * A RootStore model.
@@ -8,7 +9,8 @@ import { SpeciesStoreModel } from "../species/species-store"
 // prettier-ignore
 export const RootStoreModel = types.model("RootStore").props({
   speciesStore: types.optional(SpeciesStoreModel, {} as any),
-  evolutionStore: types.optional(EvolutionStoreModel, {} as any)
+  evolutionStore: types.optional(EvolutionStoreModel, {} as any),
+  encounterStore: types.optional(EncounterStoreModel, {} as any)
 })
 
 /**

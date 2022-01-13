@@ -33,7 +33,9 @@
     "detailTitle": "Method %{num}"
   },
   "encountersScreen": {
-    "title": "Encounters"
+    "title": "Encounters",
+    "noEncounter": "%{species} has no encounters",
+    "noSelection": "search for a pokemon or shuffle to show possible encounters",
   },
   "errorScreen": {
     "title": "Something went wrong!",

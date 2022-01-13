@@ -12,7 +12,7 @@ const ROOT: ViewStyle = {
   flex: 1,
   alignItems: "center",
 }
-const TEXT_CONTAINER: ViewStyle = {
+const HEADER_CONTAINER: ViewStyle = {
   marginBottom: 10,
 }
 const TEXT: TextStyle = {
@@ -119,7 +119,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
 
   return (
     <Screen style={ROOT} preset="fixed" unsafe={true}>
-      <Text style={TEXT_CONTAINER} preset="header" tx="evolutionsScreen.title" />
+      <Text style={HEADER_CONTAINER} preset="header" tx="evolutionsScreen.title" />
       {loading ? <ActivityIndicator /> : 
       <>
         {!selected ? (

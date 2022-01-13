@@ -3,28 +3,6 @@ import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
 import { GetEncounterResult } from "./api-types"
 
-const recurseEvolutions = (name: string, chain: GetEvolutionChainResult): any => {
-  if (name.toLowerCase() !== chain.species.name.toLowerCase()) {
-    return recurseEvolutions(name, chain.evolves_to[0])
-  }
-  chain.evolves_to.forEach((evolution) => {
-    evolution.evolution_details.forEach((details) => {
-      details.trigger = details.trigger.name
-      if (details.item) details.item = details.item.name
-      if (details.held_item) details.held_item = details.held_item.name
-      if (details.known_move) details.known_move = details.known_move.name
-      if (details.known_move_type) details.known_move_type = details.known_move_type.name
-      if (details.location) details.location = details.location.name
-      if (details.party_species) details.party_species = details.party_species.name
-      if (details.party_type) details.party_type = details.party_type.name
-      if (details.trade_species) details.trade_species = details.trade_species.name
-    })
-    evolution.evolves_to = []
-    evolution.species = evolution.species.name
-  })
-  return chain.evolves_to
-}
-
 export class EncounterApi {
   private api: Api
 
@@ -32,15 +10,20 @@ export class EncounterApi {
     this.api = api
   }
 
-  async getChain(pokemon: string | number): Promise<GetEncounterResult> {
+  async get(pokemon: string | number): Promise<GetEncounterResult> {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.get(`pokemon/${pokemon}/encounters`)
 
-      const convert = (raw) => {
-        return {
-          id: raw.id,
-          name: raw.name,
-        }
+      const convert = (encounter: Encounter) => {
+        encounter.location_area = encounter.location_area.name
+        encounter.version_details.forEach(versionDetail => {
+          versionDetail.version = versionDetail.version.name
+          versionDetail.encounter_details.forEach(encounterDetail => {
+            encounterDetail.method = encounterDetail.method.name
+          })
+        })
+
+        return encounter
       }
 
       // the typical ways to die when calling an api
@@ -49,9 +32,11 @@ export class EncounterApi {
         if (problem) return problem
       }
 
-      const chain = recurseEvolutions(species, response.data.chain)
+      const rawEncounters = response.data
+      const convertedEncounters: Encounter[] = rawEncounters.map(convert)
+      console.tron.log('baz', convertedEncounters)
 
-      return { kind: "ok", chain }
+      return { kind: "ok", encounters: convertedEncounters }
     } catch (e) {
       __DEV__ && console.tron.log(e.message)
       return { kind: "bad-data" }
