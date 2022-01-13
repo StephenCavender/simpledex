@@ -1,4 +1,4 @@
-import { Instance, SnapshotOut, types, applySnapshot } from "mobx-state-tree"
+import { Instance, SnapshotOut, types, applySnapshot, flow } from "mobx-state-tree"
 import { SpeciesApi } from "../../services/api/species-api"
 import { PokemonApi } from "../../services/api/pokemon-api"
 import { withEnvironment } from "../extensions/with-environment"
@@ -23,19 +23,19 @@ export const SpeciesStoreModel = types
     },
   }))
   .actions((self) => ({
-    getAll: async () => {
+    getAll: flow(function* () {
       const speciesApi = new SpeciesApi(self.environment.api)
-      const result = await speciesApi.getAll()
+      const result = yield speciesApi.getAll()
 
       if (result.kind === "ok") {
         self.save(result.species)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
-    },
-    get: async (species: string | number) => {
+    }),
+    get: flow(function* (species: string | number) {
       const speciesApi = new SpeciesApi(self.environment.api)
-      const result = await speciesApi.get(species)
+      const result = yield speciesApi.get(species)
 
       if (result.kind === "ok") {
         return result.species
@@ -43,10 +43,10 @@ export const SpeciesStoreModel = types
         __DEV__ && console.tron.log(result.kind)
         throw result
       }
-    },
-    getPokemon: async (pokemon: string | number) => {
+    }),
+    getPokemon: flow(function* (pokemon: string | number) {
       const pokemonApi = new PokemonApi(self.environment.api)
-      const result = await pokemonApi.get(pokemon)
+      const result = yield pokemonApi.get(pokemon)
 
       if (result.kind === "ok") {
         return result.pokemon
@@ -54,32 +54,32 @@ export const SpeciesStoreModel = types
         __DEV__ && console.tron.log(result.kind)
         throw result
       }
-    },
+    }),
   }))
   .actions((self) => ({
-    afterCreate: async () => {
+    afterCreate: flow(function* () {
       self.setSelected(undefined)
-      await self.getAll()
-    },
-    select: async (species: string) => {
+      yield self.getAll()
+    }),
+    select: flow(function* (species: string) {
       try {
         const toSelect = self.species.find((s) => s.name === species)
-        const toApply = await self.get(species)
+        const toApply = yield self.get(species)
         const variety = toApply.varieties.find((variety) => variety.is_default)
-        variety.pokemon = await self.getPokemon(species)
+        variety.pokemon = yield self.getPokemon(species)
         applySnapshot(toSelect, toApply)
         self.setSelected(toSelect)
       } catch (error) {
         __DEV__ && console.tron.log(`err: ${error}`)
       }
-    },
-    getPokemonData: async (species: string) => {
+    }),
+    getPokemonData: flow(function* (species: string) {
       const model = self.species.find((s) => s.name === species)
-      const snapshot = await self.get(species)
+      const snapshot = yield self.get(species)
       const variety = snapshot.varieties.find((variety) => variety.is_default)
-      variety.pokemon = await self.getPokemon(species)
+      variety.pokemon = yield self.getPokemon(species)
       applySnapshot(model, snapshot)
-    }
+    })
   }))
 
 type SpeciesStoreType = Instance<typeof SpeciesStoreModel>
