@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle, TouchableOpacity, TextStyle, ImageStyle, useWindowDimensions, ActivityIndicator } from "react-native"
-import { Screen, Text, AutoImage as Image } from "../../components"
+import { Screen, Text, AutoImage as Image, Card } from "../../components"
 import { EvolutionDetails, Species, useStores } from "../../models"
 import { color, spacing } from "../../theme"
 import { capitalize } from "lodash"
@@ -17,16 +17,6 @@ const HEADER_CONTAINER: ViewStyle = {
 }
 const TEXT: TextStyle = {
   textAlign: "center",
-}
-const CARD: ViewStyle = {
-  borderWidth: 2,
-  borderColor: color.primary,
-  borderRadius: 5,
-  paddingBottom: spacing.smaller
-}
-const CARD_HEADER: ViewStyle = {
-  backgroundColor: color.primary,
-  paddingVertical: spacing.smaller
 }
 const SPRITE: ImageStyle = {
   alignSelf: "center",
@@ -108,12 +98,11 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
   )
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={CARD} onPress={() => speciesStore.select(item.species.name)}>
-      <View style={CARD_HEADER}>
-        <Text preset="bold" style={TEXT} text={capitalize(item.species.name)} />
-      </View>
-      {renderSprite(item.species)}
-      {renderDetails(item.evolution_details)}
+    <TouchableOpacity onPress={() => speciesStore.select(item.species.name)}>
+      <Card title={capitalize(item.species.name)}>
+        {renderSprite(item.species)}
+        {renderDetails(item.evolution_details)}
+      </Card>
     </TouchableOpacity>
   )
 
@@ -131,7 +120,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
               data={evolutions}
               renderItem={renderItem}
               sliderWidth={width}
-              itemWidth={width - 100} /> :
+              itemWidth={width - 50} /> :
             <Text
               txOptions={{ species: capitalize(selected.name) }}
               tx="evolutionsScreen.noEvolutions"
