@@ -27,9 +27,6 @@ export interface CardProps {
   children: React.ReactNode
 }
 
-/**
- * Card component
- */
 export const Card = observer(function Card(props: CardProps) {
   const { title, children } = props
 

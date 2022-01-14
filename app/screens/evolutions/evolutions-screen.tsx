@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle, TouchableOpacity, TextStyle, ImageStyle, useWindowDimensions, ActivityIndicator } from "react-native"
-import { Screen, Text, AutoImage as Image, Card } from "../../components"
+import { View, ViewStyle, TouchableOpacity, TextStyle, useWindowDimensions, ActivityIndicator } from "react-native"
+import { Screen, Text, Sprite, Card } from "../../components"
 import { EvolutionDetails, Species, useStores } from "../../models"
 import { color, spacing } from "../../theme"
 import { capitalize } from "lodash"
@@ -17,11 +17,6 @@ const HEADER_CONTAINER: ViewStyle = {
 }
 const TEXT: TextStyle = {
   textAlign: "center",
-}
-const SPRITE: ImageStyle = {
-  alignSelf: "center",
-  height: 125,
-  width: 125,
 }
 const DETAIL_CARD: ViewStyle = {
   alignSelf: "center",
@@ -74,8 +69,8 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
     // TODO: sprite not loading on selection
     const variety = species.varieties?.find((variety) => variety.is_default)
     return variety ? 
-    <Image style={SPRITE} source={{ uri: variety.pokemon.sprites.front_default }} /> :
-    <Image style={SPRITE} source={{ uri: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png" }} />
+    <Sprite uri={variety.pokemon.sprites.front_default} /> :
+    <Sprite uri="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png" />
   }
 
   const renderDetails = (details: EvolutionDetails[]) => (

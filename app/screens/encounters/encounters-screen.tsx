@@ -1,9 +1,9 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, FlatList, View, Dimensions } from "react-native"
+import { ViewStyle, FlatList } from "react-native"
 import { Screen, Text, Card } from "../../components"
 import { useStores } from "../../models"
-import { color, spacing } from "../../theme"
+import { color } from "../../theme"
 import { capitalize } from "lodash"
 import { translate } from "../../i18n"
 
