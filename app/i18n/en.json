@@ -36,6 +36,10 @@
     "title": "Encounters",
     "noEncounter": "%{species} has no encounters",
     "noSelection": "search for a pokemon or shuffle to show possible encounters",
+    "hasEncounters": "%{species} can be encountered at",
+    "location": "Location: %{location}",
+    "versions": "in versions: %{versions}",
+    "method": "by %{method}"
   },
   "errorScreen": {
     "title": "Something went wrong!",
