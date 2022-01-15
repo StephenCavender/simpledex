@@ -48,13 +48,15 @@ export const EncountersScreen = observer(function EncountersScreen() {
   useEffect(() => {
     if (!filter) return
 
-    setFilteredEncounters(
-      encounters.filter((encounter: Encounter) =>
-        encounter.version_details.filter(versionDetails => 
-          versionDetails.version.toLowerCase().includes(filter.toLowerCase)
-        )
-      )
-    )
+    console.tron.log('foo')
+
+    // setFilteredEncounters(
+    //   encounters.filter((encounter: Encounter) =>
+    //     encounter.version_details.filter(versionDetails => 
+    //       versionDetails.version.toLowerCase().includes(filter.toLowerCase)
+    //     )
+    //   )
+    // )
   }, [filter])
 
   const renderItem = ({ item, index }) => {

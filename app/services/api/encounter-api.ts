@@ -34,7 +34,6 @@ export class EncounterApi {
 
       const rawEncounters = response.data
       const convertedEncounters: Encounter[] = rawEncounters.map(convert)
-      console.tron.log('baz', convertedEncounters)
 
       return { kind: "ok", encounters: convertedEncounters }
     } catch (e) {
