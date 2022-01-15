@@ -32,7 +32,10 @@ export const EncounterStoreModel = types
         __DEV__ && console.tron.log(result.kind)
         throw result
       }
-    })
+    }),
+    afterCreate: () => {
+      self.setFilter(undefined)
+    }
   }))
 
 type EncounterStoreType = Instance<typeof EncounterStoreModel>

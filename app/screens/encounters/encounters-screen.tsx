@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, useWindowDimensions } from "react-native"
+import { ViewStyle, useWindowDimensions, ActivityIndicator } from "react-native"
 import { Screen, Text, Card, Button } from "../../components"
 import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
@@ -21,7 +21,7 @@ const TEXT: TextStyle = {
   textAlign: "center",
 }
 const FILTER_BUTTON: ViewStyle = {
-  marginBottom: spacing.smaller
+  marginBottom: spacing.medium
 }
 
 export const EncountersScreen = observer(function EncountersScreen() {
@@ -30,16 +30,20 @@ export const EncountersScreen = observer(function EncountersScreen() {
   const { encounters, filter } = encounterStore
 
   const [filteredEncounters, setFilteredEncounters] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const navigation = useNavigation()
 
   const { width } = useWindowDimensions();
 
+
   useEffect(() => {
     if (!selected) return
 
+    setLoading(true)
     async function fetchData() {
       await encounterStore.get(selected.name)
+      setLoading(false)
     }
 
     fetchData()
@@ -48,15 +52,13 @@ export const EncountersScreen = observer(function EncountersScreen() {
   useEffect(() => {
     if (!filter) return
 
-    console.tron.log('foo')
-
-    // setFilteredEncounters(
-    //   encounters.filter((encounter: Encounter) =>
-    //     encounter.version_details.filter(versionDetails => 
-    //       versionDetails.version.toLowerCase().includes(filter.toLowerCase)
-    //     )
-    //   )
-    // )
+    setFilteredEncounters(
+      encounters.filter((encounter: Encounter) =>
+        encounter.version_details.filter(versionDetails => 
+          versionDetails.version.toLowerCase().includes(filter.toLowerCase)
+        )
+      )
+    )
   }, [filter])
 
   const renderItem = ({ item, index }) => {
@@ -75,53 +77,36 @@ export const EncountersScreen = observer(function EncountersScreen() {
   return (
     <Screen style={ROOT} preset="fixed" unsafe={true}>
       <Text style={HEADER_CONTAINER} preset="header" tx="encountersScreen.title" />
-      {!selected ? (
-        <Text style={TEXT} tx="encountersScreen.noSelection" />
-      ) : (
-        <>
-          <Button
-            style={FILTER_BUTTON}
-            preset="ghost"
-            text={filter || translate("encountersScreen.filterPlaceholder")}
-            onPress={() => navigation.navigate("filter")} />
-          {filter ? 
-            <>
-              {filteredEncounters.length ? 
-                <Carousel
-                  data={filteredEncounters}
-                  renderItem={renderItem}
-                  sliderWidth={width}
-                  itemWidth={width - 50} /> :
-                <Text
-                  txOptions={{ species: capitalize(selected.name) }}
-                  tx="encountersScreen.noEncounters"
-                />
-              }
-            </> : <Text tx="encountersScreen.noFilter" />
-          }
-        </>
-        //   }
-        //   {encounters.length ? 
-        //   <Carousel
-        //     data={encounters}
-        //     renderItem={renderItem}
-        //     sliderWidth={width}
-        //     itemWidth={width - 50} /> :
-        //   <Text
-        //     txOptions={{ species: capitalize(selected.name) }}
-        //     tx="encountersScreen.noEncounters"
-        //   />
-        // }
-        // </>
-        // <FlatList
-        //   data={encounters}
-        //   renderItem={renderItem}
-        //   listEmptyComponent={
-        //     <Text
-        //       txOptions={{ species: capitalize(selected.name) }}
-        //       tx="encountersScreen.noEncounters" />
-        //   } />
-      )}
+      {loading ? <ActivityIndicator /> : 
+      <>
+        {!selected ? (
+          <Text style={TEXT} tx="encountersScreen.noSelection" />
+        ) : (
+          <>
+            <Button
+              style={FILTER_BUTTON}
+              preset="ghost"
+              text={filter || translate("encountersScreen.filterPlaceholder")}
+              onPress={() => navigation.navigate("filter")} />
+            {filter ? 
+              <>
+                {filteredEncounters.length ? 
+                  <Carousel
+                    data={filteredEncounters}
+                    renderItem={renderItem}
+                    sliderWidth={width}
+                    itemWidth={width - 50} /> :
+                  <Text
+                    txOptions={{ species: capitalize(selected.name), version: filter }}
+                    tx="encountersScreen.noEncounters"
+                  />
+                }
+              </> : <Text tx="encountersScreen.noFilter" />
+            }
+          </>
+        )}
+      </>
+      }
     </Screen>
   )
 })

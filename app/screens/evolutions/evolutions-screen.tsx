@@ -125,15 +125,6 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
         )}
       </>
       }
-      {/* {!selected ? (
-        <Text style={TEXT} tx="evolutionsScreen.noSelection" />
-      ) : (
-        <Carousel
-          data={evolutions}
-          renderItem={renderItem}
-          sliderWidth={width}
-          itemWidth={width - 100} />
-      )} */}
     </Screen>
   )
 })
