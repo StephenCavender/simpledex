@@ -25,7 +25,7 @@ export const viewPresets: Record<string, ViewStyle> = {
   /**
    * A smaller piece of secondard information.
    */
-  primary: { ...BASE_VIEW, backgroundColor: color.palette.orange } as ViewStyle,
+  primary: { ...BASE_VIEW, backgroundColor: color.line } as ViewStyle,
 
   /**
    * A button without extras.
@@ -36,6 +36,12 @@ export const viewPresets: Record<string, ViewStyle> = {
     paddingVertical: 0,
     alignItems: "flex-start",
   } as ViewStyle,
+
+  ghost: {
+    ...BASE_VIEW,
+    borderWidth: 2,
+    borderColor: color.primary
+  },
 }
 
 export const textPresets: Record<ButtonPresetNames, TextStyle> = {
@@ -46,6 +52,9 @@ export const textPresets: Record<ButtonPresetNames, TextStyle> = {
     paddingHorizontal: 0,
     paddingVertical: 0,
   } as TextStyle,
+  ghost: {
+    ...BASE_TEXT, fontSize: 14
+  } as TextStyle
 }
 
 /**

@@ -9,7 +9,7 @@ import { ImageStyle, useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { EvolutionsScreen, EncountersScreen, AboutScreen, SearchScreen } from "../screens"
+import { EvolutionsScreen, EncountersScreen, AboutScreen, SearchScreen, FilterScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
 import { Header, Icon } from "../components"
 import { color } from "../theme"
@@ -82,6 +82,7 @@ const AppTabs = () => {
 export type StackParamList = {
   tabs: undefined
   search: undefined
+  filter: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -97,6 +98,7 @@ const AppStack = () => {
     >
       <Stack.Screen name="tabs" component={AppTabs} />
       <Stack.Screen options={{ presentation: "modal" }} name="search" component={SearchScreen} />
+      <Stack.Screen options={{ presentation: "modal" }} name="filter" component={FilterScreen} />
     </Stack.Navigator>
   )
 }

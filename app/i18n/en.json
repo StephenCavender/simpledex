@@ -39,7 +39,14 @@
     "hasEncounters": "%{species} can be encountered at",
     "location": "Location: %{location}",
     "versions": "in versions: %{versions}",
-    "method": "by %{method}"
+    "method": "by %{method}",
+    "filterPlaceholder": "filter...",
+    "noFilter": "select a version to filter by"
+  },
+  "filterScreen": {
+    "title": "Filter",
+    "noFilter": "select a version to filter encounters on",
+    "currentlySelected": "%{filter} is currently selected."
   },
   "errorScreen": {
     "title": "Something went wrong!",

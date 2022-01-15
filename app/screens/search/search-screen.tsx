@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, FlatList, ViewStyle } from "react-native"
-import { Screen, Text, TextField, Button, Sprite } from "../../components"
+import { FlatList, ViewStyle } from "react-native"
+import { Screen, Text, TextField, Button, Sprite, ModalDismissIndicator } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
 import { debounce, capitalize } from "lodash"
@@ -11,14 +11,6 @@ const ROOT: ViewStyle = {
   backgroundColor: color.background,
   flex: 1,
   alignItems: "center",
-}
-const DISMISS_INDICATOR: ViewStyle = {
-  backgroundColor: color.dim,
-  height: 5,
-  width: 50,
-  borderRadius: 20,
-  marginTop: 5,
-  marginBottom: 15
 }
 const LIST_ITEM: TextStyle = {
   fontSize: 18
@@ -55,8 +47,8 @@ export const SearchScreen = observer(function SearchScreen() {
   }
 
   return (
-    <Screen style={ROOT} preset="fixed" unsafe={true}>
-      <View style={DISMISS_INDICATOR} />
+    <Screen style={ROOT} preset="fixed" unsafe>
+      <ModalDismissIndicator />
       <Text preset="header" tx="searchScreen.title" />
       {!selected ? (
         <>
@@ -81,7 +73,7 @@ export const SearchScreen = observer(function SearchScreen() {
         autoFocus
       />
       <FlatList
-        data={[...filteredSpecies]}
+        data={filteredSpecies}
         renderItem={renderItem}
         keyExtractor={(item, index) => String(index)} />
     </Screen>

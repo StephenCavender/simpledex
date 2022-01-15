@@ -1,11 +1,13 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, FlatList } from "react-native"
-import { Screen, Text, Card } from "../../components"
+import { ViewStyle, useWindowDimensions } from "react-native"
+import { Screen, Text, Card, Button } from "../../components"
 import { useStores } from "../../models"
-import { color } from "../../theme"
+import { color, spacing } from "../../theme"
 import { capitalize } from "lodash"
 import { translate } from "../../i18n"
+import { useNavigation } from "@react-navigation/native"
+import Carousel from "react-native-snap-carousel"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -18,11 +20,20 @@ const HEADER_CONTAINER: ViewStyle = {
 const TEXT: TextStyle = {
   textAlign: "center",
 }
+const FILTER_BUTTON: ViewStyle = {
+  marginBottom: spacing.smaller
+}
 
 export const EncountersScreen = observer(function EncountersScreen() {
   const { speciesStore, encounterStore } = useStores()
   const { selected } = speciesStore
-  const { encounters } = encounterStore
+  const { encounters, filter } = encounterStore
+
+  const [filteredEncounters, setFilteredEncounters] = useState([])
+
+  const navigation = useNavigation()
+
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     if (!selected) return
@@ -33,6 +44,18 @@ export const EncountersScreen = observer(function EncountersScreen() {
 
     fetchData()
   }, [selected])
+
+  useEffect(() => {
+    if (!filter) return
+
+    setFilteredEncounters(
+      encounters.filter((encounter: Encounter) =>
+        encounter.version_details.filter(versionDetails => 
+          versionDetails.version.toLowerCase().includes(filter.toLowerCase)
+        )
+      )
+    )
+  }, [filter])
 
   const renderItem = ({ item, index }) => {
     const i18nTitle = translate("encountersScreen.location", { location: item.location_area })
@@ -53,14 +76,49 @@ export const EncountersScreen = observer(function EncountersScreen() {
       {!selected ? (
         <Text style={TEXT} tx="encountersScreen.noSelection" />
       ) : (
-        <FlatList
-          data={encounters}
-          renderItem={renderItem}
-          listEmptyComponent={
-            <Text
-              txOptions={{ species: capitalize(selected.name) }}
-              tx="encountersScreen.noEncounters" />
-          } />
+        <>
+          <Button
+            style={FILTER_BUTTON}
+            preset="ghost"
+            text={filter || translate("encountersScreen.filterPlaceholder")}
+            onPress={() => navigation.navigate("filter")} />
+          {filter ? 
+            <>
+              {filteredEncounters.length ? 
+                <Carousel
+                  data={filteredEncounters}
+                  renderItem={renderItem}
+                  sliderWidth={width}
+                  itemWidth={width - 50} /> :
+                <Text
+                  txOptions={{ species: capitalize(selected.name) }}
+                  tx="encountersScreen.noEncounters"
+                />
+              }
+            </> : <Text tx="encountersScreen.noFilter" />
+          }
+        </>
+        //   }
+        //   {encounters.length ? 
+        //   <Carousel
+        //     data={encounters}
+        //     renderItem={renderItem}
+        //     sliderWidth={width}
+        //     itemWidth={width - 50} /> :
+        //   <Text
+        //     txOptions={{ species: capitalize(selected.name) }}
+        //     tx="encountersScreen.noEncounters"
+        //   />
+        // }
+        // </>
+        // <FlatList
+        //   data={encounters}
+        //   renderItem={renderItem}
+        //   listEmptyComponent={
+        //     <Text
+        //       txOptions={{ species: capitalize(selected.name) }}
+        //       tx="encountersScreen.noEncounters" />
+        //   } />
       )}
     </Screen>
   )
