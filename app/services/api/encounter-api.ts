@@ -20,6 +20,7 @@ export class EncounterApi {
           versionDetail.version = versionDetail.version.name
           versionDetail.encounter_details.forEach(encounterDetail => {
             encounterDetail.method = encounterDetail.method.name
+            encounterDetail.condition_values = encounterDetail.condition_values.map(conditionValue => conditionValue.name)
           })
         })
 
