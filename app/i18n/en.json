@@ -38,8 +38,8 @@
     "noSelection": "search for a pokemon or shuffle to show possible encounters",
     "hasEncounters": "%{species} can be encountered at",
     "location": "Location: %{location}",
-    "versions": "in versions: %{versions}",
-    "method": "by %{method}",
+    "method": "Method: %{method}",
+    "chance": "Chance: %{chance}%",
     "filterPlaceholder": "filter...",
     "noFilter": "select a version to filter by"
   },

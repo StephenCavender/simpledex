@@ -8,6 +8,7 @@ import { capitalize } from "lodash"
 import { translate } from "../../i18n"
 import { useNavigation } from "@react-navigation/native"
 import Carousel from "react-native-snap-carousel"
+import { VersionDetails } from "./version-details.component"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -61,22 +62,12 @@ export const EncountersScreen = observer(function EncountersScreen() {
     )
   }, [filter])
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({ item }) => {
     const i18nTitle = translate("encountersScreen.location", { location: item.location_area })
   
     return (
       <Card title={i18nTitle}>
-        {item.version_details.map(versionDetail => {
-          return versionDetail.encounter_details.map(encounterDetail => {
-            return (
-              // condition values
-              // TODO: create an encounter detail component
-              <>
-                <Text text={encounterDetail.method} />
-                <Text text={encounterDetail.chance} />
-              </>
-          )})
-        })}
+        <VersionDetails versionDetails={item.version_details} />
       </Card>
     )}
 
