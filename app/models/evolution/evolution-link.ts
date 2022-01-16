@@ -12,8 +12,6 @@ export const EvolutionLinkModel = types
     evolves_to: types.optional(types.array(types.late(() => EvolutionLinkModel)), []),
     species: types.maybe(types.reference(types.late(() => SpeciesModel))),
   })
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type EvolutionLinkType = Instance<typeof EvolutionLinkModel>
 export interface EvolutionLink extends EvolutionLinkType {}

@@ -7,10 +7,9 @@ export const EncounterDetailModel = types
   .model("EncounterDetail")
   .props({
     chance: types.number,
+    condition_values: types.array(types.string),
     method: types.string,
   })
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type EncounterDetailType = Instance<typeof EncounterDetailModel>
 export interface EncounterDetail extends EncounterDetailType {}

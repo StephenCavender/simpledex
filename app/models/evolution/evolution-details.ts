@@ -30,8 +30,7 @@ export const EvolutionDetailsModel = types
     clean: () => {
       return pickBy(self, identity)
     }
-  })) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  }))
 
 type EvolutionDetailsType = Instance<typeof EvolutionDetailsModel>
 export interface EvolutionDetails extends EvolutionDetailsType {}

@@ -10,8 +10,6 @@ export const EncounterModel = types
     location_area: types.string,
     version_details: types.array(VersionDetailsModel),
   })
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type EncounterType = Instance<typeof EncounterModel>
 export interface Encounter extends EncounterType {}

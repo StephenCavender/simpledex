@@ -8,8 +8,6 @@ export const SpriteModel = types
   .props({
     front_default: types.maybe(types.string),
   })
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type SpriteType = Instance<typeof SpriteModel>
 export interface Sprite extends SpriteType {}
