@@ -66,11 +66,17 @@ export const EncountersScreen = observer(function EncountersScreen() {
   
     return (
       <Card title={i18nTitle}>
-        {/* // todo: loop through versions: list out version, details (chance, method) */}
-        <Text
-          txOptions={{ versions: item.version_details.map(v => v.version).join(', ') }}
-          tx="encountersScreen.versions" />
-        {/* Details: chance, method */}
+        {item.version_details.map(versionDetail => {
+          return versionDetail.encounter_details.map(encounterDetail => {
+            return (
+              // condition values
+              // TODO: create an encounter detail component
+              <>
+                <Text text={encounterDetail.method} />
+                <Text text={encounterDetail.chance} />
+              </>
+          )})
+        })}
       </Card>
     )}
 
