@@ -9,6 +9,8 @@ export const EncounterDetailModel = types
     chance: types.number,
     condition_values: types.array(types.string),
     method: types.string,
+    max_level: types.number,
+    min_level: types.number
   })
 
 type EncounterDetailType = Instance<typeof EncounterDetailModel>

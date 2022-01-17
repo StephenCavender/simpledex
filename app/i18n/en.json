@@ -41,7 +41,10 @@
     "method": "Method: %{method}",
     "chance": "Chance: %{chance}%",
     "filterPlaceholder": "filter...",
-    "noFilter": "select a version to filter by"
+    "noFilter": "select a version to filter by",
+    "minLevel": "Minimum Level: %{level}",
+    "maxLevel": "Maximum Level: %{level}",
+    "conditions": "Conditions:"
   },
   "filterScreen": {
     "title": "Filter",

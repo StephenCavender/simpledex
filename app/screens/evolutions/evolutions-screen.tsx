@@ -77,13 +77,13 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
     details.map((detail, i) => {
       detail = detail.clean()
       return (
-        <View style={DETAIL_CARD} key={`detail-${i++}`}>
+        <View style={DETAIL_CARD} key={`evolution-detail-${i}`}>
           {details.length > 1 &&
             <View style={DETAIL_TITLE}>
               <Text txOptions={{ num: i }} tx="evolutionsScreen.detailTitle" />
             </View>}
           {Object.keys(detail).map((key) => (
-            <Text key={`detail-${i}-${key}`}>
+            <Text key={`evolution-detail-${i}-${key}`}>
               <Text preset="bold" text={`${key}: `} />{detail[key]}
             </Text>
           ))}
