@@ -10,7 +10,7 @@ import { SpeciesModel, SpeciesSnapshot, Species } from "./species"
 export const SpeciesStoreModel = types
   .model("SpeciesStore")
   .props({
-    species: types.optional(types.array(SpeciesModel), []),
+    species: types.array(SpeciesModel),
     selected: types.maybe(types.reference(types.late(() => SpeciesModel))),
   })
   .extend(withEnvironment)
