@@ -9,7 +9,8 @@ const ROOT: ViewStyle = {
   borderWidth: 2,
   borderColor: color.line,
   borderRadius: 5,
-  padding: spacing.small
+  padding: spacing.small,
+  marginBottom: spacing.small
 }
 
 export interface VersionDetailsProps {
