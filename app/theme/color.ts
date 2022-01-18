@@ -48,6 +48,7 @@ export const color = {
    * Error messages and icons.
    */
   error: palette.angry,
+  secondary: palette.yellow,
 
   /**
    * Storybook background for Text stories, or any stories where

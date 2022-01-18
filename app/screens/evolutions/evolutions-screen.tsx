@@ -104,7 +104,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
   return (
     <Screen style={ROOT} preset="fixed" unsafe={true}>
       <Text style={HEADER_CONTAINER} preset="header" tx="evolutionsScreen.title" />
-      {loading ? <ActivityIndicator /> : 
+      {loading ? <ActivityIndicator size="large" color={color.secondary} /> : 
       <>
         {!selected ? (
           <Text style={TEXT} tx="evolutionsScreen.noSelection" />
