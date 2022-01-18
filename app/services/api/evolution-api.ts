@@ -4,11 +4,16 @@ import { getGeneralApiProblem } from "./api-problem"
 import { GetEvolutionChainResult } from "./api-types"
 
 const recurseEvolutions = (name: string, chain: GetEvolutionChainResult): any => {
+  // TODO: write a better recursion function, gallade had issues because its prececcesor
+  // could evolves into it or another and gallade wasn't first in the array
   if (name.toLowerCase() !== chain.species.name.toLowerCase()) {
-    return recurseEvolutions(name, chain.evolves_to[0])
+    if (chain.evolves_to.length) {
+      return recurseEvolutions(name, chain.evolves_to[0])
+    }
+    return []
   }
-  chain.evolves_to.forEach((evolution) => {
-    evolution.evolution_details.forEach((details) => {
+  chain.evolves_to.forEach(evolution => {
+    evolution.evolution_details.forEach(details => {
       details.trigger = details.trigger.name
       if (details.item) details.item = details.item.name
       if (details.held_item) details.held_item = details.held_item.name
