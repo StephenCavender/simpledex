@@ -12,7 +12,7 @@ import { capitalize, sample } from "lodash"
 // static styles
 const ROOT: ViewStyle = {
   paddingTop: spacing.huge,
-  paddingBottom: spacing.large,
+  paddingBottom: spacing.tiny,
   backgroundColor: color.background,
 }
 const ROW: ViewStyle = {
