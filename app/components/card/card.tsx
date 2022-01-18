@@ -16,7 +16,7 @@ const CARD_HEADER: ViewStyle = {
   paddingVertical: spacing.smaller
 }
 const CARD_CONTENTS: ViewStyle = {
-  padding: spacing.small
+  paddingHorizontal: spacing.small
 }
 const TEXT: TextStyle = {
   textAlign: "center",
