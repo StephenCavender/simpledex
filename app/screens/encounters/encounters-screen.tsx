@@ -41,10 +41,13 @@ export const EncountersScreen = observer(function EncountersScreen() {
   useEffect(() => {
     if (!selected) return
 
+    const cachedFilter = filter
+    encounterStore.setFilter(undefined)
     setLoading(true)
     async function fetchData() {
       await encounterStore.get(selected.name)
       setLoading(false)
+      encounterStore.setFilter(cachedFilter)
     }
 
     fetchData()
