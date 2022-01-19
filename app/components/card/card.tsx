@@ -5,7 +5,7 @@ import { color, spacing } from "../../theme"
 import { Text } from "../text/text"
 
 const CARD: ViewStyle = {
-  width: Dimensions.get('window').width - 50,
+  width: Dimensions.get('window').width - spacing.huge,
   borderWidth: 2,
   borderColor: color.primary,
   borderRadius: 5,

@@ -95,7 +95,8 @@ export const EncountersScreen = observer(function EncountersScreen() {
                     data={filteredEncounters}
                     renderItem={renderItem}
                     sliderWidth={width}
-                    itemWidth={width - 50} /> :
+                    containerCustomStyle={{ flexGrow: 0 }}
+                    itemWidth={width - spacing.huge} /> :
                   <Text
                     txOptions={{ species: capitalize(selected.name), version: filter }}
                     tx="encountersScreen.noEncounters"

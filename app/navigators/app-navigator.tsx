@@ -31,7 +31,7 @@ const AppTabs = () => {
         header: function header() {
           return <Header />
         },
-        tabBarStyle: { backgroundColor: color.background },
+        tabBarStyle: { backgroundColor: color.background, padding: 5, height: 80 },
         tabBarActiveTintColor: color.primary,
       }}
     >

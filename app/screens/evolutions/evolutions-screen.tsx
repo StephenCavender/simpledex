@@ -115,7 +115,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
               data={evolutions}
               renderItem={renderItem}
               sliderWidth={width}
-              itemWidth={width - 50} /> :
+              itemWidth={width - spacing.huge} /> :
             <Text
               txOptions={{ species: capitalize(selected.name) }}
               tx="evolutionsScreen.noEvolutions"
