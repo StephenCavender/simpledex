@@ -2,17 +2,13 @@ import * as React from "react"
 import { View, ViewStyle, ImageStyle, TextStyle } from "react-native"
 import { Text } from "../text/text"
 import { Icon } from "../icon/icon"
-import { spacing, typography } from "../../theme"
+import { spacing, typography, color } from "../../theme"
 
 const BULLET_ITEM: ViewStyle = {
   flexDirection: "row",
-  marginTop: spacing.medium,
-  paddingBottom: spacing.medium,
-  borderBottomWidth: 1,
-  borderBottomColor: "#3A3048",
 }
 const BULLET_CONTAINER: ViewStyle = {
-  marginRight: spacing.medium - 1,
+  marginRight: spacing.small,
   marginTop: spacing.smaller,
 }
 const BULLET: ImageStyle = {
@@ -22,7 +18,6 @@ const BULLET: ImageStyle = {
 const BULLET_TEXT: TextStyle = {
   flex: 1,
   fontFamily: typography.primary,
-  color: "#BAB6C8",
   fontSize: 15,
   lineHeight: 22,
 }
