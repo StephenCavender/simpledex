@@ -1,5 +1,5 @@
 import * as React from "react"
-import { TextStyle, View, ViewStyle, Dimensions } from "react-native"
+import { TextStyle, View, ViewStyle, Dimensions, ScrollView } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, spacing } from "../../theme"
 import { Text } from "../text/text"
@@ -9,7 +9,8 @@ const CARD: ViewStyle = {
   borderWidth: 2,
   borderColor: color.primary,
   borderRadius: 5,
-  paddingBottom: spacing.smaller
+  overflow: "scroll",
+  marginBottom: spacing.small
 }
 const CARD_HEADER: ViewStyle = {
   backgroundColor: color.primary,
@@ -38,9 +39,9 @@ export const Card = observer(function Card(props: CardProps) {
           style={TEXT}
           text={title} />
       </View>
-      <View style={CARD_CONTENTS}>
+      <ScrollView style={CARD_CONTENTS}>
         {children}
-      </View>
+      </ScrollView>
     </View>
   )
 })
