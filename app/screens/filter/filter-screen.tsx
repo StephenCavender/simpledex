@@ -14,8 +14,11 @@ const ROOT: ViewStyle = {
 const TEXT: ViewStyle = {
   marginBottom: spacing.medium
 }
-const LIST_ITEM: TextStyle = {
+const LIST_ITEM_TEXT: TextStyle = {
   fontSize: 18
+}
+const LIST_ITEM_BUTTON: ViewStyle = {
+  flexDirection: "row"
 }
 
 export const FilterScreen = observer(function FilterScreen() {
@@ -24,9 +27,12 @@ export const FilterScreen = observer(function FilterScreen() {
   const { filter } = encounterStore
 
   const renderItem = ({ item }) => (
-    <Button preset="link" onPress={() => encounterStore.setFilter(item.name)}>
-      <Text style={LIST_ITEM} text={capitalize(item.name)} />
-    </Button>
+    <Button
+      style={LIST_ITEM_BUTTON}
+      textStyle={LIST_ITEM_TEXT}
+      preset="link"
+      text={capitalize(item.name)}
+      onPress={() => encounterStore.setFilter(item.name)} />
   )
 
   return (

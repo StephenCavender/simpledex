@@ -23,7 +23,7 @@ const DETAIL_CARD: ViewStyle = {
   borderWidth: 2,
   borderColor: color.text,
   borderRadius: 5,
-  marginVertical: spacing.smaller,
+  marginVertical: spacing.small,
   padding: spacing.smaller
 }
 const DETAIL_TITLE: ViewStyle = {
@@ -35,7 +35,7 @@ const DETAIL_TITLE: ViewStyle = {
 
 export const EvolutionsScreen = observer(function EvolutionsScreen() {
   const { speciesStore, evolutionStore } = useStores()
-  const { selected } = speciesStore
+  const { selected, species } = speciesStore
   const { evolutions } = evolutionStore
 
   const { width } = useWindowDimensions();
@@ -53,6 +53,10 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
 
     fetchData()
   }, [selected])
+
+  useEffect(() => {
+    console.tron.log('species list changed')
+  }, [species])
 
   // useEffect(() => {
   //   if (!evolutions.length || !selected) return

@@ -12,8 +12,11 @@ const ROOT: ViewStyle = {
   flex: 1,
   alignItems: "center",
 }
-const LIST_ITEM: TextStyle = {
-  fontSize: 18
+const BUTTON: ViewStyle = {
+  flexDirection: "row"
+}
+const TEXT: TextStyle = {
+  fontSize: 18,
 }
 
 export const SearchScreen = observer(function SearchScreen() {
@@ -36,9 +39,12 @@ export const SearchScreen = observer(function SearchScreen() {
   }, 500)
 
   const renderItem = ({ item }) => (
-    <Button preset="link" onPress={() => speciesStore.select(item.name)}>
-      <Text style={LIST_ITEM} text={capitalize(item.name)} />
-    </Button>
+    <Button
+      style={BUTTON}
+      textStyle={TEXT}
+      preset="link"
+      text={capitalize(item.name)}
+      onPress={() => speciesStore.select(item.name)} />
   )
 
   const renderSprite = () => {
