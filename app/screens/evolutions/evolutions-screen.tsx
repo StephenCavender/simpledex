@@ -54,23 +54,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
     fetchData()
   }, [selected])
 
-  useEffect(() => {
-    console.tron.log('species list changed')
-  }, [species])
-
-  // useEffect(() => {
-  //   if (!evolutions.length || !selected) return
-
-  //   async function fetchData() {
-  //     console.tron.log(`fetching data: ${selected.name}`)
-  //     await speciesStore.getPokemonData(selected.name)
-  //   }
-
-  //   fetchData()
-  // }, [evolutions])
-
   const renderSprite = (species: Species) => {
-    // TODO: sprite not loading on selection
     const variety = species.varieties?.find((variety) => variety.is_default)
     return variety ? 
     <Sprite uri={variety.pokemon.sprites.front_default} /> :

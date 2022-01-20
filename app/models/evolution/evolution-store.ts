@@ -15,12 +15,12 @@ export const EvolutionStoreModel = types
   .extend(withEnvironment)
   .extend(withRootStore)
   .actions((self) => ({
-    save: (evolutionLinkSnapshot: EvolutionLinkSnapshot[]) => {
-      evolutionLinkSnapshot.forEach(flow(function* (evolution) {
+    save: flow(function* (evolutions: EvolutionLinkSnapshot[]) {
+      yield Promise.all(evolutions.map(flow(function* (evolution) {
         yield self.rootStore.speciesStore.getPokemonData(evolution.species)
-      }))
-      self.evolutions.replace(evolutionLinkSnapshot)
-    },
+      })))
+      self.evolutions.replace(evolutions)
+    })
   }))
   .actions((self) => ({
     getChain: flow(function* (evolutionChain: number, species: string) {
