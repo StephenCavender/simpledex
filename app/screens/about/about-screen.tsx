@@ -9,9 +9,9 @@ import {
   Linking,
   TouchableOpacityProps,
 } from "react-native"
-import { Screen, Text, Icon, AutoImage as Image } from "../../components"
+import { Screen, Text, Icon, AutoImage as Image, Button } from "../../components"
 import { TxKeyPath } from "../../i18n"
-import { color } from "../../theme"
+import { color, spacing } from "../../theme"
 import { getVersion } from "react-native-device-info"
 
 const appLogo = require("./app-logo.png")
@@ -21,10 +21,14 @@ const ROOT: ViewStyle = {
   backgroundColor: color.background,
   flex: 1,
   alignItems: "center",
-  justifyContent: "space-between",
+  justifyContent: "space-around",
+}
+const LOGO_CONTAINER: ViewStyle = {
+  alignItems: "center"
 }
 const LOGO: ImageStyle = {
   resizeMode: "contain",
+  marginBottom: spacing.small
 }
 const APP_LOGO: ImageStyle = {
   height: 150,
@@ -62,6 +66,15 @@ const LINK_ICON_CONTAINER: ViewStyle = {
 const LINK_ICON: ImageStyle = {
   tintColor: color.primary,
 }
+const ROW: ViewStyle = {
+  flexDirection: "row",
+  width: "80%",
+  justifyContent: "space-around"
+}
+const LEGAL: TextStyle = {
+  color: color.secondary,
+  textDecorationLine: "underline"
+}
 
 interface LinkProps extends TouchableOpacityProps {
   titleTx: TxKeyPath
@@ -83,17 +96,45 @@ export const AboutScreen = observer(function AboutScreen() {
   }
 
   return (
-    <Screen style={ROOT} preset="fixed">
-      <Text preset="header" tx="aboutScreen.title" />
+    <Screen
+      style={ROOT}
+      preset="fixed">
+      <Text
+        preset="header"
+        tx="aboutScreen.title" />
       {/* // TODO: missingno easter egg */}
-      <Image source={appLogo} style={[LOGO, APP_LOGO]} />
-      <Text txOptions={{ version: getVersion() }} tx="aboutScreen.version" />
+      <View style={LOGO_CONTAINER}>
+        <Image
+          source={appLogo}
+          style={[LOGO, APP_LOGO]} />
+        <Text
+          txOptions={{ version: getVersion() }}
+          tx="aboutScreen.version" />
+      </View>
       <View style={LINKS_CONTAINER}>
-        <Link titleTx="aboutScreen.developer" url="https://dev.cavender.io" />
+        <Link
+          titleTx="aboutScreen.developer"
+          url="https://dev.cavender.io" />
         <View style={LINK_SEPARATOR} />
-        <Link titleTx="aboutScreen.project" url="https://simpledex.cavender.io" />
+        <Link
+          titleTx="aboutScreen.project"
+          url="https://simpledex.cavender.io" />
         <View style={LINK_SEPARATOR} />
-        <Link titleTx="aboutScreen.pokeApi" url="https://pokeapi.co" />
+        <Link
+          titleTx="aboutScreen.pokeApi"
+          url="https://pokeapi.co" />
+      </View>
+      <View style={ROW}>
+        <Button
+          preset="link"
+          textStyle={LEGAL}
+          tx="aboutScreen.privacyPolicy"
+          onPress={() => Linking.openURL("https://user.fm/files/v2-891a62a0a61947b7e884d31505325a52/privacyPolicy.html")} />
+        <Button
+          preset="link"
+          textStyle={LEGAL}
+          tx="aboutScreen.terms"
+          onPress={() => Linking.openURL("https://user.fm/files/v2-b8cb3440d4c3c31ea2e126c0541d64ef/termsAndConditions.html")} />
       </View>
       <View>
         <Text style={API_TEXT} tx="aboutScreen.poweredBy" />

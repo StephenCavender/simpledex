@@ -13,7 +13,9 @@
     "developer": "Developer",
     "project": "Project",
     "poweredBy": "Powered by",
-    "pokeApi": "PokeAPI"
+    "pokeApi": "PokeAPI",
+    "privacyPolicy": "Privacy Policy",
+    "terms": "Terms & Conditions"
   },
   "searchScreen": {
     "title": "Search",
