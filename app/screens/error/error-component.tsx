@@ -1,7 +1,9 @@
 import React, { ErrorInfo } from "react"
 import { TextStyle, View, ViewStyle, ScrollView, ImageStyle } from "react-native"
 import { color } from "../../theme"
-import { Button, Icon, Text } from "../../components"
+import { Button, Text, AutoImage as Image } from "../../components"
+
+const missingno = require("./missingno.png")
 
 const CONTAINER: ViewStyle = {
   alignItems: "center",
@@ -53,8 +55,8 @@ const CONTENT_ERROR: TextStyle = {
 
 const ICON: ImageStyle = {
   marginTop: 30,
-  width: 64,
-  height: 64,
+  resizeMode: "contain",
+  height: 128,
 }
 
 export interface ErrorComponentProps {
@@ -69,7 +71,7 @@ export interface ErrorComponentProps {
 export const ErrorComponent = (props: ErrorComponentProps) => {
   return (
     <View style={CONTAINER}>
-      <Icon style={ICON} icon="bug" />
+      <Image source={missingno} style={ICON} />
       <Text style={TITLE_ERROR} tx={"errorScreen.title"} />
       <Text style={FRIENDLY_SUBTITLE} tx={"errorScreen.friendlySubtitle"} />
       <View style={ERROR_DETAILS_CONTAINER}>
