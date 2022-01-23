@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SimpleDex</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">WAfFGJ1POqQTTGKVtxZD5uEBQr4BoEk-hVTya</string>
 </resources>
