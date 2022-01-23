@@ -2,6 +2,8 @@ apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
 
+import groovy.json.JsonSlurper
+
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
  * and bundleReleaseJsAndAssets).
@@ -126,6 +128,13 @@ def enableHermes = project.ext.react.get("enableHermes", false);
  */
 def nativeArchitectures = project.getProperties().get("reactNativeDebugArchitectures")
 
+def getNpmVersion() {
+    def inputFile = file("$rootDir/../package.json")
+    def jsonPackage = new JsonSlurper().parseText(inputFile.text)
+
+    return jsonPackage["version"]
+}
+
 android {
 
     ndkVersion rootProject.ext.ndkVersion
@@ -136,8 +145,8 @@ android {
         applicationId "com.simpledex"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName getNpmVersion()
     }
     splits {
         abi {
