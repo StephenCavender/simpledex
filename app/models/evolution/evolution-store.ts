@@ -16,11 +16,15 @@ export const EvolutionStoreModel = types
   .extend(withRootStore)
   .actions((self) => ({
     save: flow(function* (evolutions: EvolutionLinkSnapshot[]) {
-      yield Promise.all(evolutions.map(flow(function* (evolution) {
-        yield self.rootStore.speciesStore.getPokemonData(evolution.species)
-      })))
+      yield Promise.all(
+        evolutions.map(
+          flow(function* (evolution) {
+            yield self.rootStore.speciesStore.getPokemonData(evolution.species)
+          }),
+        ),
+      )
       self.evolutions.replace(evolutions)
-    })
+    }),
   }))
   .actions((self) => ({
     getChain: flow(function* (evolutionChain: number, species: string) {

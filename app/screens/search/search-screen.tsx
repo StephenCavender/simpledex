@@ -13,7 +13,7 @@ const ROOT: ViewStyle = {
   alignItems: "center",
 }
 const BUTTON: ViewStyle = {
-  flexDirection: "row"
+  flexDirection: "row",
 }
 const TEXT: TextStyle = {
   fontSize: 18,
@@ -35,7 +35,6 @@ export const SearchScreen = observer(function SearchScreen() {
     } else {
       setFilteredSpecies([])
     }
-    
   }, 500)
 
   const renderItem = ({ item }) => (
@@ -44,7 +43,8 @@ export const SearchScreen = observer(function SearchScreen() {
       textStyle={TEXT}
       preset="link"
       text={capitalize(item.name)}
-      onPress={() => speciesStore.select(item.name)} />
+      onPress={() => speciesStore.select(item.name)}
+    />
   )
 
   const renderSprite = () => {
@@ -81,7 +81,8 @@ export const SearchScreen = observer(function SearchScreen() {
       <FlatList
         data={filteredSpecies}
         renderItem={renderItem}
-        keyExtractor={(item, index) => String(index)} />
+        keyExtractor={(item, index) => String(index)}
+      />
     </Screen>
   )
 })

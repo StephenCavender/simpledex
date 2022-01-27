@@ -1,7 +1,5 @@
-import { ApisauceInstance, create, ApiResponse } from "apisauce"
-import { getGeneralApiProblem } from "./api-problem"
+import { ApisauceInstance, create } from "apisauce"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
-import * as Types from "./api.types"
 
 /**
  * Manages all requests to the API.

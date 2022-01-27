@@ -5,19 +5,19 @@ import { color, spacing } from "../../theme"
 import { Text } from "../text/text"
 
 const CARD: ViewStyle = {
-  width: Dimensions.get('window').width - spacing.huge,
+  width: Dimensions.get("window").width - spacing.huge,
   borderWidth: 2,
   borderColor: color.primary,
   borderRadius: 5,
   overflow: "scroll",
-  marginBottom: spacing.small
+  marginBottom: spacing.small,
 }
 const CARD_HEADER: ViewStyle = {
   backgroundColor: color.primary,
-  paddingVertical: spacing.smaller
+  paddingVertical: spacing.smaller,
 }
 const CARD_CONTENTS: ViewStyle = {
-  paddingHorizontal: spacing.small
+  paddingHorizontal: spacing.small,
 }
 const TEXT: TextStyle = {
   textAlign: "center",
@@ -34,14 +34,9 @@ export const Card = observer(function Card(props: CardProps) {
   return (
     <View style={CARD}>
       <View style={CARD_HEADER}>
-        <Text
-          preset="bold"
-          style={TEXT}
-          text={title} />
+        <Text preset="bold" style={TEXT} text={title} />
       </View>
-      <ScrollView style={CARD_CONTENTS}>
-        {children}
-      </ScrollView>
+      <ScrollView style={CARD_CONTENTS}>{children}</ScrollView>
     </View>
   )
 })

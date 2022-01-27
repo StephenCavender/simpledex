@@ -15,7 +15,5 @@ export interface SpriteProps {
 export const Sprite = function Sprite(props: SpriteProps) {
   const { uri } = props
 
-  return (
-    <Image style={SPRITE} source={{ uri }} />
-  )
+  return <Image style={SPRITE} source={{ uri }} />
 }

@@ -10,16 +10,16 @@ const DISMISS_INDICATOR: ViewStyle = {
   width: 50,
   borderRadius: 20,
   marginTop: spacing.tiny,
-  marginBottom: spacing.medium
+  marginBottom: spacing.medium,
 }
 const RIGHT: ViewStyle = {
   alignItems: "flex-end",
   alignSelf: "stretch",
-  padding: spacing.medium
+  padding: spacing.medium,
 }
 const ICON: ImageStyle = {
   tintColor: color.palette.lightGrey,
-  width: 48
+  width: 48,
 }
 
 /**
@@ -29,12 +29,12 @@ const ICON: ImageStyle = {
  */
 export const ModalDismissIndicator = () => {
   const navigation = useNavigation()
-  
-  return Platform.OS === 'ios' ?
-  <View style={DISMISS_INDICATOR} /> :
-  <TouchableOpacity
-    style={RIGHT}
-    onPress={() => navigation.goBack()}>
-    <Icon icon="x" style={ICON} />
-  </TouchableOpacity>
+
+  return Platform.OS === "ios" ? (
+    <View style={DISMISS_INDICATOR} />
+  ) : (
+    <TouchableOpacity style={RIGHT} onPress={() => navigation.goBack()}>
+      <Icon icon="x" style={ICON} />
+    </TouchableOpacity>
+  )
 }

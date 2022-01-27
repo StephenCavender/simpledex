@@ -40,7 +40,7 @@ export const viewPresets: Record<string, ViewStyle> = {
   ghost: {
     ...BASE_VIEW,
     borderWidth: 2,
-    borderColor: color.primary
+    borderColor: color.primary,
   },
 }
 
@@ -53,8 +53,9 @@ export const textPresets: Record<ButtonPresetNames, TextStyle> = {
     paddingVertical: 0,
   } as TextStyle,
   ghost: {
-    ...BASE_TEXT, fontSize: 14
-  } as TextStyle
+    ...BASE_TEXT,
+    fontSize: 14,
+  } as TextStyle,
 }
 
 /**

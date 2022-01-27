@@ -12,9 +12,7 @@ export class VersionApi {
 
   async getAll(): Promise<GetAllVersionsResult> {
     try {
-      const countResponse: ApiResponse<any> = await this.api.apisauce.get(
-        "/version?limit=1",
-      )
+      const countResponse: ApiResponse<any> = await this.api.apisauce.get("/version?limit=1")
       const response: ApiResponse<any> = await this.api.apisauce.get(
         `/version?limit=${countResponse.data.count}`,
       )

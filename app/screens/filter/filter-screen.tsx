@@ -12,13 +12,13 @@ const ROOT: ViewStyle = {
   alignItems: "center",
 }
 const TEXT: ViewStyle = {
-  marginBottom: spacing.medium
+  marginBottom: spacing.medium,
 }
 const LIST_ITEM_TEXT: TextStyle = {
-  fontSize: 18
+  fontSize: 18,
 }
 const LIST_ITEM_BUTTON: ViewStyle = {
-  flexDirection: "row"
+  flexDirection: "row",
 }
 
 export const FilterScreen = observer(function FilterScreen() {
@@ -32,7 +32,8 @@ export const FilterScreen = observer(function FilterScreen() {
       textStyle={LIST_ITEM_TEXT}
       preset="link"
       text={capitalize(item.name)}
-      onPress={() => encounterStore.setFilter(item.name)} />
+      onPress={() => encounterStore.setFilter(item.name)}
+    />
   )
 
   return (
@@ -51,7 +52,8 @@ export const FilterScreen = observer(function FilterScreen() {
       <FlatList
         data={versions}
         renderItem={renderItem}
-        keyExtractor={(item, index) => String(index)} />
+        keyExtractor={(item, index) => String(index)}
+      />
     </Screen>
   )
 })

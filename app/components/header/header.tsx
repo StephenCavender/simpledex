@@ -11,9 +11,9 @@ import { capitalize, sample } from "lodash"
 
 // static styles
 const ROOT: ViewStyle = {
-  paddingTop: Platform.OS === 'ios' ? spacing.huge : null,
+  paddingTop: Platform.OS === "ios" ? spacing.huge : null,
   paddingBottom: spacing.tiny,
-  backgroundColor: color.background, 
+  backgroundColor: color.background,
 }
 const ROW: ViewStyle = {
   flexDirection: "row",
@@ -65,13 +65,17 @@ export const Header = observer(function Header() {
   }, [selected])
 
   const previous = () => {
-    let currentIndex = species.findIndex((s) => s.name.toLowerCase() === selected.name.toLowerCase())
+    let currentIndex = species.findIndex(
+      (s) => s.name.toLowerCase() === selected.name.toLowerCase(),
+    )
     const name = species[--currentIndex].name
     speciesStore.select(name)
   }
 
   const next = () => {
-    let currentIndex = species.findIndex((s) => s.name.toLowerCase() === selected.name.toLowerCase())
+    let currentIndex = species.findIndex(
+      (s) => s.name.toLowerCase() === selected.name.toLowerCase(),
+    )
     const name = species[++currentIndex].name
     speciesStore.select(name)
   }

@@ -10,16 +10,16 @@ export const EncounterStoreModel = types
   .model("EncounterStore")
   .props({
     encounters: types.array(EncounterModel),
-    filter: types.maybe(types.string)
+    filter: types.maybe(types.string),
   })
   .extend(withEnvironment)
   .actions((self) => ({
     save: (encounterSnapshot: EncounterSnapshot[]) => {
       self.encounters.replace(encounterSnapshot)
     },
-    setFilter: ((filter) => {
+    setFilter: (filter) => {
       self.filter = filter
-    })
+    },
   }))
   .actions((self) => ({
     get: flow(function* (pokemon: string | number) {
@@ -35,7 +35,7 @@ export const EncounterStoreModel = types
     }),
     afterCreate: () => {
       self.setFilter(undefined)
-    }
+    },
   }))
 
 type EncounterStoreType = Instance<typeof EncounterStoreModel>

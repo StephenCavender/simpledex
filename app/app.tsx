@@ -17,7 +17,7 @@ import { initFonts } from "./theme/fonts" // expo
 import * as storage from "./utils/storage"
 import { useBackButtonHandler, AppNavigator, canExit, useNavigationPersistence } from "./navigators"
 import { RootStore, RootStoreProvider, setupRootStore } from "./models"
-import { ToggleStorybook } from "../storybook/toggle-storybook"
+// import { ToggleStorybook } from "../storybook/toggle-storybook"
 import { ErrorBoundary } from "./screens/error/error-boundary"
 import codePush from "react-native-code-push"
 
@@ -61,16 +61,16 @@ function App() {
     // TODO: Re-enable when this issue is resolved
     // * https://github.com/infinitered/ignite/issues/1705
     // <ToggleStorybook>
-      <RootStoreProvider value={rootStore}>
-        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <ErrorBoundary catchErrors={"always"}>
-            <AppNavigator
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-            />
-          </ErrorBoundary>
-        </SafeAreaProvider>
-      </RootStoreProvider>
+    <RootStoreProvider value={rootStore}>
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <ErrorBoundary catchErrors={"always"}>
+          <AppNavigator
+            initialState={initialNavigationState}
+            onStateChange={onNavigationStateChange}
+          />
+        </ErrorBoundary>
+      </SafeAreaProvider>
+    </RootStoreProvider>
     // </ToggleStorybook>
   )
 }

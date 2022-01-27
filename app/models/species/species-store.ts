@@ -79,7 +79,7 @@ export const SpeciesStoreModel = types
       const variety = snapshot.varieties.find((variety) => variety.is_default)
       variety.pokemon = yield self.getPokemon(species)
       applySnapshot(model, snapshot)
-    })
+    }),
   }))
 
 type SpeciesStoreType = Instance<typeof SpeciesStoreModel>

@@ -1,6 +1,6 @@
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 import { withEnvironment } from "../extensions/with-environment"
-import { VersionModel, VersionSNapshot } from "./version"
+import { VersionModel, VersionSnapshot } from "./version"
 import { VersionApi } from "../../services/api/version-api"
 
 /**
@@ -15,7 +15,7 @@ export const VersionStoreModel = types
   .actions((self) => ({
     save: (versionSnapshot: VersionSnapshot[]) => {
       self.versions.replace(versionSnapshot)
-    }
+    },
   }))
   .actions((self) => ({
     getAll: flow(function* () {
@@ -27,12 +27,12 @@ export const VersionStoreModel = types
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
-    })
+    }),
   }))
   .actions((self) => ({
     afterCreate: flow(function* () {
       yield self.getAll()
-    })
+    }),
   }))
 
 type VersionStoreType = Instance<typeof VersionStoreModel>

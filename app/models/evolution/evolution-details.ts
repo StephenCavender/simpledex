@@ -1,5 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { identity, pickBy } from 'lodash'
+import { identity, pickBy } from "lodash"
 
 /**
  * Model description here for TypeScript hints.
@@ -29,7 +29,7 @@ export const EvolutionDetailsModel = types
   .views((self) => ({
     clean: () => {
       return pickBy(self, identity)
-    }
+    },
   }))
 
 type EvolutionDetailsType = Instance<typeof EvolutionDetailsModel>

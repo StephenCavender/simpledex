@@ -3,11 +3,9 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 /**
  * Image properties for a pokemon
  */
-export const SpriteModel = types
-  .model("Sprite")
-  .props({
-    front_default: types.maybe(types.string),
-  })
+export const SpriteModel = types.model("Sprite").props({
+  front_default: types.maybe(types.string),
+})
 
 type SpriteType = Instance<typeof SpriteModel>
 export interface Sprite extends SpriteType {}

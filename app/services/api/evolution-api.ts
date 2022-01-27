@@ -12,8 +12,8 @@ const recurseEvolutions = (name: string, chain: GetEvolutionChainResult): any =>
     }
     return []
   }
-  chain.evolves_to.forEach(evolution => {
-    evolution.evolution_details.forEach(details => {
+  chain.evolves_to.forEach((evolution) => {
+    evolution.evolution_details.forEach((details) => {
       details.trigger = details.trigger.name
       if (details.item) details.item = details.item.name
       if (details.held_item) details.held_item = details.held_item.name

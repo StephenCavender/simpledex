@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle, TouchableOpacity, TextStyle, useWindowDimensions, ActivityIndicator } from "react-native"
+import {
+  View,
+  ViewStyle,
+  TouchableOpacity,
+  TextStyle,
+  useWindowDimensions,
+  ActivityIndicator,
+} from "react-native"
 import { Screen, Text, Sprite, Card } from "../../components"
 import { EvolutionDetails, Species, useStores } from "../../models"
 import { color, spacing } from "../../theme"
@@ -24,21 +31,21 @@ const DETAIL_CARD: ViewStyle = {
   borderColor: color.text,
   borderRadius: 5,
   marginVertical: spacing.small,
-  padding: spacing.smaller
+  padding: spacing.smaller,
 }
 const DETAIL_TITLE: ViewStyle = {
   alignSelf: "center",
   borderBottomWidth: 1,
   borderBottomColor: color.text,
-  marginBottom: spacing.tiny
+  marginBottom: spacing.tiny,
 }
 
 export const EvolutionsScreen = observer(function EvolutionsScreen() {
   const { speciesStore, evolutionStore } = useStores()
-  const { selected, species } = speciesStore
+  const { selected } = speciesStore
   const { evolutions } = evolutionStore
 
-  const { width } = useWindowDimensions();
+  const { width } = useWindowDimensions()
 
   const [loading, setLoading] = useState(false)
 
@@ -56,29 +63,32 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
 
   const renderSprite = (species: Species) => {
     const variety = species.varieties?.find((variety) => variety.is_default)
-    return variety ? 
-    <Sprite uri={variety.pokemon.sprites.front_default} /> :
-    <Sprite uri="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png" />
+    return variety ? (
+      <Sprite uri={variety.pokemon.sprites.front_default} />
+    ) : (
+      <Sprite uri="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png" />
+    )
   }
 
-  const renderDetails = (details: EvolutionDetails[]) => (
+  const renderDetails = (details: EvolutionDetails[]) =>
     details.map((detail, i) => {
       detail = detail.clean()
       return (
         <View style={DETAIL_CARD} key={`evolution-detail-${i}`}>
-          {details.length > 1 &&
+          {details.length > 1 && (
             <View style={DETAIL_TITLE}>
               <Text txOptions={{ num: i }} tx="evolutionsScreen.detailTitle" />
-            </View>}
+            </View>
+          )}
           {Object.keys(detail).map((key) => (
             <Text key={`evolution-detail-${i}-${key}`}>
-              <Text preset="bold" text={`${key}: `} />{detail[key]}
+              <Text preset="bold" text={`${key}: `} />
+              {detail[key]}
             </Text>
           ))}
         </View>
       )
     })
-  )
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => speciesStore.select(item.species.name)}>
@@ -92,27 +102,31 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
   return (
     <Screen style={ROOT} preset="fixed" unsafe>
       <Text style={HEADER_CONTAINER} preset="header" tx="evolutionsScreen.title" />
-      {loading ? <ActivityIndicator size="large" color={color.secondary} /> : 
-      <>
-        {!selected ? (
-          <Text style={TEXT} tx="evolutionsScreen.noSelection" />
-        ) : (
-          <>
-            {evolutions.length ? 
-            <Carousel
-              data={evolutions}
-              renderItem={renderItem}
-              sliderWidth={width}
-              itemWidth={width - spacing.huge} /> :
-            <Text
-              txOptions={{ species: capitalize(selected.name) }}
-              tx="evolutionsScreen.noEvolutions"
-            />
-          }
-          </>
-        )}
-      </>
-      }
+      {loading ? (
+        <ActivityIndicator size="large" color={color.secondary} />
+      ) : (
+        <>
+          {!selected ? (
+            <Text style={TEXT} tx="evolutionsScreen.noSelection" />
+          ) : (
+            <>
+              {evolutions.length ? (
+                <Carousel
+                  data={evolutions}
+                  renderItem={renderItem}
+                  sliderWidth={width}
+                  itemWidth={width - spacing.huge}
+                />
+              ) : (
+                <Text
+                  txOptions={{ species: capitalize(selected.name) }}
+                  tx="evolutionsScreen.noEvolutions"
+                />
+              )}
+            </>
+          )}
+        </>
+      )}
     </Screen>
   )
 })

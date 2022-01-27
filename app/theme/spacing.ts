@@ -49,5 +49,5 @@ export const spacing = {
   large: 24,
   larger: 32,
   huge: 48,
-  massive: 64
+  massive: 64,
 }
