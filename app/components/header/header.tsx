@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { View, ViewStyle, TextStyle, ImageStyle, TouchableOpacity } from "react-native"
+import { View, ViewStyle, TextStyle, ImageStyle, TouchableOpacity, Platform } from "react-native"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import { Icon } from "../icon/icon"
@@ -11,9 +11,9 @@ import { capitalize, sample } from "lodash"
 
 // static styles
 const ROOT: ViewStyle = {
-  paddingTop: spacing.huge,
+  paddingTop: Platform.OS === 'ios' ? spacing.huge : null,
   paddingBottom: spacing.tiny,
-  backgroundColor: color.background,
+  backgroundColor: color.background, 
 }
 const ROW: ViewStyle = {
   flexDirection: "row",

@@ -1,4 +1,6 @@
 <resources>
-    <string name="app_name">SimpleDex</string>
-    <string moduleConfig="true" name="CodePushDeploymentKey">WAfFGJ1POqQTTGKVtxZD5uEBQr4BoEk-hVTya</string>
+  <!-- Below line is handled by '@expo/configure-splash-screen' command and it's discouraged to modify it manually -->
+  <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
+  <string name="app_name">SimpleDex</string>
+  <string moduleConfig="true" name="CodePushDeploymentKey">WAfFGJ1POqQTTGKVtxZD5uEBQr4BoEk-hVTya</string>
 </resources>

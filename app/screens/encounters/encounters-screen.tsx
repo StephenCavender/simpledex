@@ -75,7 +75,7 @@ export const EncountersScreen = observer(function EncountersScreen() {
     )}
 
   return (
-    <Screen style={ROOT} preset="fixed" unsafe={true}>
+    <Screen style={ROOT} preset="fixed" unsafe>
       <Text style={HEADER_CONTAINER} preset="header" tx="encountersScreen.title" />
       {loading ? <ActivityIndicator size="large" color={color.secondary} /> : 
       <>

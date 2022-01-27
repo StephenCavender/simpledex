@@ -1,0 +1,58 @@
+before_all do
+  ensure_git_branch(
+    'main'
+  )
+  ensure_git_status_clean
+  git_pull
+end
+
+platform :ios do    
+  desc 'Fetch certificates and provisioning profiles'
+  lane :certificates do
+    match(app_identifier: 'com.cavender.simpledex', type: 'appstore', readonly: true)
+  end
+
+  desc 'Fetch certificates. Build the iOS application.'
+  lane :build do
+    certificates
+    gym(
+      scheme: "SimpleDex",
+      workspace: './ios/SimpleDex.xcworkspace',
+      # project: './ios/SimpleDex.xcodeproj', # Use this command if you don't have an iOS .xcworkspace file.
+      export_method: 'app-store'
+    )
+ end
+
+ desc 'Fetch certificates, build and upload to App Center.'
+  lane :appcenter do
+    build
+    appcenter_upload(
+      api_token: ENV["APPCENTER_API_TOKEN_IOS"],
+      owner_name: ENV["APPCENTER_OWNER"],
+      app_name: ENV["APPCENTER_APP_NAME_IOS"],
+      file: ENV["APPCENTER_DISTRIBUTE_FILE_IOS"]
+    )
+  end
+end
+
+platform :android do
+  desc 'Build the Android application.'
+  lane :build do
+    gradle(task: 'clean', project_dir: 'android/')
+    # gradle(task: 'assemble', build_type: 'release', project_dir: 'android/') # Use this command to generate an APK
+    gradle(task: 'bundle', build_type: 'release', project_dir: 'android/') # Use this command to generate an AAB
+  end
+
+  desc 'Build and upload to App Center.'
+  lane :appcenter do
+  build
+  appcenter_upload(
+      api_token: ENV["APPCENTER_API_TOKEN_ANDROID"],
+      owner_name: ENV["APPCENTER_OWNER"],
+      app_name: ENV["APPCENTER_APP_NAME_ANDROID"],
+      file: ENV["APPCENTER_DISTRIBUTE_FILE_ANDROID"],
+      destinations: 'Production',
+      destination_type: 'store'
+      )
+  end
+end

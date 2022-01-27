@@ -1,6 +1,6 @@
 {
   "name": "simple-dex",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "start": "react-native start",
@@ -26,7 +26,9 @@
     "build-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "clean": "react-native-clean-project",
     "clean-all": "npx react-native clean-project-auto",
-    "bump": "npx react-native bump-version --skip-semver-for android"
+    "bump": "npx react-native bump-version --skip-semver-for android",
+    "deploy:android": "bundle exec fastlane android appcenter",
+    "deploy:ios": "bundle exec fastlane ios appcenter"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.14.1",
@@ -39,6 +41,7 @@
     "expo": "~43.0.0",
     "expo-linear-gradient": "^10.0.3",
     "expo-localization": "11.0.0",
+    "expo-splash-screen": "~0.13.5",
     "i18n-js": "3.8.0",
     "lodash": "^4.17.21",
     "mobx": "6.1.8",

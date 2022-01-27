@@ -5,7 +5,7 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import { ImageStyle, useColorScheme } from "react-native"
+import { ImageStyle, useColorScheme, ViewStyle } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
@@ -22,7 +22,13 @@ export type TabParamList = {
 
 const Tab = createBottomTabNavigator<TabParamList>()
 
-const ICON: ImageStyle = { tintColor: color.primary, width: 24 }
+const ICON: ImageStyle = { width: 24 }
+const TAB_BAR_STYLE: ViewStyle = {
+  backgroundColor: color.background,
+  height: 80,
+  padding: 5,
+  paddingBottom: 20
+}
 
 const AppTabs = () => {
   return (
@@ -31,7 +37,7 @@ const AppTabs = () => {
         header: function header() {
           return <Header />
         },
-        tabBarStyle: { backgroundColor: color.background, padding: 5, height: 80 },
+        tabBarStyle: TAB_BAR_STYLE,
         tabBarActiveTintColor: color.primary,
       }}
     >
@@ -93,12 +99,20 @@ const AppStack = () => {
     <Stack.Navigator
       initialRouteName="tabs"
       screenOptions={{
-        headerShown: false,
+        headerShown: false
       }}
     >
-      <Stack.Screen name="tabs" component={AppTabs} />
-      <Stack.Screen options={{ presentation: "modal" }} name="search" component={SearchScreen} />
-      <Stack.Screen options={{ presentation: "modal" }} name="filter" component={FilterScreen} />
+      <Stack.Screen
+        name="tabs"
+        component={AppTabs} />
+      <Stack.Screen
+        options={{ presentation: "modal" }}
+        name="search"
+        component={SearchScreen} />
+      <Stack.Screen
+        options={{ presentation: "modal" }}
+        name="filter"
+        component={FilterScreen} />
     </Stack.Navigator>
   )
 }
