@@ -1,6 +1,6 @@
 before_all do
   ensure_git_branch(
-    'main'
+    branch: 'main'
   )
   ensure_git_status_clean
   git_pull
