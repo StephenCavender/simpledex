@@ -82,6 +82,7 @@ export const SearchScreen = observer(function SearchScreen() {
         data={filteredSpecies}
         renderItem={renderItem}
         keyExtractor={(item, index) => String(index)}
+        keyboardShouldPersistTaps="handled"
       />
     </Screen>
   )

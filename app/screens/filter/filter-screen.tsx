@@ -1,6 +1,6 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, FlatList } from "react-native"
+import { ViewStyle, FlatList, TextStyle } from "react-native"
 import { Screen, Text, Button, ModalDismissIndicator } from "../../components"
 import { useStores } from "../../models"
 import { color, spacing } from "../../theme"
@@ -53,6 +53,7 @@ export const FilterScreen = observer(function FilterScreen() {
         data={versions}
         renderItem={renderItem}
         keyExtractor={(item, index) => String(index)}
+        keyboardShouldPersistTaps="handled"
       />
     </Screen>
   )
