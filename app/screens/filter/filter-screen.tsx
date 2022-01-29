@@ -1,10 +1,10 @@
-import React from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { ViewStyle, FlatList, TextStyle } from "react-native"
-import { Screen, Text, Button, ModalDismissIndicator } from "../../components"
-import { useStores } from "../../models"
+import { Screen, Text, Button, ModalDismissIndicator, TextField } from "../../components"
+import { useStores, Version } from "../../models"
 import { color, spacing } from "../../theme"
-import { capitalize } from "lodash"
+import { capitalize, debounce } from "lodash"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
@@ -25,6 +25,20 @@ export const FilterScreen = observer(function FilterScreen() {
   const { versionStore, encounterStore } = useStores()
   const { versions } = versionStore
   const { filter } = encounterStore
+
+  const [filteredVersions, setFilteredVersions] = useState([])
+
+  const onChangeText = debounce((filter: string) => {
+    if (filter) {
+      setFilteredVersions(
+        versions.filter((version: Version) =>
+          version.name.toLowerCase().includes(filter.toLowerCase()),
+        ),
+      )
+    } else {
+      setFilteredVersions([])
+    }
+  }, 500)
 
   const renderItem = ({ item }) => (
     <Button
@@ -49,8 +63,16 @@ export const FilterScreen = observer(function FilterScreen() {
           tx="filterScreen.currentlySelected"
         />
       )}
+      <TextField
+        placeholderTx="filterScreen.searchField.placeholder"
+        onChangeText={onChangeText}
+        autoCapitalize="none"
+        autoCompleteType="off"
+        autoCorrect={false}
+        autoFocus
+      />
       <FlatList
-        data={versions}
+        data={filteredVersions}
         renderItem={renderItem}
         keyExtractor={(item, index) => String(index)}
         keyboardShouldPersistTaps="handled"

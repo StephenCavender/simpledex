@@ -22,7 +22,6 @@
     "currentlySelected": "%{species} is currently selected.",
     "noSelection": "No selection has been made.",
     "searchField": {
-      "label": "Species",
       "placeholder": "char"
     },
     "noResults": "No result for this search..."
@@ -51,7 +50,10 @@
   "filterScreen": {
     "title": "Filter",
     "noFilter": "select a version to filter encounters on",
-    "currentlySelected": "%{filter} is currently selected."
+    "currentlySelected": "%{filter} is currently selected.",
+    "searchField": {
+      "placeholder": "red"
+    }
   },
   "errorScreen": {
     "title": "Something went wrong!",
