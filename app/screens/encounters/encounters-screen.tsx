@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { ViewStyle, useWindowDimensions, ActivityIndicator } from "react-native"
 import { Screen, Text, Card, Button } from "../../components"
-import { useStores } from "../../models"
+import { Encounter, useStores } from "../../models"
 import { color, spacing } from "../../theme"
 import { capitalize } from "lodash"
 import { translate } from "../../i18n"
@@ -55,6 +55,8 @@ export const EncountersScreen = observer(function EncountersScreen() {
   useEffect(() => {
     if (!filter) return
 
+    // TODO: this logic is not filtering anything out
+
     setFilteredEncounters(
       encounters.filter((encounter: Encounter) =>
         encounter.version_details.filter((versionDetails) =>
@@ -66,6 +68,8 @@ export const EncountersScreen = observer(function EncountersScreen() {
 
   const renderItem = ({ item }) => {
     const i18nTitle = translate("encountersScreen.location", { location: item.location_area })
+
+    // TODO: possibly create an encounterDetails component instead of version details
 
     return (
       <Card title={i18nTitle}>
