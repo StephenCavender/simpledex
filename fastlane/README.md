@@ -1,4 +1,5 @@
-## fastlane documentation
+fastlane documentation
+----
 
 # Installation
 
@@ -38,7 +39,8 @@ Fetch certificates. Build the iOS application.
 
 Fetch certificates, build and upload to App Center.
 
----
+----
+
 
 ## Android
 
@@ -58,7 +60,7 @@ Build the Android application.
 
 Build and upload to App Center.
 
----
+----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
 
