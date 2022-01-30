@@ -1,4 +1,4 @@
-package com.simpledex;
+package com.cavender.simpledex;
 
 import com.facebook.react.ReactActivity;
 
