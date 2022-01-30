@@ -99,6 +99,9 @@ export const EncountersScreen = observer(function EncountersScreen() {
                       renderItem={renderItem}
                       sliderWidth={width}
                       itemWidth={width - spacing.huge}
+                      initialNumToRender={3}
+                      maxToRenderPerBatch={3}
+                      removeClippedSubviews
                     />
                   ) : (
                     <Text

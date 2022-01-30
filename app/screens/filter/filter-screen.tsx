@@ -76,6 +76,7 @@ export const FilterScreen = observer(function FilterScreen() {
         renderItem={renderItem}
         keyExtractor={(item, index) => String(index)}
         keyboardShouldPersistTaps="handled"
+        initialNumToRender={5}
       />
     </Screen>
   )

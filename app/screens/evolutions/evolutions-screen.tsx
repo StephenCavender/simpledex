@@ -116,6 +116,9 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
                   renderItem={renderItem}
                   sliderWidth={width}
                   itemWidth={width - spacing.huge}
+                  initialNumToRender={3}
+                  maxToRenderPerBatch={3}
+                  removeClippedSubviews
                 />
               ) : (
                 <Text
