@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, useWindowDimensions, ActivityIndicator } from "react-native"
+import { ViewStyle, TextStyle, useWindowDimensions, ActivityIndicator } from "react-native"
 import { Screen, Text, Card, Button } from "../../components"
 import { Encounter, useStores } from "../../models"
 import { color, spacing } from "../../theme"
@@ -8,7 +8,7 @@ import { capitalize } from "lodash"
 import { translate } from "../../i18n"
 import { useNavigation } from "@react-navigation/native"
 import Carousel from "react-native-snap-carousel"
-import { VersionDetails } from "./version-details.component"
+import { EncounterDetails } from "./encounter-details"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -55,25 +55,23 @@ export const EncountersScreen = observer(function EncountersScreen() {
   useEffect(() => {
     if (!filter) return
 
-    // TODO: this logic is not filtering anything out
+    const filtered = []
+    encounters.forEach((encounter: Encounter) => {
+      const versionDetails = encounter.version_details.find(versionDetail => versionDetail.version.toLowerCase() === filter.toLowerCase())
+      if (versionDetails) {
+        filtered.push({ location_area: encounter.location_area, encounter_details: versionDetails.encounter_details})
+      }
+    })
 
-    setFilteredEncounters(
-      encounters.filter((encounter: Encounter) =>
-        encounter.version_details.filter((versionDetails) =>
-          versionDetails.version.toLowerCase().includes(filter.toLowerCase),
-        ),
-      ),
-    )
+    setFilteredEncounters(filtered)
   }, [filter])
 
   const renderItem = ({ item }) => {
     const i18nTitle = translate("encountersScreen.location", { location: item.location_area })
 
-    // TODO: possibly create an encounterDetails component instead of version details
-
     return (
       <Card title={i18nTitle}>
-        <VersionDetails versionDetails={item.version_details} />
+        <EncounterDetails encounterDetails={item.encounter_details} />
       </Card>
     )
   }
