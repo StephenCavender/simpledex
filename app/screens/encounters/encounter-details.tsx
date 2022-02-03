@@ -23,7 +23,6 @@ export const EncounterDetails = function EncounterDetails(props: EncounterDetail
   const { encounterDetails } = props
 
   const renderItem = ({ item }) => {
-    console.tron.log('test', item)
     return (
       <View style={ROOT}>
           <View style={ITEM}>
