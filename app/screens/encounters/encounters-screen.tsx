@@ -20,6 +20,7 @@ const HEADER_CONTAINER: ViewStyle = {
 }
 const TEXT: TextStyle = {
   textAlign: "center",
+  paddingHorizontal: spacing.large
 }
 const FILTER_BUTTON: ViewStyle = {
   marginBottom: spacing.medium,

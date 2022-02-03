@@ -24,6 +24,7 @@ const HEADER_CONTAINER: ViewStyle = {
 }
 const TEXT: TextStyle = {
   textAlign: "center",
+  paddingHorizontal: spacing.large
 }
 const DETAIL_CARD: ViewStyle = {
   alignSelf: "center",
