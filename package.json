@@ -27,8 +27,12 @@
     "clean": "react-native-clean-project",
     "clean-all": "npx react-native clean-project-auto",
     "bump": "npx react-native bump-version --skip-semver-for android",
-    "deploy:android": "bundle exec fastlane android appcenter",
-    "deploy:ios": "bundle exec fastlane ios appcenter"
+    "appcenter:android": "bundle exec fastlane android appcenter",
+    "appcenter:ios": "bundle exec fastlane ios appcenter",
+    "codepush": "npm-run-all codepush:*",
+    "codepush:android": "appcenter codepush release-react -a yoshi-lord/simpledex-android -d Production",
+    "codepush:ios": "appcenter codepush release-react -a yoshi-lord/simpledex-iOS -d Production",
+
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.14.1",
