@@ -30,13 +30,13 @@
     "title": "Evolutions",
     "noEvolutions": "%{species} does not evolve",
     "hasEvolutions": "%{species} can evolve into",
-    "noSelection": "search for a pokemon or shuffle to show possible evolutions",
+    "noSelection": "search for a pokèmon or shuffle to show possible evolutions",
     "detailTitle": "Method %{num}"
   },
   "encountersScreen": {
     "title": "Encounters",
     "noEncounters": "%{species} has no encounters in %{version}",
-    "noSelection": "search for a pokemon or shuffle to show possible encounters",
+    "noSelection": "search for a pokèmon or shuffle to show possible encounters",
     "hasEncounters": "%{species} can be encountered at",
     "location": "Location: %{location}",
     "method": "Method: %{method}",
