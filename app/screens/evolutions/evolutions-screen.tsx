@@ -4,11 +4,11 @@ import {
   View,
   ViewStyle,
   TouchableOpacity,
-  TextStyle,
   useWindowDimensions,
   ActivityIndicator,
+  TextStyle,
 } from "react-native"
-import { Screen, Text, Sprite, Card } from "../../components"
+import { Screen, Text, Sprite, Card, NoSelection } from "../../components"
 import { EvolutionDetails, Species, useStores } from "../../models"
 import { color, spacing } from "../../theme"
 import { capitalize } from "lodash"
@@ -21,10 +21,6 @@ const ROOT: ViewStyle = {
 }
 const HEADER_CONTAINER: ViewStyle = {
   marginBottom: 10,
-}
-const TEXT: TextStyle = {
-  textAlign: "center",
-  paddingHorizontal: spacing.large
 }
 const DETAIL_CARD: ViewStyle = {
   alignSelf: "center",
@@ -39,6 +35,12 @@ const DETAIL_TITLE: ViewStyle = {
   borderBottomWidth: 1,
   borderBottomColor: color.text,
   marginBottom: spacing.tiny,
+}
+const TEXT: TextStyle = {
+  fontSize: 16,
+  lineHeight: 20,
+  textAlign: "center",
+  marginHorizontal: spacing.large,
 }
 
 export const EvolutionsScreen = observer(function EvolutionsScreen() {
@@ -108,7 +110,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
       ) : (
         <>
           {!selected ? (
-            <Text style={TEXT} tx="evolutionsScreen.noSelection" />
+            <NoSelection />
           ) : (
             <>
               {evolutions.length ? (
@@ -123,6 +125,7 @@ export const EvolutionsScreen = observer(function EvolutionsScreen() {
                 />
               ) : (
                 <Text
+                  style={TEXT}
                   txOptions={{ species: capitalize(selected.name) }}
                   tx="evolutionsScreen.noEvolutions"
                 />

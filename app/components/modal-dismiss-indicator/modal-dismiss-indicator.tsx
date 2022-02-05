@@ -9,8 +9,7 @@ const DISMISS_INDICATOR: ViewStyle = {
   height: 5,
   width: 50,
   borderRadius: 20,
-  marginTop: spacing.tiny,
-  marginBottom: spacing.medium,
+  marginVertical: spacing.medium
 }
 const RIGHT: ViewStyle = {
   alignItems: "flex-end",

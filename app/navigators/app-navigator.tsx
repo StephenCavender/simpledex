@@ -21,9 +21,9 @@ import { Header, Icon } from "../components"
 import { color } from "../theme"
 
 export type TabParamList = {
-  evolutions: undefined
-  encounters: undefined
-  about: undefined
+  Evolutions: undefined
+  Encounters: undefined
+  About: undefined
 }
 
 const Tab = createBottomTabNavigator<TabParamList>()
@@ -48,7 +48,7 @@ const AppTabs = () => {
       }}
     >
       <Tab.Screen
-        name="evolutions"
+        name="Evolutions"
         component={EvolutionsScreen}
         options={{
           tabBarIcon: function tabBarIcon({ color }) {
@@ -57,7 +57,7 @@ const AppTabs = () => {
         }}
       />
       <Tab.Screen
-        name="encounters"
+        name="Encounters"
         component={EncountersScreen}
         options={{
           tabBarIcon: function tabBarIcon({ color }) {
@@ -66,7 +66,7 @@ const AppTabs = () => {
         }}
       />
       <Tab.Screen
-        name="about"
+        name="About"
         component={AboutScreen}
         options={{
           tabBarIcon: function tabBarIcon({ color }) {

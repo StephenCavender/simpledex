@@ -11,8 +11,10 @@ const ROOT: ViewStyle = {
   flex: 1,
   alignItems: "center",
 }
-const TEXT: ViewStyle = {
+const TEXT: TextStyle = {
   marginBottom: spacing.medium,
+  marginHorizontal: spacing.large,
+  textAlign: "center"
 }
 const LIST_ITEM_TEXT: TextStyle = {
   fontSize: 18,
@@ -26,7 +28,7 @@ export const FilterScreen = observer(function FilterScreen() {
   const { versions } = versionStore
   const { filter } = encounterStore
 
-  const [filteredVersions, setFilteredVersions] = useState([])
+  const [filteredVersions, setFilteredVersions] = useState(versions)
 
   const onChangeText = debounce((filter: string) => {
     if (filter) {

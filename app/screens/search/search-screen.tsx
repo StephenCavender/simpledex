@@ -23,7 +23,7 @@ export const SearchScreen = observer(function SearchScreen() {
   const { speciesStore } = useStores()
   const { selected, species } = speciesStore
 
-  const [filteredSpecies, setFilteredSpecies] = useState([])
+  const [filteredSpecies, setFilteredSpecies] = useState(species)
 
   const onChangeText = debounce((filter: string) => {
     if (filter) {

@@ -1,12 +1,4 @@
 {
-  "common": {
-    "ok": "OK!",
-    "cancel": "Cancel",
-    "back": "Back"
-  },
-  "errors": {
-    "invalidEmail": "Invalid email address."
-  },
   "aboutScreen": {
     "title": "SimpleDex",
     "version": "Version %{version}",
@@ -20,40 +12,43 @@
   "searchScreen": {
     "title": "Search",
     "currentlySelected": "%{species} is currently selected.",
-    "noSelection": "No selection has been made.",
+    "noSelection": "Select a pokèmon from the list below.",
     "searchField": {
-      "placeholder": "char"
+      "placeholder": "charmander"
     },
     "noResults": "No result for this search..."
   },
   "evolutionsScreen": {
     "title": "Evolutions",
-    "noEvolutions": "%{species} does not evolve",
+    "noEvolutions": "%{species} does not evolve. Use the icon buttons in the header above to update your pokèmon selection.",
     "hasEvolutions": "%{species} can evolve into",
-    "noSelection": "search for a pokèmon or shuffle to show possible evolutions",
     "detailTitle": "Method %{num}"
   },
   "encountersScreen": {
     "title": "Encounters",
-    "noEncounters": "%{species} has no encounters in %{version}",
-    "noSelection": "search for a pokèmon or shuffle to show possible encounters",
-    "hasEncounters": "%{species} can be encountered at",
+    "noEncounters": "%{species} has no encounters in %{version}. Use the icon buttons in the header above to update your pokèmon selection or choose a different game version to filter on.",
     "location": "Location: %{location}",
     "method": "Method: %{method}",
     "chance": "Chance: %{chance}%",
     "filterPlaceholder": "filter...",
-    "noFilter": "select a version to filter by",
+    "noFilter": "Use the button above to select a game version to filter by.",
     "minLevel": "Minimum Level: %{level}",
     "maxLevel": "Maximum Level: %{level}",
     "conditions": "Conditions:"
   },
   "filterScreen": {
     "title": "Filter",
-    "noFilter": "select a version to filter encounters on",
+    "noFilter": "Select a game version to filter encounters on from the list below.",
     "currentlySelected": "%{filter} is currently selected.",
     "searchField": {
       "placeholder": "red"
     }
+  },
+  "noSelection": {
+    "message": "No pokèmon is currently selected.",
+    "search": "Search",
+    "shuffle": "Shuffle",
+    "or": "or"
   },
   "errorScreen": {
     "title": "Something went wrong!",

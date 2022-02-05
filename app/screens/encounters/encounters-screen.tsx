@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, TextStyle, useWindowDimensions, ActivityIndicator } from "react-native"
-import { Screen, Text, Card, Button } from "../../components"
+import { ViewStyle, useWindowDimensions, ActivityIndicator, TextStyle } from "react-native"
+import { Screen, Text, Card, Button, NoSelection } from "../../components"
 import { Encounter, useStores } from "../../models"
 import { color, spacing } from "../../theme"
 import { capitalize } from "lodash"
@@ -18,12 +18,14 @@ const ROOT: ViewStyle = {
 const HEADER_CONTAINER: ViewStyle = {
   marginBottom: 10,
 }
-const TEXT: TextStyle = {
-  textAlign: "center",
-  paddingHorizontal: spacing.large
-}
 const FILTER_BUTTON: ViewStyle = {
   marginBottom: spacing.medium,
+}
+const TEXT: TextStyle = {
+  fontSize: 16,
+  lineHeight: 20,
+  textAlign: "center",
+  marginHorizontal: spacing.large
 }
 
 export const EncountersScreen = observer(function EncountersScreen() {
@@ -85,7 +87,7 @@ export const EncountersScreen = observer(function EncountersScreen() {
       ) : (
         <>
           {!selected ? (
-            <Text style={TEXT} tx="encountersScreen.noSelection" />
+            <NoSelection />
           ) : (
             <>
               <Button
@@ -108,13 +110,14 @@ export const EncountersScreen = observer(function EncountersScreen() {
                     />
                   ) : (
                     <Text
+                      style={TEXT}
                       txOptions={{ species: capitalize(selected.name), version: filter }}
                       tx="encountersScreen.noEncounters"
                     />
                   )}
                 </>
               ) : (
-                <Text tx="encountersScreen.noFilter" />
+                <Text style={TEXT} tx="encountersScreen.noFilter" />
               )}
             </>
           )}

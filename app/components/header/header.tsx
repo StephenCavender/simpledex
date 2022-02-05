@@ -80,7 +80,7 @@ export const Header = observer(function Header() {
     speciesStore.select(name)
   }
 
-  const random = () => {
+  const shuffle = () => {
     const { name }: Species = sample(species)
     speciesStore.select(name)
   }
@@ -117,7 +117,7 @@ export const Header = observer(function Header() {
             style={[ICON, SELECTOR_ICON, nextDisabled ? ICON_DISABLED : null]}
           />
         </Button>
-        <Button preset="link" onPress={random} style={SELECTOR}>
+        <Button preset="link" onPress={shuffle} style={SELECTOR}>
           <Icon icon="shuffle" style={[ICON, SELECTOR_ICON]} />
         </Button>
       </View>

@@ -30,8 +30,8 @@
     "appcenter:android": "bundle exec fastlane android appcenter",
     "appcenter:ios": "bundle exec fastlane ios appcenter",
     "codepush": "npm-run-all codepush:*",
-    "codepush:android": "appcenter codepush release-react -a yoshi-lord/simpledex-android -d Production",
-    "codepush:ios": "appcenter codepush release-react -a yoshi-lord/simpledex-iOS -d Production"
+    "codepush:android": "appcenter codepush release-react -a yoshi-lord/simpledex-android",
+    "codepush:ios": "appcenter codepush release-react -a yoshi-lord/simpledex-iOS"
 
   },
   "dependencies": {
