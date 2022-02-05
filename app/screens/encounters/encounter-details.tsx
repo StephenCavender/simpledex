@@ -25,20 +25,20 @@ export const EncounterDetails = function EncounterDetails(props: EncounterDetail
   const renderItem = ({ item }) => {
     return (
       <View style={ROOT}>
-          <View style={ITEM}>
-            <Text txOptions={{ method: item.method }} tx="encountersScreen.method" />
-            <Text txOptions={{ chance: item.chance }} tx="encountersScreen.chance" />
-            <Text txOptions={{ level: item.min_level }} tx="encountersScreen.minLevel" />
-            <Text txOptions={{ level: item.max_level }} tx="encountersScreen.maxLevel" />
-            {item.condition_values.length > 0 && (
-              <>
-                <Text tx="encountersScreen.conditions" />
-                {item.condition_values.map((conditionValue, i) => (
-                  <BulletItem key={`encounter-detail-condition-${i}`} text={conditionValue} />
-                ))}
-              </>
-            )}
-          </View>
+        <View style={ITEM}>
+          <Text txOptions={{ method: item.method }} tx="encountersScreen.method" />
+          <Text txOptions={{ chance: item.chance }} tx="encountersScreen.chance" />
+          <Text txOptions={{ level: item.min_level }} tx="encountersScreen.minLevel" />
+          <Text txOptions={{ level: item.max_level }} tx="encountersScreen.maxLevel" />
+          {item.condition_values.length > 0 && (
+            <>
+              <Text tx="encountersScreen.conditions" />
+              {item.condition_values.map((conditionValue, i) => (
+                <BulletItem key={`encounter-detail-condition-${i}`} text={conditionValue} />
+              ))}
+            </>
+          )}
+        </View>
       </View>
     )
   }

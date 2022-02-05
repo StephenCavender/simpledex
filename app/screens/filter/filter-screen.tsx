@@ -14,7 +14,7 @@ const ROOT: ViewStyle = {
 const TEXT: TextStyle = {
   marginBottom: spacing.medium,
   marginHorizontal: spacing.large,
-  textAlign: "center"
+  textAlign: "center",
 }
 const LIST_ITEM_TEXT: TextStyle = {
   fontSize: 18,

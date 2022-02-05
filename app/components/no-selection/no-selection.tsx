@@ -12,7 +12,7 @@ import { Icon } from ".."
 const CONTAINER: ViewStyle = {
   flex: 1,
   justifyContent: "space-around",
-  maxHeight: 200
+  maxHeight: 200,
 }
 const TEXT: TextStyle = {
   fontFamily: typography.primary,
@@ -26,14 +26,13 @@ const ROW: ViewStyle = {
 const ICON: ImageStyle = {
   tintColor: color.text,
   width: 20,
-  marginRight: spacing.medium
+  marginRight: spacing.medium,
 }
 
 /**
  * Component shown when evolution or encounter data can't be shown
  */
 export const NoSelection = observer(function NoSelection() {
-
   const { speciesStore } = useStores()
   const { species } = speciesStore
 

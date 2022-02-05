@@ -25,7 +25,7 @@ const TEXT: TextStyle = {
   fontSize: 16,
   lineHeight: 20,
   textAlign: "center",
-  marginHorizontal: spacing.large
+  marginHorizontal: spacing.large,
 }
 
 export const EncountersScreen = observer(function EncountersScreen() {
@@ -60,9 +60,14 @@ export const EncountersScreen = observer(function EncountersScreen() {
 
     const filtered = []
     encounters.forEach((encounter: Encounter) => {
-      const versionDetails = encounter.version_details.find(versionDetail => versionDetail.version.toLowerCase() === filter.toLowerCase())
+      const versionDetails = encounter.version_details.find(
+        (versionDetail) => versionDetail.version.toLowerCase() === filter.toLowerCase(),
+      )
       if (versionDetails) {
-        filtered.push({ location_area: encounter.location_area, encounter_details: versionDetails.encounter_details})
+        filtered.push({
+          location_area: encounter.location_area,
+          encounter_details: versionDetails.encounter_details,
+        })
       }
     })
 

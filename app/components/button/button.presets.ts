@@ -13,7 +13,7 @@ const BASE_VIEW: ViewStyle = {
 }
 
 const BASE_TEXT: TextStyle = {
-  paddingHorizontal: spacing.small
+  paddingHorizontal: spacing.small,
 }
 
 /**
@@ -45,7 +45,12 @@ export const viewPresets: Record<string, ViewStyle> = {
 }
 
 export const textPresets: Record<ButtonPresetNames, TextStyle> = {
-  primary: { ...BASE_TEXT, fontSize: 18, color: color.palette.white, fontWeight: "bold"} as TextStyle,
+  primary: {
+    ...BASE_TEXT,
+    fontSize: 18,
+    color: color.palette.white,
+    fontWeight: "bold",
+  } as TextStyle,
   link: {
     ...BASE_TEXT,
     color: color.text,
