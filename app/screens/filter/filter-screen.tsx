@@ -5,6 +5,7 @@ import { Screen, Text, Button, ModalDismissIndicator, TextField } from "../../co
 import { useStores, Version } from "../../models"
 import { color, spacing } from "../../theme"
 import { capitalize, debounce } from "lodash"
+import { useNavigation } from "@react-navigation/native"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
@@ -28,6 +29,8 @@ export const FilterScreen = observer(function FilterScreen() {
   const { versions } = versionStore
   const { filter } = encounterStore
 
+  const navigation = useNavigation();
+
   const [filteredVersions, setFilteredVersions] = useState(versions)
 
   const onChangeText = debounce((filter: string) => {
@@ -38,9 +41,14 @@ export const FilterScreen = observer(function FilterScreen() {
         ),
       )
     } else {
-      setFilteredVersions([])
+      setFilteredVersions(versions)
     }
   }, 500)
+
+  const setFilter = (value: string) => {
+    encounterStore.setFilter(value)
+    navigation.goBack()
+  }
 
   const renderItem = ({ item }) => (
     <Button
@@ -48,7 +56,7 @@ export const FilterScreen = observer(function FilterScreen() {
       textStyle={LIST_ITEM_TEXT}
       preset="link"
       text={capitalize(item.name)}
-      onPress={() => encounterStore.setFilter(item.name)}
+      onPress={() => setFilter(item.name)}
     />
   )
 

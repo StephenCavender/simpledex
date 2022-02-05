@@ -6,6 +6,8 @@ import { useStores } from "../../models"
 import { color } from "../../theme"
 import { debounce, capitalize } from "lodash"
 import { Species } from "../../models/species/species"
+import { navigationRef } from "../../navigators"
+import { useNavigation } from "@react-navigation/native"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -23,6 +25,8 @@ export const SearchScreen = observer(function SearchScreen() {
   const { speciesStore } = useStores()
   const { selected, species } = speciesStore
 
+  const navigation = useNavigation()
+
   const [filteredSpecies, setFilteredSpecies] = useState(species)
 
   const onChangeText = debounce((filter: string) => {
@@ -33,9 +37,14 @@ export const SearchScreen = observer(function SearchScreen() {
         ),
       )
     } else {
-      setFilteredSpecies([])
+      setFilteredSpecies(species)
     }
   }, 500)
+
+  const setSpecies = (value: string) => {
+    speciesStore.select(value)
+    navigation.goBack()
+  }
 
   const renderItem = ({ item }) => (
     <Button
@@ -43,7 +52,7 @@ export const SearchScreen = observer(function SearchScreen() {
       textStyle={TEXT}
       preset="link"
       text={capitalize(item.name)}
-      onPress={() => speciesStore.select(item.name)}
+      onPress={() => setSpecies(item.name)}
     />
   )
 
