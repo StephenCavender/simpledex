@@ -29,7 +29,6 @@
     "bump": "npx react-native bump-version --skip-semver-for android",
     "appcenter:android": "bundle exec fastlane android appcenter",
     "appcenter:ios": "bundle exec fastlane ios appcenter",
-    "codepush": "npm-run-all codepush:*",
     "codepush:android": "appcenter codepush release-react -a yoshi-lord/simpledex-android",
     "codepush:ios": "appcenter codepush release-react -a yoshi-lord/simpledex-iOS"
   },
