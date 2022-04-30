@@ -30,7 +30,9 @@
     "appcenter:android": "bundle exec fastlane android appcenter",
     "appcenter:ios": "bundle exec fastlane ios appcenter",
     "codepush:android": "appcenter codepush release-react -a yoshi-lord/simpledex-android",
-    "codepush:ios": "appcenter codepush release-react -a yoshi-lord/simpledex-iOS"
+    "codepush:ios": "appcenter codepush release-react -a yoshi-lord/simpledex-iOS",
+    "build:android": "bundle exec fastlane android build",
+    "build:ios": "bundle exec fastlane ios build"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.14.1",
