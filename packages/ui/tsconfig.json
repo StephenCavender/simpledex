@@ -5,7 +5,8 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "paths": {
       "@simpledex/ui/*": ["./src/*"]
-    }
+    },
+    "types": ["node", "@types/react", "@types/react-dom"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"]

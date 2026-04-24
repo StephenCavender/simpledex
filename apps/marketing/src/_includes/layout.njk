@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/style.css">
+		<title>{{title}}</title>
+	</head>
+	<body>
+		<main>
+		  {{ content | safe }}
+		</main>
+	</body>
+
+  {% include "footer.njk" %}
+</html>
