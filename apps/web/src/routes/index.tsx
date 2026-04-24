@@ -1,6 +1,6 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useMutation } from "convex/react";
+import { useQuery } from "convex/react";
 import { useState } from "react";
 import { Search, Info, Zap, Flame, Droplets, Leaf, Snowflake, Rock, Bug, Ghost, Dragon, Psychic, Flying, Ground, Poison, Steel, Fairy, Normal, Fighting } from "lucide-react";
 
@@ -59,13 +59,6 @@ function HomeComponent() {
   });
 
   const types = useQuery(api.pokemon.listTypes);
-  const syncBulk = useMutation(api.pokemon.bulkSync);
-
-  const handleSync = async () => {
-    if (confirm("This will sync Pokemon from PokeAPI. Continue?")) {
-      await syncBulk({ limit: 151 });
-    }
-  };
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-6">
@@ -74,8 +67,8 @@ function HomeComponent() {
         <p className="text-muted-foreground">Your quick reference for Pokemon</p>
       </div>
 
-      <div className="mb-6 flex gap-4">
-        <div className="relative flex-1">
+      <div className="mb-6">
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
@@ -85,12 +78,6 @@ function HomeComponent() {
             className="h-10 w-full rounded-lg border bg-background pl-10 pr-4 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/50"
           />
         </div>
-        <button
-          onClick={handleSync}
-          className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity"
-        >
-          Sync
-        </button>
       </div>
 
       {types && types.length > 0 && (
@@ -126,14 +113,8 @@ function HomeComponent() {
       {pokemonList === undefined ? (
         <div className="text-center py-12 text-muted-foreground">Loading...</div>
       ) : pokemonList.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">No Pokemon found</p>
-          <button
-            onClick={handleSync}
-            className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity"
-          >
-            Sync from PokeAPI
-          </button>
+        <div className="text-center py-12 text-muted-foreground">
+          No Pokemon found
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
