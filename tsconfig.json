@@ -1,0 +1,3 @@
+{
+  "extends": "@simpledex/config/tsconfig.base.json"
+}
