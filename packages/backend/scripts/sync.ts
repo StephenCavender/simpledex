@@ -1,4 +1,7 @@
-import { ConvexHttpClient } from "convex/http";
+import { ConvexHttpClient } from "convex";
+
+// Use hardcoded dev URL from .env.local
+const convexUrl = "https://adamant-coyote-255.convex.cloud";
 
 const POKEAPI_BASE = "https://pokeapi.co/api/v2";
 
@@ -8,19 +11,10 @@ const fetchJson = async (url: string) => {
   return res.json();
 };
 
-const convexUrl = process.env.CONVEX_URL || "https://" + process.env.CONVEX_DEPLOYMENT + ".convex.cloud";
-const convexKey = process.env.CONVEX_ADMIN_KEY || process.env.CONVEX_DEPLOY_KEY;
-
-if (!convexKey) {
-  console.error("Missing CONVEX_ADMIN_KEY or CONVEX_DEPLOY_KEY");
-  process.exit(1);
-}
-
-const convex = new ConvexHttpClient(convexUrl, convexKey);
+// Create client without auth - convex run has auth baked in
+const createClient = () => new ConvexHttpClient(convexUrl);
 
 async function syncPokemon(id: number) {
-  console.log(`Syncing Pokemon #${id}...`);
-
   const data = await fetchJson(`${POKEAPI_BASE}/pokemon/${id}`);
   const speciesData = await fetchJson(`${POKEAPI_BASE}/pokemon-species/${id}`);
 
@@ -69,8 +63,6 @@ async function syncPokemon(id: number) {
 }
 
 async function syncTypes() {
-  console.log("Syncing types...");
-
   const data = await fetchJson(`${POKEAPI_BASE}/type`);
   const types = [];
 
@@ -87,24 +79,42 @@ async function syncTypes() {
 }
 
 async function main() {
-  const limit = parseInt(process.argv[2] || "151");
+  const limit = parseInt(process.argv[2] || "20");
 
-  console.log(`Syncing ${limit} Pokemon from PokeAPI...`);
+  console.log(`Syncing ${limit} Pokemon from PokeAPI to Convex...`);
+  console.log(`URL: ${convexUrl}`);
+
+  // Test connection first
+  const test = createClient();
+  try {
+    await test.query(api => api.pokemon.list({ limit: 1 }));
+    console.log("✓ Convex connection OK");
+  } catch (e) {
+    console.error("✗ Convex connection failed:", e);
+    console.error("Make sure you're running from packages/backend with convex dev running");
+    process.exit(1);
+  }
 
   for (let i = 1; i <= limit; i++) {
     try {
       const { pokemon, species } = await syncPokemon(i);
-
+      const convex = createClient();
       await convex.mutation(api => api.pokemon.ingestPokemon, { pokemon, species });
-      console.log(`Synced ${pokemon.name}`);
+      console.log(`✓ ${i}: ${pokemon.name}`);
     } catch (e) {
-      console.error(`Failed to sync ${i}:`, e);
+      console.error(`✗ ${i}:`, e.message);
     }
   }
 
-  const types = await syncTypes();
-  await convex.mutation(api => api.pokemon.ingestTypes, { types });
-  console.log(`Synced ${types.length} types`);
+  // Sync types
+  try {
+    const types = await syncTypes();
+    const convex = createClient();
+    await convex.mutation(api => api.pokemon.ingestTypes, { types });
+    console.log(`✓ Synced ${types.length} types`);
+  } catch (e) {
+    console.error("✗ Types:", e.message);
+  }
 
   console.log("Done!");
 }

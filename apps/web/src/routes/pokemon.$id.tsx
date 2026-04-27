@@ -1,29 +1,29 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-import { ArrowLeft, Info, Zap, Flame, Droplets, Leaf, Snowflake, Rock, Bug, Ghost, Dragon, Psychic, Flying, Ground, Poison, Steel, Fairy, Normal, Fighting } from "lucide-react";
+import { ArrowLeft, Info, Zap, Flame as Fire, Droplets as Water, Leaf as Grass, Snowflake as Ice, Mountain, Bug, Ghost, Skull, Brain, Bird, Biohazard, Anvil, Sparkles, Circle, Swords } from "lucide-react";
 
 export const Route = createFileRoute("/pokemon/$id")({
   component: PokemonDetail,
 });
 
 const TYPE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  grass: Leaf,
-  fire: Flame,
-  water: Droplets,
-  ice: Snowflake,
-  rock: Rock,
+  grass: Grass,
+  fire: Fire,
+  water: Water,
+  ice: Ice,
+  rock: Mountain,
   bug: Bug,
   ghost: Ghost,
-  dragon: Dragon,
-  psychic: Psychic,
-  flying: Flying,
-  ground: Ground,
-  poison: Poison,
-  steel: Steel,
-  fairy: Fairy,
-  normal: Normal,
-  fighting: Fighting,
+  dragon: Skull,
+  psychic: Brain,
+  flying: Bird,
+  ground: Mountain,
+  poison: Biohazard,
+  steel: Anvil,
+  fairy: Sparkles,
+  normal: Circle,
+  fighting: Swords,
   electric: Zap,
 };
 

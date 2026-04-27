@@ -9,9 +9,24 @@ build
 _site
 *.tsbuildinfo
 
+# Convex generated
+packages/*/convex/_generated/
+apps/*/convex/_generated/
+
+# Convex AI/agents
+packages/backend/.agents/
+packages/backend/.claude/
+packages/backend/AGENTS.md
+packages/backend/CLAUDE.md
+packages/backend/skills-lock.json
+
+# Route tree generated
+apps/web/src/routeTree.gen.ts
+
 # Environment variables
 .env
 .env*.local
+packages/backend/.env.local
 
 # IDEs and editors
 .vscode/*
