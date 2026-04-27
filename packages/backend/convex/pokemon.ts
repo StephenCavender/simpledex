@@ -255,8 +255,8 @@ export const getEncounters = query({
   handler: async ({ db }, { pokemonId }) => {
     return db
       .query("encounters")
-      .filter((q) => q.eq(q.field("pokemonId"), pokemonId))
-      .collect();
+      .withIndex("by_pokemonId", (q) => q.eq("pokemonId", pokemonId))
+      .take(100);
   },
 });
 
@@ -316,23 +316,35 @@ export const fetchEncounters = action({
 });
 
 const simplifyEvolutionChain = (chain: any): any => {
-  const result: any = {
-    species: chain.species.name,
-    evolvesTo: [],
+  const extractSpeciesId = (url: string): number => {
+    const match = url.match(/\/(\d+)\/$/);
+    return match ? parseInt(match[1], 10) : 1;
+  };
+
+  const getSprite = (id: number): string => 
+    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+
+  const processChain = (node: any): any => {
+    const speciesId = extractSpeciesId(node.species.url);
+    const result: any = {
+      species: node.species.name,
+      id: speciesId,
+      sprite: getSprite(speciesId),
+      evolvesTo: [],
+    };
+    
+    for (const ev of node.evolves_to || []) {
+      const details = ev.evolution_details?.[0] || {};
+      result.evolvesTo.push({
+        ...processChain(ev),
+        method: details.min_level ? `level ${details.min_level}` : 
+               details.item ? `use ${details.item.name}` : 
+               details.trigger?.name || "trade",
+      });
+    }
+    
+    return result;
   };
   
-  for (const ev of chain.evolves_to || []) {
-    const details = ev.evolution_details?.[0] || {};
-    result.evolvesTo.push({
-      species: ev.species.name,
-      level: details.min_level,
-      item: details.item?.name,
-      trigger: details.trigger?.name,
-      method: details.min_level ? `level ${details.min_level}` : 
-             details.item ? `use ${details.item.name}` : 
-             details.trigger?.name || "trade",
-    });
-  }
-  
-  return result;
+  return processChain(chain);
 };

@@ -1,14 +1,14 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
-import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useMutation } from "convex/react";
-import { useEffect } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery, useAction } from "convex/react";
+import { useEffect, useMemo, type ReactNode, type ComponentType } from "react";
 import { ArrowLeft, Info, Zap, Flame as Fire, Droplets as Water, Leaf as Grass, Snowflake as Ice, Mountain, Bug, Ghost, Skull, Brain, Bird, Biohazard, Anvil, Sparkles, Circle, Swords, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/pokemon/$id")({
   component: PokemonDetail,
 });
 
-const TYPE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+const TYPE_ICONS: Record<string, ComponentType<{ className?: string }>> = {
   grass: Grass,
   fire: Fire,
   water: Water,
@@ -66,8 +66,8 @@ function PokemonDetail() {
     { pokemonId }
   );
 
-  const fetchEvolution = useMutation(api.pokemon.fetchEvolutionChain);
-  const fetchEncounters = useMutation(api.pokemon.fetchEncounters);
+  const fetchEvolution = useAction(api.pokemon.fetchEvolutionChain);
+  const fetchEncounters = useAction(api.pokemon.fetchEncounters);
 
   useEffect(() => {
     if (evolutionChainId && !evolutionData) {
@@ -77,6 +77,51 @@ function PokemonDetail() {
       fetchEncounters({ pokemonId });
     }
   }, [pokemonId, evolutionChainId]);
+
+  const groupedEncounters = useMemo(() => {
+    if (!encounters?.length) return [];
+    const groups: Record<string, typeof encounters> = {};
+    encounters.forEach((enc) => {
+      if (!groups[enc.version]) groups[enc.version] = [];
+      groups[enc.version].push(enc);
+    });
+    return Object.entries(groups).map(([version, locs]) => ({
+      version,
+      locations: locs.slice(0, 5),
+    }));
+  }, [encounters]);
+
+  const renderEvolutionChain = (chain: any, currentId: number): ReactNode => {
+    const nodes: ReactNode[] = [];
+    
+    const traverse = (node: any) => {
+      const isCurrent = node.id === currentId;
+      nodes.push(
+        <div key={node.id} className="text-center">
+          {node.sprite && (
+            <Link to="/pokemon/$id" params={{ id: String(node.id) }}>
+              <img 
+                src={node.sprite} 
+                alt={node.species} 
+                className={`h-20 w-20 object-contain hover:scale-110 transition-transform ${isCurrent ? 'ring-2 ring-primary rounded-full' : ''}`} 
+              />
+            </Link>
+          )}
+          <p className="text-sm capitalize mt-1">{node.species}</p>
+          {node.method && <p className="text-xs text-muted-foreground">{node.method}</p>}
+        </div>
+      );
+      if (node.evolvesTo?.length) {
+        node.evolvesTo.forEach((ev: any) => {
+          nodes.push(<span key={`arrow-${node.id}-${ev.id}`} className="text-2xl mx-1">→</span>);
+          traverse(ev);
+        });
+      }
+    };
+    
+    traverse(chain);
+    return nodes;
+  };
 
   const prevId = pokemonId > 1 ? pokemonId - 1 : null;
   const nextId = pokemonId < 151 ? pokemonId + 1 : null;
@@ -230,22 +275,8 @@ function PokemonDetail() {
           <div className="mt-6">
             <h2 className="text-lg font-semibold mb-3">Evolutions</h2>
             {evolutionData?.chain ? (
-              <div className="flex items-center gap-4 flex-wrap">
-                <div className="text-center">
-                  {pokemon.sprite && (
-                    <img src={pokemon.sprite} alt={pokemon.name} className="h-16 w-16 object-contain" />
-                  )}
-                  <p className="text-sm capitalize mt-1">{evolutionData.chain.species}</p>
-                </div>
-                {evolutionData.chain.evolvesTo?.map((ev: any, i: number) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <span className="text-2xl">→</span>
-                    <div className="text-center">
-                      <p className="text-sm font-medium capitalize">{ev.species}</p>
-                      <p className="text-xs text-muted-foreground">{ev.method}</p>
-                    </div>
-                  </div>
-                ))}
+              <div className="flex items-center gap-2 flex-wrap">
+                {renderEvolutionChain(evolutionData.chain, pokemonId)}
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">Loading evolutions...</p>
@@ -258,14 +289,23 @@ function PokemonDetail() {
             <MapPin className="h-4 w-4" />
             Locations
           </h2>
-          {encounters?.length ? (
-            <div className="space-y-2">
-              {encounters.slice(0, 10).map((enc, i) => (
-                <div key={i} className="flex justify-between items-center text-sm bg-muted p-2 rounded">
-                  <span className="capitalize">{enc.location}</span>
-                  <div className="text-xs text-muted-foreground">
-                    <span className="capitalize mr-2">{enc.method}</span>
-                    {enc.chance && `${enc.chance}%`}
+          {groupedEncounters.length ? (
+            <div className="space-y-4">
+              {groupedEncounters.map((group) => (
+                <div key={group.version}>
+                  <h3 className="text-sm font-medium capitalize mb-2 text-muted-foreground">
+                    {group.version}
+                  </h3>
+                  <div className="space-y-1">
+                    {group.locations.map((enc, i) => (
+                      <div key={i} className="flex justify-between items-center text-sm bg-muted p-2 rounded">
+                        <span className="capitalize">{enc.location}</span>
+                        <div className="text-xs text-muted-foreground">
+                          <span className="capitalize mr-2">{enc.method}</span>
+                          {enc.chance && `${enc.chance}%`}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}
