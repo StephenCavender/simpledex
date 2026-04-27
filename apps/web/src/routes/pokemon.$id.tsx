@@ -1,8 +1,8 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation } from "convex/react";
-import { useState } from "react";
-import { ArrowLeft, Info, Zap, Flame as Fire, Droplets as Water, Leaf as Grass, Snowflake as Ice, Mountain, Bug, Ghost, Skull, Brain, Bird, Biohazard, Anvil, Sparkles, Circle, Swords, RefreshCw, MapPin } from "lucide-react";
+import { useEffect } from "react";
+import { ArrowLeft, Info, Zap, Flame as Fire, Droplets as Water, Leaf as Grass, Snowflake as Ice, Mountain, Bug, Ghost, Skull, Brain, Bird, Biohazard, Anvil, Sparkles, Circle, Swords, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/pokemon/$id")({
   component: PokemonDetail,
@@ -51,8 +51,6 @@ const TYPE_COLORS: Record<string, string> = {
 function PokemonDetail() {
   const { id } = Route.useParams();
   const pokemonId = parseInt(id, 10);
-  const [showEncounters, setShowEncounters] = useState(false);
-  const [loading, setLoading] = useState<string | null>(null);
 
   const pokemon = useQuery(api.pokemon.getById, { id: pokemonId });
   const species = useQuery(api.pokemon.getSpecies, { id: pokemonId });
@@ -64,33 +62,21 @@ function PokemonDetail() {
   );
 
   const encounters = useQuery(
-    showEncounters ? api.pokemon.getEncounters : undefined,
-    showEncounters ? { pokemonId } : undefined
+    api.pokemon.getEncounters,
+    { pokemonId }
   );
 
   const fetchEvolution = useMutation(api.pokemon.fetchEvolutionChain);
   const fetchEncounters = useMutation(api.pokemon.fetchEncounters);
 
-  const loadEvolution = async () => {
-    if (evolutionChainId) {
-      setLoading("evolution");
-      try {
-        await fetchEvolution({ chainId: evolutionChainId });
-      } finally {
-        setLoading(null);
-      }
+  useEffect(() => {
+    if (evolutionChainId && !evolutionData) {
+      fetchEvolution({ chainId: evolutionChainId });
     }
-  };
-
-  const loadEncounters = async () => {
-    setShowEncounters(true);
-    setLoading("encounters");
-    try {
-      await fetchEncounters({ pokemonId });
-    } finally {
-      setLoading(null);
+    if (!encounters?.length) {
+      fetchEncounters({ pokemonId });
     }
-  };
+  }, [pokemonId, evolutionChainId]);
 
   const prevId = pokemonId > 1 ? pokemonId - 1 : null;
   const nextId = pokemonId < 151 ? pokemonId + 1 : null;
@@ -242,17 +228,7 @@ function PokemonDetail() {
 
         {evolutionChainId && (
           <div className="mt-6">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold">Evolutions</h2>
-              <button
-                onClick={loadEvolution}
-                disabled={loading !== null}
-                className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 disabled:opacity-50"
-              >
-                <RefreshCw className="h-3 w-3" />
-                Load
-              </button>
-            </div>
+            <h2 className="text-lg font-semibold mb-3">Evolutions</h2>
             {evolutionData?.chain ? (
               <div className="flex items-center gap-4 flex-wrap">
                 <div className="text-center">
@@ -272,25 +248,16 @@ function PokemonDetail() {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">Click Load to fetch evolution data</p>
+              <p className="text-sm text-muted-foreground">Loading evolutions...</p>
             )}
           </div>
         )}
 
         <div className="mt-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
-              Locations
-            </h2>
-            <button
-              onClick={loadEncounters}
-              className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1"
-            >
-              <RefreshCw className="h-3 w-3" />
-              Load
-            </button>
-          </div>
+          <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
+            <MapPin className="h-4 w-4" />
+            Locations
+          </h2>
           {encounters?.length ? (
             <div className="space-y-2">
               {encounters.slice(0, 10).map((enc, i) => (
@@ -304,7 +271,7 @@ function PokemonDetail() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">Click Load to find locations</p>
+            <p className="text-sm text-muted-foreground">Loading locations...</p>
           )}
         </div>
       </div>
