@@ -1,7 +1,8 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "convex/react";
-import { ArrowLeft, Info, Zap, Flame as Fire, Droplets as Water, Leaf as Grass, Snowflake as Ice, Mountain, Bug, Ghost, Skull, Brain, Bird, Biohazard, Anvil, Sparkles, Circle, Swords } from "lucide-react";
+import { useQuery, useMutation } from "convex/react";
+import { useState } from "react";
+import { ArrowLeft, Info, Zap, Flame as Fire, Droplets as Water, Leaf as Grass, Snowflake as Ice, Mountain, Bug, Ghost, Skull, Brain, Bird, Biohazard, Anvil, Sparkles, Circle, Swords, RefreshCw, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/pokemon/$id")({
   component: PokemonDetail,
@@ -50,9 +51,49 @@ const TYPE_COLORS: Record<string, string> = {
 function PokemonDetail() {
   const { id } = Route.useParams();
   const pokemonId = parseInt(id, 10);
+  const [showEncounters, setShowEncounters] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null);
 
   const pokemon = useQuery(api.pokemon.getById, { id: pokemonId });
   const species = useQuery(api.pokemon.getSpecies, { id: pokemonId });
+  const evolutionChainId = species?.evolutionChainId;
+
+  const evolutionData = useQuery(
+    evolutionChainId ? api.pokemon.getEvolutionChain : undefined,
+    evolutionChainId ? { id: evolutionChainId } : undefined
+  );
+
+  const encounters = useQuery(
+    showEncounters ? api.pokemon.getEncounters : undefined,
+    showEncounters ? { pokemonId } : undefined
+  );
+
+  const fetchEvolution = useMutation(api.pokemon.fetchEvolutionChain);
+  const fetchEncounters = useMutation(api.pokemon.fetchEncounters);
+
+  const loadEvolution = async () => {
+    if (evolutionChainId) {
+      setLoading("evolution");
+      try {
+        await fetchEvolution({ chainId: evolutionChainId });
+      } finally {
+        setLoading(null);
+      }
+    }
+  };
+
+  const loadEncounters = async () => {
+    setShowEncounters(true);
+    setLoading("encounters");
+    try {
+      await fetchEncounters({ pokemonId });
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  const prevId = pokemonId > 1 ? pokemonId - 1 : null;
+  const nextId = pokemonId < 151 ? pokemonId + 1 : null;
 
   if (pokemon === undefined) {
     return (
@@ -82,10 +123,24 @@ function PokemonDetail() {
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-6">
-      <a href="/" className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="mr-1 h-4 w-4" />
-        Back
-      </a>
+      <div className="flex items-center justify-between mb-4">
+        <a href="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="mr-1 h-4 w-4" />
+          Back
+        </a>
+        <div className="flex gap-2">
+          {prevId && (
+            <a href={`/pokemon/${prevId}`} className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80">
+              ← Prev
+            </a>
+          )}
+          {nextId && (
+            <a href={`/pokemon/${nextId}`} className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80">
+              Next →
+            </a>
+          )}
+        </div>
+      </div>
 
       <div className="rounded-lg border bg-card p-6">
         <div className="mb-6 text-center">
@@ -184,6 +239,74 @@ function PokemonDetail() {
             </div>
           </div>
         )}
+
+        {evolutionChainId && (
+          <div className="mt-6">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg font-semibold">Evolutions</h2>
+              <button
+                onClick={loadEvolution}
+                disabled={loading !== null}
+                className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 disabled:opacity-50"
+              >
+                <RefreshCw className="h-3 w-3" />
+                Load
+              </button>
+            </div>
+            {evolutionData?.chain ? (
+              <div className="flex items-center gap-4 flex-wrap">
+                <div className="text-center">
+                  {pokemon.sprite && (
+                    <img src={pokemon.sprite} alt={pokemon.name} className="h-16 w-16 object-contain" />
+                  )}
+                  <p className="text-sm capitalize mt-1">{evolutionData.chain.species}</p>
+                </div>
+                {evolutionData.chain.evolvesTo?.map((ev: any, i: number) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <span className="text-2xl">→</span>
+                    <div className="text-center">
+                      <p className="text-sm font-medium capitalize">{ev.species}</p>
+                      <p className="text-xs text-muted-foreground">{ev.method}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Click Load to fetch evolution data</p>
+            )}
+          </div>
+        )}
+
+        <div className="mt-6">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              Locations
+            </h2>
+            <button
+              onClick={loadEncounters}
+              className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1"
+            >
+              <RefreshCw className="h-3 w-3" />
+              Load
+            </button>
+          </div>
+          {encounters?.length ? (
+            <div className="space-y-2">
+              {encounters.slice(0, 10).map((enc, i) => (
+                <div key={i} className="flex justify-between items-center text-sm bg-muted p-2 rounded">
+                  <span className="capitalize">{enc.location}</span>
+                  <div className="text-xs text-muted-foreground">
+                    <span className="capitalize mr-2">{enc.method}</span>
+                    {enc.chance && `${enc.chance}%`}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Click Load to find locations</p>
+          )}
+        </div>
       </div>
     </div>
   );

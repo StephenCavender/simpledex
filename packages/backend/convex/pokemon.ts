@@ -150,6 +150,43 @@ export const ingestTypes = mutation({
   },
 });
 
+export const ingestEvolutionChain = mutation({
+  args: {
+    id: v.number(),
+    chain: v.any(),
+  },
+  handler: async ({ db }, { id, chain }) => {
+    const existing = await db
+      .query("evolutionChain")
+      .filter((q) => q.eq(q.field("id"), id))
+      .first();
+
+    if (existing) {
+      await db.patch(existing._id, { id, chain });
+    } else {
+      await db.insert("evolutionChain", { id, chain });
+    }
+
+    return { success: true };
+  },
+});
+
+export const ingestEncounter = mutation({
+  args: {
+    pokemonId: v.number(),
+    location: v.string(),
+    version: v.string(),
+    method: v.string(),
+    chance: v.optional(v.number()),
+    minLevel: v.optional(v.number()),
+    maxLevel: v.optional(v.number()),
+  },
+handler: async ({ db }, args) => {
+    await db.insert("encounters", args);
+    return { success: true };
+  },
+});
+
 export const bulkSyncFromPokeAPI = action({
   args: { limit: v.optional(v.number()) },
   handler: async ({ runMutation }, { limit = 20 }) => {
@@ -212,3 +249,90 @@ export const bulkSyncFromPokeAPI = action({
     return { synced: results.length, names: results };
   },
 });
+
+export const getEncounters = query({
+  args: { pokemonId: v.number() },
+  handler: async ({ db }, { pokemonId }) => {
+    return db
+      .query("encounters")
+      .filter((q) => q.eq(q.field("pokemonId"), pokemonId))
+      .collect();
+  },
+});
+
+export const fetchEvolutionChain = action({
+  args: { chainId: v.number() },
+  handler: async ({ runMutation }, { chainId }) => {
+    try {
+      const data = await fetchJson(`${POKEAPI_BASE}/evolution-chain/${chainId}`);
+      
+      const simplifiedChain = simplifyEvolutionChain(data.chain);
+      
+      const existing = await runMutation("pokemon:ingestEvolutionChain", {
+        id: chainId,
+        chain: simplifiedChain,
+      });
+      
+      return { success: true, chain: simplifiedChain };
+    } catch (e) {
+      return { success: false, error: String(e) };
+    }
+  },
+});
+
+export const fetchEncounters = action({
+  args: { pokemonId: v.number() },
+  handler: async ({ runMutation }, { pokemonId }) => {
+    try {
+      const data = await fetchJson(`${POKEAPI_BASE}/pokemon/${pokemonId}/encounters`);
+      
+      const encounters = [];
+      
+      for (const encounter of data) {
+        for (const versionDetail of encounter.version_details) {
+          for (const encDetail of versionDetail.encounter_details) {
+            encounters.push({
+              pokemonId,
+              location: encounter.location_area.name,
+              version: versionDetail.version.name,
+              method: encDetail.method.name,
+              chance: encDetail.chance || undefined,
+              minLevel: encDetail.min_level || undefined,
+              maxLevel: encDetail.max_level || undefined,
+            });
+          }
+        }
+      }
+      
+      for (const enc of encounters) {
+        await runMutation("pokemon:ingestEncounter", enc);
+      }
+      
+      return { success: true, count: encounters.length };
+    } catch (e) {
+      return { success: false, error: String(e) };
+    }
+  },
+});
+
+const simplifyEvolutionChain = (chain: any): any => {
+  const result: any = {
+    species: chain.species.name,
+    evolvesTo: [],
+  };
+  
+  for (const ev of chain.evolves_to || []) {
+    const details = ev.evolution_details?.[0] || {};
+    result.evolvesTo.push({
+      species: ev.species.name,
+      level: details.min_level,
+      item: details.item?.name,
+      trigger: details.trigger?.name,
+      method: details.min_level ? `level ${details.min_level}` : 
+             details.item ? `use ${details.item.name}` : 
+             details.trigger?.name || "trade",
+    });
+  }
+  
+  return result;
+};
