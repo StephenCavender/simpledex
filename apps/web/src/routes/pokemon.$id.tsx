@@ -1,7 +1,7 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useAction } from "convex/react";
-import { useEffect, useMemo, type ReactNode, type ComponentType } from "react";
+import { useEffect, useMemo, useState, type ReactNode, type ComponentType } from "react";
 import { ArrowLeft, Info, Zap, Flame as Fire, Droplets as Water, Leaf as Grass, Snowflake as Ice, Mountain, Bug, Ghost, Skull, Brain, Bird, Biohazard, Anvil, Sparkles, Circle, Swords, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/pokemon/$id")({
@@ -69,12 +69,26 @@ function PokemonDetail() {
   const fetchEvolution = useAction(api.pokemon.fetchEvolutionChain);
   const fetchEncounters = useAction(api.pokemon.fetchEncounters);
 
+  const [evolutionError, setEvolutionError] = useState<string | null>(null);
+  const [encountersError, setEncountersError] = useState<string | null>(null);
+
   useEffect(() => {
+    setEvolutionError(null);
+    setEncountersError(null);
+    
     if (evolutionChainId && !evolutionData) {
-      fetchEvolution({ chainId: evolutionChainId });
+      fetchEvolution({ chainId: evolutionChainId }).then((result: any) => {
+        if (result?.success === false) {
+          setEvolutionError(result.error);
+        }
+      });
     }
     if (!encounters?.length) {
-      fetchEncounters({ pokemonId });
+      fetchEncounters({ pokemonId }).then((result: any) => {
+        if (result?.success === false) {
+          setEncountersError(result.error);
+        }
+      });
     }
   }, [pokemonId, evolutionChainId]);
 
@@ -274,7 +288,9 @@ function PokemonDetail() {
         {evolutionChainId && (
           <div className="mt-6">
             <h2 className="text-lg font-semibold mb-3">Evolutions</h2>
-            {evolutionData?.chain ? (
+            {evolutionError ? (
+              <p className="text-sm text-destructive">Failed to load evolutions: {evolutionError}</p>
+            ) : evolutionData?.chain ? (
               <div className="flex items-center gap-2 flex-wrap">
                 {renderEvolutionChain(evolutionData.chain, pokemonId)}
               </div>
@@ -289,7 +305,9 @@ function PokemonDetail() {
             <MapPin className="h-4 w-4" />
             Locations
           </h2>
-          {groupedEncounters.length ? (
+          {encountersError ? (
+            <p className="text-sm text-destructive">Failed to load locations: {encountersError}</p>
+          ) : groupedEncounters.length ? (
             <div className="space-y-4">
               {groupedEncounters.map((group) => (
                 <div key={group.version}>
