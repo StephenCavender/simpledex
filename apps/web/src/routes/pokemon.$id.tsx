@@ -72,19 +72,35 @@ function PokemonDetail() {
   const [evolutionError, setEvolutionError] = useState<string | null>(null);
   const [encountersError, setEncountersError] = useState<string | null>(null);
 
+  const retryFetch = async (fn: () => Promise<any>, maxRetries = 3): Promise<any> => {
+    let lastError: string | null = null;
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        const result = await fn();
+        if (result?.success !== false) return result;
+        lastError = result?.error;
+        if (i < maxRetries - 1) await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
+      } catch (e) {
+        lastError = String(e);
+        if (i < maxRetries - 1) await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
+      }
+    }
+    return { success: false, error: lastError || "Max retries exceeded" };
+  };
+
   useEffect(() => {
     setEvolutionError(null);
     setEncountersError(null);
     
     if (evolutionChainId && !evolutionData) {
-      fetchEvolution({ chainId: evolutionChainId }).then((result: any) => {
+      retryFetch(() => fetchEvolution({ chainId: evolutionChainId })).then((result: any) => {
         if (result?.success === false) {
           setEvolutionError(result.error);
         }
       });
     }
     if (!encounters?.length) {
-      fetchEncounters({ pokemonId }).then((result: any) => {
+      retryFetch(() => fetchEncounters({ pokemonId })).then((result: any) => {
         if (result?.success === false) {
           setEncountersError(result.error);
         }

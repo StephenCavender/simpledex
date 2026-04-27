@@ -3,12 +3,12 @@
 ## Features
 
 ### Error Handling
-- [ ] Add error handling UI for failed PokeAPI fetches in fetchEvolutionChain and fetchEncounters actions
-- [ ] Show user-friendly error messages when data fails to load
-- [ ] Implement retry logic for transient failures
+- [x] Add error handling UI for failed PokeAPI fetches in fetchEvolutionChain and fetchEncounters actions
+- [x] Show user-friendly error messages when data fails to load
+- [x] Implement retry logic for transient failures
 
 ### Search & Filtering
-- [ ] Debounce the search field input to avoid excessive queries
+- [x] Debounce the search field input to avoid excessive queries
 - [ ] Add loading state while search is being processed
 
 ### Pagination

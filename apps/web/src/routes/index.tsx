@@ -1,7 +1,7 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Search, Info, Zap, Flame as Fire, Droplets as Water, Leaf as Grass, Snowflake as Ice, Mountain, Bug, Ghost, Skull, Brain, Bird, Biohazard, Anvil, Sparkles, Circle, Swords } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -50,13 +50,23 @@ const TYPE_COLORS: Record<string, string> = {
 
 function HomeComponent() {
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
   const pokemonList = useQuery(api.pokemon.list, {
-    search: search || undefined,
+    search: debouncedSearch || undefined,
     type: selectedType || undefined,
     limit: 50,
   });
+
+  const handleSearchChange = useCallback((value: string) => {
+    setSearch(value);
+  }, []);
 
   const types = useQuery(api.pokemon.listTypes);
 
@@ -74,7 +84,7 @@ function HomeComponent() {
             type="text"
             placeholder="Search Pokemon..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             className="h-10 w-full rounded-lg border bg-background pl-10 pr-4 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/50"
           />
         </div>
