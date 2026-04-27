@@ -52,11 +52,18 @@ function HomeComponent() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 300);
-    return () => clearTimeout(timer);
-  }, [search]);
+    if (search !== debouncedSearch) {
+      setIsSearching(true);
+      const timer = setTimeout(() => {
+        setDebouncedSearch(search);
+        setIsSearching(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [search, debouncedSearch]);
 
   const pokemonList = useQuery(api.pokemon.list, {
     search: debouncedSearch || undefined,
@@ -79,7 +86,11 @@ function HomeComponent() {
 
       <div className="mb-6">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          {isSearching ? (
+            <div className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin border-2 border-primary border-t-transparent rounded-full" />
+          ) : (
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          )}
           <input
             type="text"
             placeholder="Search Pokemon..."
