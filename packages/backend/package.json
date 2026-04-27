@@ -5,8 +5,8 @@
   "license": "ISC",
   "author": "",
   "scripts": {
-    "dev": "convex dev --typecheck disable",
-    "dev:setup": "convex dev --configure --until-success --typecheck disable"
+    "dev": "convex dev",
+    "dev:setup": "convex dev --configure --until-success"
   },
   "dependencies": {
     "convex": "catalog:",

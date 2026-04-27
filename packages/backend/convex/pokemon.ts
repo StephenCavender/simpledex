@@ -1,5 +1,6 @@
 import { query, mutation, action } from "./_generated/server";
 import { v } from "convex/values";
+import { api } from "./_generated/api";
 
 const POKEAPI_BASE = "https://pokeapi.co/api/v2";
 
@@ -189,7 +190,8 @@ handler: async ({ db }, args) => {
 
 export const bulkSyncFromPokeAPI = action({
   args: { limit: v.optional(v.number()) },
-  handler: async ({ runMutation }, { limit = 20 }) => {
+  handler: async (ctx, { limit = 20 }) => {
+    const runMutation = ctx.runMutation.bind(ctx);
     const results = [];
     const toSync = Math.min(limit, 151);
 
@@ -219,8 +221,8 @@ export const bulkSyncFromPokeAPI = action({
 
         const chainUrl = speciesData.evolution_chain?.url;
         const chainId = chainUrl
-          ? parseInt(chainUrl.split("/").filter(Boolean).pop())
-          : null;
+          ? parseInt(chainUrl.split("/").filter(Boolean).pop() || "0", 10)
+          : undefined;
 
         const species = {
           id: speciesData.id,
@@ -239,7 +241,7 @@ export const bulkSyncFromPokeAPI = action({
             : undefined,
         };
 
-        await runMutation("pokemon:ingestPokemon", { pokemon, species });
+        await runMutation(api.pokemon.ingestPokemon, { pokemon, species });
         results.push(pokemon.name);
       } catch (e) {
         console.error(`Failed to sync ${i}:`, e);
@@ -262,13 +264,14 @@ export const getEncounters = query({
 
 export const fetchEvolutionChain = action({
   args: { chainId: v.number() },
-  handler: async ({ runMutation }, { chainId }) => {
+  handler: async (ctx, { chainId }) => {
+    const runMutation = ctx.runMutation.bind(ctx);
     try {
       const data = await fetchJson(`${POKEAPI_BASE}/evolution-chain/${chainId}`);
       
       const simplifiedChain = simplifyEvolutionChain(data.chain);
       
-      const existing = await runMutation("pokemon:ingestEvolutionChain", {
+      await runMutation(api.pokemon.ingestEvolutionChain, {
         id: chainId,
         chain: simplifiedChain,
       });
@@ -282,7 +285,8 @@ export const fetchEvolutionChain = action({
 
 export const fetchEncounters = action({
   args: { pokemonId: v.number() },
-  handler: async ({ runMutation }, { pokemonId }) => {
+  handler: async (ctx, { pokemonId }) => {
+    const runMutation = ctx.runMutation.bind(ctx);
     try {
       const data = await fetchJson(`${POKEAPI_BASE}/pokemon/${pokemonId}/encounters`);
       
@@ -305,7 +309,7 @@ export const fetchEncounters = action({
       }
       
       for (const enc of encounters) {
-        await runMutation("pokemon:ingestEncounter", enc);
+        await runMutation(api.pokemon.ingestEncounter, enc);
       }
       
       return { success: true, count: encounters.length };
