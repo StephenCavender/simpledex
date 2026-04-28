@@ -80,7 +80,9 @@ function HomeComponent() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-6">
       <div className="mb-8 text-center">
-        <h1 className="mb-2 text-4xl font-bold tracking-tight">SimpleDex</h1>
+        <a href="/about" className="inline-block mb-2">
+          <img src="/logo.png" alt="SimpleDex" className="h-16 w-auto mx-auto hover:opacity-80 transition-opacity" />
+        </a>
         <p className="text-muted-foreground">Your quick reference for Pokemon</p>
       </div>
 
