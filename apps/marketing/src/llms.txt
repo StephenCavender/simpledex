@@ -1,0 +1,40 @@
+# SimpleDex
+
+Your quick reference for Pokemon.
+
+## Overview
+
+SimpleDex is a web application for browsing the original 151 Pokemon from the Kanto region. Search, filter, and explore Pokemon details including stats, abilities, evolutions, and encounter locations.
+
+## Features
+
+- Search & Filter: Find Pokemon by name or filter by type
+- Detailed Stats: HP, attack, defense, speed, and abilities
+- Evolution Chains: View evolution lines with sprites
+- Locations: Discover where each Pokemon can be found
+- Progressive Web App: Works offline after initial load
+
+## Technology
+
+- React with TanStack Router
+- TailwindCSS for styling
+- Convex for backend
+- PokeAPI for Pokemon data
+- PWA support
+
+## Links
+
+- Web App: https://simpledex.app
+- API: PokeAPI (https://pokeapi.co)
+- GitHub: https://github.com/anomalyco/simpledex
+
+## Legal
+
+- Privacy Policy: /privacy
+- Terms of Service: /terms
+
+## Contact
+
+SimpleDex is provided as-is. Data provided by PokeAPI.
+
+© 2025 SimpleDex
