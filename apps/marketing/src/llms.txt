@@ -4,14 +4,13 @@ Your quick reference for Pokemon.
 
 ## Overview
 
-SimpleDex is a web application for browsing the original 151 Pokemon from the Kanto region. Search, filter, and explore Pokemon details including stats, abilities, evolutions, and encounter locations.
+SimpleDex is a web application for browsing the original 151 Pokemon from the Kanto region. Search, filter, and explore Pokemon details including stats, abilities, and evolutions.
 
 ## Features
 
 - Search & Filter: Find Pokemon by name or filter by type
 - Detailed Stats: HP, attack, defense, speed, and abilities
 - Evolution Chains: View evolution lines with sprites
-- Locations: Discover where each Pokemon can be found
 - Progressive Web App: Works offline after initial load
 
 ## Technology
@@ -37,4 +36,4 @@ SimpleDex is a web application for browsing the original 151 Pokemon from the Ka
 
 SimpleDex is provided as-is. Data provided by PokeAPI.
 
-© 2025 SimpleDex
+© 2026 Stephen Cavender
