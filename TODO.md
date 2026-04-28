@@ -3,7 +3,7 @@
 ## Features
 
 ### Error Handling
-- [x] Add error handling UI for failed PokeAPI fetches in fetchEvolutionChain and fetchEncounters actions
+- [x] Add error handling UI for failed PokeAPI fetches in fetchEvolutionChain action
 - [x] Show user-friendly error messages when data fails to load
 - [x] Implement retry logic for transient failures
 
@@ -38,3 +38,9 @@
 - [x] Add share functionality for Pokemon detail pages
 - [ ] Add favorites/watchlist feature (requires auth)
 - [ ] Support for more than Gen 1 Pokemon (currently 151)
+
+## Bugs
+- [ ] Fix "Unterminated regular expression" parse error in pokemon.$id.tsx
+
+## Marketing
+- [ ] Update copyright on marketing page to Stephen Cavender, current year, link to https://cavender.foo
