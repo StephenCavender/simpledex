@@ -1,8 +1,8 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useAction } from "convex/react";
-import { useEffect, useMemo, useState, type ReactNode, type ComponentType } from "react";
-import { ArrowLeft, Info, Zap, Flame as Fire, Droplets as Water, Leaf as Grass, Snowflake as Ice, Mountain, Bug, Ghost, Skull, Brain, Bird, Biohazard, Anvil, Sparkles, Circle, Swords, MapPin } from "lucide-react";
+import { useEffect, useState, type ReactNode, type ComponentType } from "react";
+import { ArrowLeft, Info, Zap, Flame as Fire, Droplets as Water, Leaf as Grass, Snowflake as Ice, Mountain, Bug, Ghost, Skull, Brain, Bird, Biohazard, Anvil, Sparkles, Circle, Swords } from "lucide-react";
 
 export const Route = createFileRoute("/pokemon/$id")({
   component: PokemonDetail,
@@ -61,16 +61,9 @@ function PokemonDetail() {
     evolutionChainId ? { id: evolutionChainId } : undefined
   );
 
-  const encounters = useQuery(
-    api.pokemon.getEncounters,
-    { pokemonId }
-  );
-
   const fetchEvolution = useAction(api.pokemon.fetchEvolutionChain);
-  const fetchEncounters = useAction(api.pokemon.fetchEncounters);
 
   const [evolutionError, setEvolutionError] = useState<string | null>(null);
-  const [encountersError, setEncountersError] = useState<string | null>(null);
 
   const retryFetch = async (fn: () => Promise<any>, maxRetries = 3): Promise<any> => {
     let lastError: string | null = null;
@@ -90,8 +83,7 @@ function PokemonDetail() {
 
   useEffect(() => {
     setEvolutionError(null);
-    setEncountersError(null);
-    
+
     if (evolutionChainId && !evolutionData) {
       retryFetch(() => fetchEvolution({ chainId: evolutionChainId })).then((result: any) => {
         if (result?.success === false) {
@@ -99,41 +91,21 @@ function PokemonDetail() {
         }
       });
     }
-    if (!encounters?.length) {
-      retryFetch(() => fetchEncounters({ pokemonId })).then((result: any) => {
-        if (result?.success === false) {
-          setEncountersError(result.error);
-        }
-      });
-    }
   }, [pokemonId, evolutionChainId]);
 
-  const groupedEncounters = useMemo(() => {
-    if (!encounters?.length) return [];
-    const groups: Record<string, typeof encounters> = {};
-    encounters.forEach((enc) => {
-      if (!groups[enc.version]) groups[enc.version] = [];
-      groups[enc.version].push(enc);
-    });
-    return Object.entries(groups).map(([version, locs]) => ({
-      version,
-      locations: locs.slice(0, 5),
-    }));
-  }, [encounters]);
-
-  const renderEvolutionChain = (chain: any, currentId: number): ReactNode => {
+  const renderEvolutionChain = (chain: any, currentId: number): ReactNode[] => {
     const nodes: ReactNode[] = [];
-    
+
     const traverse = (node: any) => {
       const isCurrent = node.id === currentId;
       nodes.push(
         <div key={node.id} className="text-center">
           {node.sprite && (
             <Link to="/pokemon/$id" params={{ id: String(node.id) }}>
-              <img 
-                src={node.sprite} 
-                alt={node.species} 
-                className={`h-20 w-20 object-contain hover:scale-110 transition-transform ${isCurrent ? 'ring-2 ring-primary rounded-full' : ''}`} 
+              <img
+                src={node.sprite}
+                alt={node.species}
+                className={`h-20 w-20 object-contain hover:scale-110 transition-transform ${isCurrent ? 'ring-2 ring-primary rounded-full' : ''}`}
               />
             </Link>
           )}
@@ -148,7 +120,7 @@ function PokemonDetail() {
         });
       }
     };
-    
+
     traverse(chain);
     return nodes;
   };
@@ -315,39 +287,6 @@ function PokemonDetail() {
             )}
           </div>
         )}
-
-        <div className="mt-6">
-          <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
-            <MapPin className="h-4 w-4" />
-            Locations
-          </h2>
-          {encountersError ? (
-            <p className="text-sm text-destructive">Failed to load locations: {encountersError}</p>
-          ) : groupedEncounters.length ? (
-            <div className="space-y-4">
-              {groupedEncounters.map((group) => (
-                <div key={group.version}>
-                  <h3 className="text-sm font-medium capitalize mb-2 text-muted-foreground">
-                    {group.version}
-                  </h3>
-                  <div className="space-y-1">
-                    {group.locations.map((enc, i) => (
-                      <div key={i} className="flex justify-between items-center text-sm bg-muted p-2 rounded">
-                        <span className="capitalize">{enc.location}</span>
-                        <div className="text-xs text-muted-foreground">
-                          <span className="capitalize mr-2">{enc.method}</span>
-                          {enc.chance && `${enc.chance}%`}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">Loading locations...</p>
-          )}
-        </div>
       </div>
     </div>
   );
