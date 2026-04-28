@@ -50,16 +50,4 @@ export default defineSchema({
     name: v.string(),
     damageRelations: v.any(),
   }).index("by_name", ["name"]),
-
-  encounters: defineTable({
-    pokemonId: v.number(),
-    location: v.string(),
-    version: v.string(),
-    method: v.string(),
-    chance: v.optional(v.number()),
-    minLevel: v.optional(v.number()),
-    maxLevel: v.optional(v.number()),
-  })
-    .index("by_pokemonId", ["pokemonId"])
-    .index("by_location", ["location"]),
 });

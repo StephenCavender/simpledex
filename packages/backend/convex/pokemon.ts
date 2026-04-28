@@ -172,147 +172,21 @@ export const ingestEvolutionChain = mutation({
   },
 });
 
-export const ingestEncounter = mutation({
-  args: {
-    pokemonId: v.number(),
-    location: v.string(),
-    version: v.string(),
-    method: v.string(),
-    chance: v.optional(v.number()),
-    minLevel: v.optional(v.number()),
-    maxLevel: v.optional(v.number()),
-  },
-handler: async ({ db }, args) => {
-    await db.insert("encounters", args);
-    return { success: true };
-  },
-});
-
-export const bulkSyncFromPokeAPI = action({
-  args: { limit: v.optional(v.number()) },
-  handler: async (ctx, { limit = 20 }) => {
-    const runMutation = ctx.runMutation.bind(ctx);
-    const results = [];
-    const toSync = Math.min(limit, 151);
-
-    for (let i = 1; i <= toSync; i++) {
-      try {
-        const data = await fetchJson(`${POKEAPI_BASE}/pokemon/${i}`);
-        const speciesData = await fetchJson(`${POKEAPI_BASE}/pokemon-species/${i}`);
-
-        const pokemon = {
-          id: data.id,
-          name: data.name,
-          types: data.types.map((t: any) => t.type.name),
-          sprite: data.sprites.front_default,
-          artwork: data.sprites.other?.["official-artwork"]?.front_default,
-          height: data.height / 10,
-          weight: data.weight / 10,
-          stats: data.stats.map((s: any) => ({
-            name: s.stat.name,
-            value: s.base_stat,
-          })),
-          abilities: data.abilities.map((a: any) => ({
-            name: a.ability.name,
-            isHidden: a.is_hidden,
-          })),
-          speciesId: speciesData.id,
-        };
-
-        const chainUrl = speciesData.evolution_chain?.url;
-        const chainId = chainUrl
-          ? parseInt(chainUrl.split("/").filter(Boolean).pop() || "0", 10)
-          : undefined;
-
-        const species = {
-          id: speciesData.id,
-          name: speciesData.name,
-          evolutionChainId: chainId,
-          generation: speciesData.generation?.name,
-          habitat: speciesData.habitat?.name,
-          color: speciesData.color?.name,
-          evolvesFrom: speciesData.evolves_from_species?.url
-            ? parseInt(
-                speciesData.evolves_from_species.url
-                  .split("/")
-                  .filter(Boolean)
-                  .pop(),
-              )
-            : undefined,
-        };
-
-        await runMutation(api.pokemon.ingestPokemon, { pokemon, species });
-        results.push(pokemon.name);
-      } catch (e) {
-        console.error(`Failed to sync ${i}:`, e);
-      }
-    }
-
-    return { synced: results.length, names: results };
-  },
-});
-
-export const getEncounters = query({
-  args: { pokemonId: v.number() },
-  handler: async ({ db }, { pokemonId }) => {
-    return db
-      .query("encounters")
-      .withIndex("by_pokemonId", (q) => q.eq("pokemonId", pokemonId))
-      .take(100);
-  },
-});
-
 export const fetchEvolutionChain = action({
   args: { chainId: v.number() },
   handler: async (ctx, { chainId }) => {
     const runMutation = ctx.runMutation.bind(ctx);
     try {
       const data = await fetchJson(`${POKEAPI_BASE}/evolution-chain/${chainId}`);
-      
+
       const simplifiedChain = simplifyEvolutionChain(data.chain);
-      
+
       await runMutation(api.pokemon.ingestEvolutionChain, {
         id: chainId,
         chain: simplifiedChain,
       });
-      
-      return { success: true, chain: simplifiedChain };
-    } catch (e) {
-      return { success: false, error: String(e) };
-    }
-  },
-});
 
-export const fetchEncounters = action({
-  args: { pokemonId: v.number() },
-  handler: async (ctx, { pokemonId }) => {
-    const runMutation = ctx.runMutation.bind(ctx);
-    try {
-      const data = await fetchJson(`${POKEAPI_BASE}/pokemon/${pokemonId}/encounters`);
-      
-      const encounters = [];
-      
-      for (const encounter of data) {
-        for (const versionDetail of encounter.version_details) {
-          for (const encDetail of versionDetail.encounter_details) {
-            encounters.push({
-              pokemonId,
-              location: encounter.location_area.name,
-              version: versionDetail.version.name,
-              method: encDetail.method.name,
-              chance: encDetail.chance || undefined,
-              minLevel: encDetail.min_level || undefined,
-              maxLevel: encDetail.max_level || undefined,
-            });
-          }
-        }
-      }
-      
-      for (const enc of encounters) {
-        await runMutation(api.pokemon.ingestEncounter, enc);
-      }
-      
-      return { success: true, count: encounters.length };
+      return { success: true, chain: simplifiedChain };
     } catch (e) {
       return { success: false, error: String(e) };
     }
@@ -325,7 +199,7 @@ const simplifyEvolutionChain = (chain: any): any => {
     return match ? parseInt(match[1], 10) : 1;
   };
 
-  const getSprite = (id: number): string => 
+  const getSprite = (id: number): string =>
     `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 
   const processChain = (node: any): any => {
@@ -336,19 +210,21 @@ const simplifyEvolutionChain = (chain: any): any => {
       sprite: getSprite(speciesId),
       evolvesTo: [],
     };
-    
+
     for (const ev of node.evolves_to || []) {
       const details = ev.evolution_details?.[0] || {};
       result.evolvesTo.push({
         ...processChain(ev),
-        method: details.min_level ? `level ${details.min_level}` : 
-               details.item ? `use ${details.item.name}` : 
-               details.trigger?.name || "trade",
+        method: details.min_level
+          ? `level ${details.min_level}`
+          : details.item
+            ? `use ${details.item.name}`
+            : details.trigger?.name || "trade",
       });
     }
-    
+
     return result;
   };
-  
+
   return processChain(chain);
 };

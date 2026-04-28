@@ -1,18 +1,23 @@
 import { ConvexHttpClient } from "convex";
+import { api } from "../convex/_generated/api";
 
 // Use hardcoded dev URL from .env.local
 const convexUrl = "https://adamant-coyote-255.convex.cloud";
 
 const POKEAPI_BASE = "https://pokeapi.co/api/v2";
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 const fetchJson = async (url: string) => {
   const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to fetch ${url}`);
+  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
   return res.json();
 };
 
-// Create client without auth - convex run has auth baked in
-const createClient = () => new ConvexHttpClient(convexUrl);
+const fetchAllPokemonList = async () => {
+  const data = await fetchJson(`${POKEAPI_BASE}/pokemon?limit=10000`);
+  return data.results; // Array of { name, url }
+};
 
 async function syncPokemon(id: number) {
   const data = await fetchJson(`${POKEAPI_BASE}/pokemon/${id}`);
@@ -79,15 +84,20 @@ async function syncTypes() {
 }
 
 async function main() {
-  const limit = parseInt(process.argv[2] || "20");
+  const args = process.argv.slice(2);
+  const limitArg = args.find(arg => arg.startsWith('--limit='));
+  const limit = limitArg ? parseInt(limitArg.split('=')[1]) : undefined;
+  const delayMs = 30_000; // 30 seconds between requests
 
-  console.log(`Syncing ${limit} Pokemon from PokeAPI to Convex...`);
+  console.log(`Syncing Pokemon from PokeAPI to Convex...`);
   console.log(`URL: ${convexUrl}`);
+  console.log(`Delay between requests: ${delayMs / 1000}s`);
+  if (limit) console.log(`Limit: ${limit} Pokemon`);
 
   // Test connection first
-  const test = createClient();
+  const client = new ConvexHttpClient(convexUrl);
   try {
-    await test.query(api => api.pokemon.list({ limit: 1 }));
+    await client.query(api => api.pokemon.list({ limit: 1 }));
     console.log("✓ Convex connection OK");
   } catch (e) {
     console.error("✗ Convex connection failed:", e);
@@ -95,28 +105,58 @@ async function main() {
     process.exit(1);
   }
 
-  for (let i = 1; i <= limit; i++) {
+  // Fetch full Pokemon list
+  console.log("\nFetching Pokemon list from PokeAPI...");
+  let pokemonList;
+  try {
+    pokemonList = await fetchAllPokemonList();
+    console.log(`✓ Found ${pokemonList.length} Pokemon`);
+  } catch (e) {
+    console.error("✗ Failed to fetch Pokemon list:", e);
+    process.exit(1);
+  }
+
+  const toSync = limit ? pokemonList.slice(0, limit) : pokemonList;
+  console.log(`\nSyncing ${toSync.length} Pokemon...\n`);
+
+  let synced = 0;
+  let failed = 0;
+
+  for (let i = 0; i < toSync.length; i++) {
+    const pokemonEntry = toSync[i];
+    // Extract ID from URL like "https://pokeapi.co/api/v2/pokemon/1/"
+    const id = parseInt(pokemonEntry.url.split("/").filter(Boolean).pop());
+
     try {
-      const { pokemon, species } = await syncPokemon(i);
-      const convex = createClient();
-      await convex.mutation(api => api.pokemon.ingestPokemon, { pokemon, species });
-      console.log(`✓ ${i}: ${pokemon.name}`);
-    } catch (e) {
-      console.error(`✗ ${i}:`, e.message);
+      const { pokemon, species } = await syncPokemon(id);
+      await client.mutation(api => api.pokemon.ingestPokemon, { pokemon, species });
+      synced++;
+      console.log(`✓ ${synced}/${toSync.length}: ${pokemon.name} (ID: ${id})`);
+    } catch (e: any) {
+      failed++;
+      console.error(`✗ ${i + 1}/${toSync.length}: Failed to sync ID ${id}:`, e.message);
+    }
+
+    // Delay before next request (skip delay after last item)
+    if (i < toSync.length - 1) {
+      const remaining = toSync.length - synced - failed;
+      console.log(`  Waiting ${delayMs / 1000}s... (${remaining} remaining)\n`);
+      await sleep(delayMs);
     }
   }
 
   // Sync types
+  console.log("\nSyncing types...");
   try {
     const types = await syncTypes();
-    const convex = createClient();
-    await convex.mutation(api => api.pokemon.ingestTypes, { types });
+    await client.mutation(api => api.pokemon.ingestTypes, { types });
     console.log(`✓ Synced ${types.length} types`);
-  } catch (e) {
+  } catch (e: any) {
     console.error("✗ Types:", e.message);
   }
 
-  console.log("Done!");
+  console.log(`\nDone! Synced: ${synced}, Failed: ${failed}`);
+  process.exit(0);
 }
 
 main();
