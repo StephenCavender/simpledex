@@ -1,17 +1,62 @@
 ---
 layout: layout.njk
-title: SimpleDex
+title: SimpleDex - Your Quick Reference for Pokemon
 ---
 
-<main class="flex">
-  <div>
-    <div class="flex">
-      <img class="logo" src="images/header.jpg" alt="{{ title }} logo" />
+<main class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <h1>SimpleDex</h1>
+      <p class="tagline">Your quick reference for Pokemon</p>
+      <p class="description">
+        Browse the original 151 Pokemon from the Kanto region. 
+        Search, filter, and explore stats, abilities, evolutions, and encounter locations.
+      </p>
+      <div class="cta-group">
+        <a href="https://simpledex.app" class="btn btn-primary">Try the Web App</a>
+        <a href="https://pokeapi.co" class="btn btn-secondary" target="_blank">Powered by PokeAPI</a>
+      </div>
     </div>
-    <p>A quick and easy tool for figuring out if a pokèmon evolves and the conditions that need to be met for it to happen.</p>
-    <div class="center flex">
-      <a href="https://simpledex.cavender.foo" class="btn">Try the Web App</a>
+    <div class="hero-image">
+      <img src="/images/screen.png" alt="SimpleDex App Screenshot" />
     </div>
   </div>
-  <img width="200" src="images/screen.png" alt="app screenshot" />
 </main>
+
+<section class="features">
+  <div class="container">
+    <h2>Features</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <h3>Search & Filter</h3>
+        <p>Quickly find Pokemon by name or filter by type with debounced search for smooth filtering.</p>
+      </div>
+      <div class="feature">
+        <h3>Detailed Stats</h3>
+        <p>View complete stats including HP, attack, defense, speed, and abilities for each Pokemon.</p>
+      </div>
+      <div class="feature">
+        <h3>Evolutions</h3>
+        <p>See evolution chains with sprites and navigate through the full evolution line.</p>
+      </div>
+      <div class="feature">
+        <h3>Locations</h3>
+        <p>Discover where each Pokemon can be found across different game versions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tech">
+  <div class="container">
+    <h2>Built With</h2>
+    <div class="tech-grid">
+      <span class="tech-badge">React</span>
+      <span class="tech-badge">TanStack Router</span>
+      <span class="tech-badge">TailwindCSS</span>
+      <span class="tech-badge">Convex</span>
+      <span class="tech-badge">PokeAPI</span>
+      <span class="tech-badge">PWA</span>
+    </div>
+  </div>
+</section>

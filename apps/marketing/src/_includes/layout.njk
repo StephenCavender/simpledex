@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="SimpleDex - Your quick reference for Pokemon with the original 151 Pokemon from Kanto." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/style.css">
-		<title>{{title}}</title>
-	</head>
-	<body>
-		<main>
-		  {{ content | safe }}
-		</main>
-	</body>
-
-  {% include "footer.njk" %}
+    <title>{{ title }}</title>
+  </head>
+  <body>
+    {{ content | safe }}
+    
+    <footer>
+      <div class="container">
+        <nav>
+          <a href="http://localhost:3001">Web App</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
+          <a href="https://pokeapi.co" target="_blank">PokeAPI</a>
+        </nav>
+        <p>&copy; 2025 SimpleDex. Data provided by PokeAPI.</p>
+      </div>
+    </footer>
+  </body>
 </html>
