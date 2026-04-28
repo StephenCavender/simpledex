@@ -18,17 +18,24 @@ function AboutComponent() {
         <p className="text-muted-foreground">Your quick reference for Pokemon</p>
       </div>
 
-      <div className="bg-card rounded-lg border p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-4">About</h2>
-        <p className="text-muted-foreground mb-4">
-          SimpleDex is your quick reference for Pokemon, featuring the original 151 Pokemon 
-          from the Kanto region. Browse, search, and explore Pokemon details 
-          including stats, abilities, evolutions, and encounter locations.
-        </p>
-        <p className="text-muted-foreground">
-          Data provided by <a href="https://pokeapi.co" className="text-primary hover:underline" target="_blank">PokeAPI</a>.
-        </p>
-      </div>
+       <div className="bg-card rounded-lg border p-6 mb-6">
+         <h2 className="text-lg font-semibold mb-4">About</h2>
+         <p className="text-muted-foreground mb-4">
+           SimpleDex is your quick reference for Pokemon, featuring the original 151 Pokemon 
+           from the Kanto region. Browse, search, and explore Pokemon details 
+           including stats, abilities, and evolutions.
+         </p>
+         <p className="text-muted-foreground">
+           Data provided by <a href="https://pokeapi.co" className="text-primary hover:underline" target="_blank">PokeAPI</a>.
+         </p>
+       </div>
+
+       <div className="bg-card rounded-lg border p-6 mb-6">
+         <h2 className="text-lg font-semibold mb-4">Developer</h2>
+         <p className="text-muted-foreground mb-4">
+           Built by <a href="https://cavender.foo" className="text-primary hover:underline" target="_blank">Stephen Cavender</a>.
+         </p>
+       </div>
 
       <div className="bg-card rounded-lg border p-6 mb-6">
         <h2 className="text-lg font-semibold mb-4">Theme</h2>
@@ -42,11 +49,15 @@ function AboutComponent() {
         </div>
       </div>
 
-      <div className="text-center">
-        <Link to="/" className="text-primary hover:underline">
-          ← Back to Pokemon List
-        </Link>
-      </div>
+       <div className="text-center">
+         <Link to="/" className="text-primary hover:underline">
+           ← Back to Pokemon List
+         </Link>
+       </div>
+
+       <div className="text-center text-sm text-muted-foreground mt-4">
+         <p>© 2026 <a href="https://cavender.foo" className="hover:underline" target="_blank">Stephen Cavender</a></p>
+       </div>
     </div>
   );
 }
