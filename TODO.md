@@ -26,8 +26,8 @@
 - [x] Enable strict TypeScript mode and fix any resulting type errors
 
 ### Testing
-- [ ] Add unit tests for Convex functions
-- [ ] Add integration tests for web app
+- [x] Add unit tests for Convex functions
+- [x] Add integration tests for web app
 
 ### Deployment
 - [ ] Set up production deployment (Vercel/Cloudflare for web, Convex for backend)
@@ -35,6 +35,6 @@
 
 ## Nice to Have
 - [x] Show Pokemon types with color-coded badges
-- [ ] Add share functionality for Pokemon detail pages
+- [x] Add share functionality for Pokemon detail pages
 - [ ] Add favorites/watchlist feature (requires auth)
 - [ ] Support for more than Gen 1 Pokemon (currently 151)

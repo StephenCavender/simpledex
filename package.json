@@ -19,12 +19,14 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "turbo dev",
+    "dev": "bun run dev:web & bun run dev:backend & bun run dev:marketing && wait",
+    "dev:web": "cd apps/web && bun run dev",
+    "dev:backend": "cd packages/backend && bun run dev",
+    "dev:marketing": "cd apps/marketing && bun run dev",
+    "dev:setup": "cd packages/backend && bun run dev:setup",
     "build": "turbo build",
     "check-types": "turbo check-types",
-    "dev:web": "turbo -F web dev",
-    "dev:server": "turbo -F @simpledex/backend dev",
-    "dev:setup": "turbo -F @simpledex/backend dev:setup",
+    "test": "cd apps/web && bun test",
     "check": "oxlint && oxfmt --write"
   },
   "dependencies": {
