@@ -31,15 +31,14 @@ function AboutComponent() {
       </div>
 
       <div className="bg-card rounded-lg border p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-4">Color Scheme</h2>
+        <h2 className="text-lg font-semibold mb-4">Theme</h2>
         <p className="text-muted-foreground mb-4">
-          Using the original SimpleDex color scheme from the React Native mobile app.
+          Supports both light and dark themes using CSS custom properties.
+          Toggle between themes using the system preference or manually.
         </p>
         <div className="flex gap-2 flex-wrap">
-          <span className="px-3 py-1 rounded-full bg-[#1d1d1d] text-white">Black</span>
-          <span className="px-3 py-1 rounded-full bg-[#ef4136] text-white">Red</span>
-          <span className="px-3 py-1 rounded-full bg-[#69D7F9] text-black">Blue</span>
-          <span className="px-3 py-1 rounded-full bg-[#FFE800] text-black">Yellow</span>
+          <span className="px-3 py-1 rounded-full bg-white text-black border">Light</span>
+          <span className="px-3 py-1 rounded-full bg-black text-white">Dark</span>
         </div>
       </div>
 

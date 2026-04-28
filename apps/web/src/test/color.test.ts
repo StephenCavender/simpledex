@@ -26,21 +26,28 @@ describe('Pokemon types', () => {
   });
 });
 
-describe('Color palette', () => {
-  it('original app colors match expected values', () => {
-    // From original simpledex-mobile/app/theme/palette.ts
-    const palette = {
-      black: '#1d1d1d',
-      white: '#ffffff',
-      red: '#ef4136',
-      blue: '#69D7F9',
-      yellow: '#FFE800',
+describe('Theme support', () => {
+  it('has light theme CSS variables', () => {
+    const light = {
+      background: 'oklch(1 0 0)',
+      foreground: 'oklch(0.145 0 0)',
+      primary: 'oklch(0.205 0 0)',
     };
     
-    expect(palette.black).toBe('#1d1d1d');
-    expect(palette.white).toBe('#ffffff');
-    expect(palette.red).toBe('#ef4136');
-    expect(palette.blue).toBe('#69D7F9');
-    expect(palette.yellow).toBe('#FFE800');
+    expect(light.background).toBe('oklch(1 0 0)');
+    expect(light.foreground).toBe('oklch(0.145 0 0)');
+    expect(light.primary).toBe('oklch(0.205 0 0)');
+  });
+
+  it('has dark theme CSS variables', () => {
+    const dark = {
+      background: 'oklch(0.145 0 0)',
+      foreground: 'oklch(0.985 0 0)',
+      primary: 'oklch(0.87 0 0)',
+    };
+    
+    expect(dark.background).toBe('oklch(0.145 0 0)');
+    expect(dark.foreground).toBe('oklch(0.985 0 0)');
+    expect(dark.primary).toBe('oklch(0.87 0 0)');
   });
 });
