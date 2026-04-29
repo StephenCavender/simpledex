@@ -12,8 +12,8 @@
 - [x] Add loading state while search is being processed
 
 ### Pagination
-- [ ] Implement proper pagination for Pokemon list (currently returns up to 1000)
-- [ ] Add infinite scroll or "Load More" button
+- [x] Implement proper pagination for Pokemon list (currently returns up to 1000)
+- [x] Add "Load More" button
 
 ### PWA
 - [x] Test PWA offline functionality
@@ -40,7 +40,7 @@
 - [ ] Support for more than Gen 1 Pokemon (currently 151)
 
 ## Bugs
-- [ ] Fix "Unterminated regular expression" parse error in pokemon.$id.tsx
+- [x] Fix "Unterminated regular expression" parse error in pokemon.$id.tsx
 
 ## Marketing
-- [ ] Update copyright on marketing page to Stephen Cavender, current year, link to https://cavender.foo
+- [x] Update copyright on marketing page to Stephen Cavender, current year, link to https://cavender.foo
