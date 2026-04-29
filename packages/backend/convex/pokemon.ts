@@ -15,8 +15,9 @@ export const list = query({
     type: v.optional(v.string()),
     search: v.optional(v.string()),
     limit: v.optional(v.number()),
+    cursor: v.optional(v.string()),
   },
-  handler: async ({ db }, { type, search, limit = 20 }) => {
+  handler: async ({ db }, { type, search, limit = 50, cursor }) => {
     let results = await db.query("pokemon").take(1000);
 
     if (type) {
@@ -28,7 +29,19 @@ export const list = query({
       results = results.filter((p) => p.name.includes(s));
     }
 
-    return results.slice(0, limit);
+    const startIndex = cursor
+      ? results.findIndex((p) => p._id === cursor) + 1
+      : 0;
+    const paginated = results.slice(startIndex, startIndex + limit);
+    const nextCursor =
+      startIndex + limit < results.length
+        ? paginated[paginated.length - 1]?._id
+        : undefined;
+
+    return {
+      pokemon: paginated,
+      nextCursor,
+    };
   },
 });
 
