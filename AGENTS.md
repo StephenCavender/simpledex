@@ -70,6 +70,35 @@ bun run build
 - Marketing deploys to any static host
 - Convex deploys via `convex deploy`
 
+## Git Workflow
+
+### Commit Standards
+- Make **atomic commits** - one logical change per commit
+- Use **conventional commits** format: `type: description`
+  - `feat:` for new features
+  - `fix:` for bug fixes
+  - `refactor:` for code restructuring
+  - `docs:` for documentation
+  - `style:` for formatting changes
+  - `test:` for adding tests
+
+### Rules
+- **Never push without explicit instruction** from the user
+- Stage and commit related changes together
+- Write clear, concise commit messages describing the "why"
+
+```bash
+# Check status
+git status
+
+# Create atomic commit
+git add <specific-files>
+git commit -m "feat: add user authentication"
+
+# Only push when instructed
+git push origin master
+```
+
 ## AI Crawlers
 
 Marketing site includes `llms.txt` for AI indexing. Update with:

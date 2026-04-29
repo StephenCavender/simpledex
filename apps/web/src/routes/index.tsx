@@ -53,6 +53,13 @@ function HomeComponent() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
+  const [cursor, setCursor] = useState<string | undefined>(undefined);
+  const [allPokemon, setAllPokemon] = useState<any[]>([]);
+
+  useEffect(() => {
+    setAllPokemon([]);
+    setCursor(undefined);
+  }, [search, selectedType]);
 
   useEffect(() => {
     if (search !== debouncedSearch) {
@@ -65,11 +72,24 @@ function HomeComponent() {
     }
   }, [search, debouncedSearch]);
 
-  const pokemonList = useQuery(api.pokemon.list, {
+  const pokemonData = useQuery(api.pokemon.list, {
     search: debouncedSearch || undefined,
     type: selectedType || undefined,
     limit: 50,
+    cursor,
   });
+
+  useEffect(() => {
+    if (pokemonData?.pokemon) {
+      setAllPokemon((prev) => [...prev, ...pokemonData.pokemon]);
+    }
+  }, [pokemonData]);
+
+  const loadMore = useCallback(() => {
+    if (pokemonData?.nextCursor) {
+      setCursor(pokemonData.nextCursor);
+    }
+  }, [pokemonData]);
 
   const handleSearchChange = useCallback((value: string) => {
     setSearch(value);
@@ -133,20 +153,21 @@ function HomeComponent() {
         </div>
       )}
 
-      {pokemonList === undefined ? (
+      {!pokemonData ? (
         <div className="text-center py-12 text-muted-foreground">Loading...</div>
-      ) : pokemonList.length === 0 ? (
+      ) : allPokemon.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
           No Pokemon found
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {pokemonList.map((p) => (
-            <a
-              key={p._id}
-              href={`/pokemon/${p.id}`}
-              className="group block rounded-lg border bg-card p-4 transition-colors hover:bg-accent"
-            >
+        <>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {allPokemon.map((p) => (
+              <a
+                key={p._id}
+                href={`/pokemon/${p.id}`}
+                className="group block rounded-lg border bg-card p-4 transition-colors hover:bg-accent"
+              >
               <div className="mb-2 text-center">
                 {p.artwork ? (
                   <img
@@ -190,7 +211,18 @@ function HomeComponent() {
               </div>
             </a>
           ))}
-        </div>
+          </div>
+          {pokemonData?.nextCursor && (
+            <div className="mt-6 text-center">
+              <button
+                onClick={loadMore}
+                className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              >
+                Load More
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
