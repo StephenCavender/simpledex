@@ -37,7 +37,13 @@
 - [x] Show Pokemon types with color-coded badges
 - [x] Add share functionality for Pokemon detail pages
 - [ ] Add favorites/watchlist feature (requires auth)
-- [ ] Support for more than Gen 1 Pokemon (currently 151)
+- [x] Support for more than Gen 1 Pokemon (currently 151)
+
+## Admin
+- [x] Add generation filter to Pokemon list
+- [x] Add generation combobox (Gen I-IX)
+- [x] Create admin dashboard route (/admin)
+- [ ] Add user management to admin (requires auth)
 
 ## Bugs
 - [x] Fix "Unterminated regular expression" parse error in pokemon.$id.tsx

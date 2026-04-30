@@ -1,7 +1,7 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Search, Info, Zap, Flame as Fire, Droplets as Water, Leaf as Grass, Snowflake as Ice, Mountain, Bug, Ghost, Skull, Brain, Bird, Biohazard, Anvil, Sparkles, Circle, Swords } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -52,14 +52,16 @@ function HomeComponent() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedGen, setSelectedGen] = useState<number | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [cursor, setCursor] = useState<string | undefined>(undefined);
   const [allPokemon, setAllPokemon] = useState<any[]>([]);
+  const scrollRef = useRef(0);
 
   useEffect(() => {
     setAllPokemon([]);
     setCursor(undefined);
-  }, [search, selectedType]);
+  }, [search, selectedType, selectedGen]);
 
   useEffect(() => {
     if (search !== debouncedSearch) {
@@ -77,6 +79,7 @@ function HomeComponent() {
     type: selectedType || undefined,
     limit: 50,
     cursor,
+    generation: selectedGen || undefined,
   });
 
   useEffect(() => {
@@ -85,7 +88,15 @@ function HomeComponent() {
     }
   }, [pokemonData]);
 
+  useEffect(() => {
+    if (scrollRef.current && allPokemon.length > 0) {
+      window.scrollTo(0, scrollRef.current);
+      scrollRef.current = 0;
+    }
+  }, [allPokemon.length]);
+
   const loadMore = useCallback(() => {
+    scrollRef.current = window.scrollY;
     if (pokemonData?.nextCursor) {
       setCursor(pokemonData.nextCursor);
     }
@@ -121,6 +132,25 @@ function HomeComponent() {
             className="h-10 w-full rounded-lg border bg-background pl-10 pr-4 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/50"
           />
         </div>
+      </div>
+
+      <div className="mb-6">
+        <select
+          value={selectedGen || ""}
+          onChange={(e) => setSelectedGen(e.target.value ? parseInt(e.target.value) : null)}
+          className="h-10 rounded-lg border bg-background px-4 text-sm outline-none"
+        >
+          <option value="">All Generations</option>
+          <option value="1">Gen I (Kanto)</option>
+          <option value="2">Gen II (Johto)</option>
+          <option value="3">Gen III (Hoenn)</option>
+          <option value="4">Gen IV (Sinnoh)</option>
+          <option value="5">Gen V (Unova)</option>
+          <option value="6">Gen VI (Kalos)</option>
+          <option value="7">Gen VII (Alola)</option>
+          <option value="8">Gen VIII (Galar)</option>
+          <option value="9">Gen IX (Paldea)</option>
+        </select>
       </div>
 
       {types && types.length > 0 && (
