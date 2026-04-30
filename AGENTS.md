@@ -1,11 +1,17 @@
 # SimpleDex Development Guide
 
-## Project Structure
+**Stack**: TypeScript · React 19 · TanStack Router · TailwindCSS v4 · Convex · Bun
+
+## Overview
+
+SimpleDex is a Pokemon reference app with a React web frontend, Eleventy marketing site, and Convex backend. Browse, search, and explore Pokemon details across all generations.
+
+## Structure
 
 ```
-simpledex/
+<project-root>/
 ├── apps/
-│   ├── web/          # React web app (TanStack Router)
+│   ├── web/          # React app (TanStack Router)
 │   └── marketing/    # Eleventy static site
 ├── packages/
 │   ├── backend/     # Convex functions
@@ -15,92 +21,97 @@ simpledex/
 └── turbo.json       # Turborepo config
 ```
 
+## Where to Look
+
+| Task | Location |
+|------|----------|
+| Add a page/route | `apps/web/src/routes/` (TanStack Router) |
+| Add a component | `apps/web/src/components/` |
+| Add Convex function | `packages/backend/convex/` |
+| Add Convex schema | `packages/backend/convex/schema.ts` |
+| Add types | inline or `packages/backend/` |
+| Add env vars | `.env.local` (never commit) |
+
 ## Development
 
 ```bash
-# Start all dev servers (web on 3001, marketing on 8080, convex)
-bun run dev
-
-# Start individual
-bun run dev:web
-bun run dev:backend
-bun run dev:marketing
+bun run dev          # Start all dev servers (web:3001, marketing:8080, convex)
+bun run build        # Production build
+bun test             # Run Vitest tests
+bun run lint         # Check linting (if configured)
 ```
 
-## Stack
+## Coding Standards
 
-- **Web**: React 19 + TanStack Router + TailwindCSS v4 + shadcn/ui
-- **Marketing**: Eleventy
-- **Backend**: Convex
-- **Build**: Vite
-- **Package Manager**: Bun
-- **PWA**: vite-plugin-pwa
-- **Testing**: Vitest with happy-dom
-
-## Code Standards
-
-### React
-
-- React Compiler is enabled - avoid manual `useMemo`/`useCallback`
+**React**
+- React Compiler enabled - avoid manual `useMemo`/`useCallback`
+- Functional components only
 - Colocate code that changes together
 - Compose smaller components rather than massive JSX blocks
 - Prefer TanStack Router file-based routing
 - Use v4 Tailwind format with global CSS variables
 
-### TypeScript
+**TypeScript**
+- No `any` casts
+- No unnecessary try/catch
+- Explicit return types on exported functions
 
-- Don't cast to `any`
-- Don't add unnecessary try/catch
+**Functional Programming**
+- Prefer pure functions with no side effects
+- Use immutability — avoid mutating objects/arrays directly
+- Favor composition over inheritance
+- Leverage array methods (map, filter, reduce) over loops
 
-### Testing
+**Code Clarity**
+- Write code that is easily understood and maintained by human engineers
+- Prioritize clarity over cleverness — avoid terse or obscure patterns
+- Use descriptive variable and function names
+- Keep functions small and focused on a single responsibility
+- Prefer explicit logic over implicit behavior
 
-```bash
-# Run tests
-bun test
-```
-
-## Build & Deploy
-
-```bash
-# Build all apps
-bun run build
-```
-
-- Web app deploys to Vercel/Cloudflare
-- Marketing deploys to any static host
-- Convex deploys via `convex deploy`
+**General**
+- Indentation: 2 spaces, no tabs
+- Use descriptive names for variables and functions
+- Single responsibility per function
 
 ## Git Workflow
 
-### Commit Standards
-- Make **atomic commits** - one logical change per commit
-- Use **conventional commits** format: `type: description`
-  - `feat:` for new features
-  - `fix:` for bug fixes
-  - `refactor:` for code restructuring
-  - `docs:` for documentation
-  - `style:` for formatting changes
-  - `test:` for adding tests
+**Commit Standards** (Conventional Commits)
+```
+feat(auth): add login with Convex
+fix(api): handle null user in profile query
+chore(deps): upgrade bun to 1.x
+```
 
-### Rules
+Types: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`
+
+**Rules**
+- Make **atomic commits** - one logical change per commit
 - **Never push without explicit instruction** from the user
 - Stage and commit related changes together
 - Write clear, concise commit messages describing the "why"
 
+**Commands**
 ```bash
-# Check status
-git status
-
-# Create atomic commit
-git add <specific-files>
-git commit -m "feat: add user authentication"
-
-# Only push when instructed
-git push origin master
+git status                    # Check what's changed
+git add <specific-files>       # Stage related changes
+git commit -m "feat: add auth"  # Commit with type prefix
+git push origin master         # ONLY when instructed
 ```
 
-## AI Crawlers
+## Anti-Patterns
 
-Marketing site includes `llms.txt` for AI indexing. Update with:
-- `/apps/marketing/src/llms.txt`
-- Rebuild with `cd apps/marketing && bun run build`
+- No `any` type in TypeScript
+- Don't commit `.env*.local` files
+- Don't use class components in React
+- Don't skip Convex schema validation
+- Don't push without explicit instruction
+- Don't add unnecessary try/catch blocks
+
+## Notes
+
+- Convex handles real-time data — no manual polling needed
+- Bun is the package manager (not npm/yarn)
+- Marketing site includes `llms.txt` for AI indexing
+  - Update at `/apps/marketing/src/llms.txt`
+  - Rebuild with `cd apps/marketing && bun run build`
