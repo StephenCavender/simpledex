@@ -14,6 +14,18 @@ const fetchJson = async (url: string) => {
   return res.json();
 };
 
+const GENERATIONS = [
+  { id: 1, name: "Gen I (Kanto)", start: 1, end: 151 },
+  { id: 2, name: "Gen II (Johto)", start: 152, end: 251 },
+  { id: 3, name: "Gen III (Hoenn)", start: 252, end: 386 },
+  { id: 4, name: "Gen IV (Sinnoh)", start: 387, end: 493 },
+  { id: 5, name: "Gen V (Unova)", start: 494, end: 649 },
+  { id: 6, name: "Gen VI (Kalos)", start: 650, end: 721 },
+  { id: 7, name: "Gen VII (Alola)", start: 722, end: 809 },
+  { id: 8, name: "Gen VIII (Galar)", start: 810, end: 905 },
+  { id: 9, name: "Gen IX (Paldea)", start: 906, end: 1025 },
+];
+
 const fetchAllPokemonList = async () => {
   const data = await fetchJson(`${POKEAPI_BASE}/pokemon?limit=10000`);
   return data.results; // Array of { name, url }
@@ -88,16 +100,26 @@ async function syncTypes() {
 
 async function main() {
   const args = process.argv.slice(2);
-  const limitArg = args.find(arg => arg.startsWith('--limit='));
-  const limit = limitArg ? parseInt(limitArg.split('=')[1]) : undefined;
   const force = args.includes('--force');
+
+  // Parse generation flags: --gen=1 or --gen=1,2,3
+  const genArg = args.find(arg => arg.startsWith('--gen='));
+  let targetGens: number[] = [];
+  
+  if (genArg) {
+    const genNumbers = genArg.split('=')[1].split(',').map(Number);
+    targetGens = GENERATIONS.filter(g => genNumbers.includes(g.id));
+  } else {
+    targetGens = [...GENERATIONS]; // All generations
+  }
+
   const delayMs = 30_000; // 30 seconds between requests
 
   console.log(`Syncing Pokemon from PokeAPI to Convex...`);
   console.log(`URL: ${convexUrl}`);
   console.log(`Delay between requests: ${delayMs / 1000}s`);
   console.log(`Force re-sync: ${force}`);
-  if (limit) console.log(`Limit: ${limit} Pokemon`);
+  console.log(`Target generations: ${targetGens.map(g => g.id).join(', ')}\n`);
 
   // Test connection first
   const client = new ConvexHttpClient(convexUrl);
@@ -113,65 +135,71 @@ async function main() {
   // Fetch existing Pokemon to skip
   let existingIds = new Set<number>();
   if (!force) {
-    console.log("\nFetching existing Pokemon from Convex...");
+    console.log("Fetching existing Pokemon from Convex...");
     try {
       const existing = await client.query(api => api.pokemon.list({ limit: 10000 }));
       existing.pokemon.forEach((p: any) => existingIds.add(p.id));
-      console.log(`✓ Found ${existingIds.size} existing Pokemon in Convex`);
+      console.log(`✓ Found ${existingIds.size} existing Pokemon in Convex\n`);
     } catch (e) {
       console.error("✗ Failed to fetch existing data:", e);
     }
   }
 
-  // Fetch full Pokemon list
-  console.log("\nFetching Pokemon list from PokeAPI...");
-  let pokemonList;
-  try {
-    pokemonList = await fetchAllPokemonList();
-    console.log(`✓ Found ${pokemonList.length} Pokemon`);
-  } catch (e) {
-    console.error("✗ Failed to fetch Pokemon list:", e);
-    process.exit(1);
-  }
+  // Build ID ranges from target generations
+  const idRanges = targetGens.map(g => ({
+    genId: g.id,
+    genName: g.name,
+    start: g.start,
+    end: g.end,
+  }));
 
-  const toSync = limit ? pokemonList.slice(0, limit) : pokemonList;
-  const toActuallySync = force ? toSync : toSync.filter((entry: any) => {
-    const id = parseInt(entry.url.split("/").filter(Boolean).pop());
-    return !existingIds.has(id);
-  });
+  // Sync Pokemon by generation
+  let totalSynced = 0;
+  let totalFailed = 0;
 
-  console.log(`\nTotal in range: ${toSync.length}`);
-  console.log(`To sync (new): ${toActuallySync.length}`);
-  console.log(`Skipping (existing): ${toSync.length - toActuallySync.length}\n`);
+  for (const range of idRanges) {
+    console.log(`\n${'='.repeat(50)}`);
+    console.log(`Syncing ${range.genName} (IDs ${range.start}-${range.end})`);
+    console.log(`${'='.repeat(50)}`);
 
-  let synced = 0;
-  let failed = 0;
+    let synced = 0;
+    let failed = 0;
 
-  for (let i = 0; i < toActuallySync.length; i++) {
-    const pokemonEntry = toActuallySync[i];
-    // Extract ID from URL like "https://pokeapi.co/api/v2/pokemon/1/"
-    const id = parseInt(pokemonEntry.url.split("/").filter(Boolean).pop());
+    for (let id = range.start; id <= range.end; id++) {
+      // Skip if already exists (unless force)
+      if (!force && existingIds.has(id)) {
+        continue;
+      }
 
-    try {
-      const { pokemon, species } = await syncPokemon(id);
-      await client.mutation(api => api.pokemon.ingestPokemon, { pokemon, species });
-      synced++;
-      console.log(`✓ ${synced}/${toActuallySync.length}: ${pokemon.name} (ID: ${id})`);
-    } catch (e: any) {
-      failed++;
-      console.error(`✗ ${i + 1}/${toActuallySync.length}: Failed to sync ID ${id}:`, e.message);
+      try {
+        const { pokemon, species } = await syncPokemon(id);
+        await client.mutation(api => api.pokemon.ingestPokemon, { pokemon, species });
+        synced++;
+        totalSynced++;
+        const progress = id - range.start + 1;
+        const total = range.end - range.start + 1;
+        console.log(`✓ [${progress}/${total}] ${pokemon.name} (ID: ${id})`);
+      } catch (e: any) {
+        failed++;
+        totalFailed++;
+        console.error(`✗ [${id}] Failed to sync:`, e.message);
+      }
+
+      // Delay before next request (skip delay after last item of last generation)
+      const isLastId = id === range.end && range === idRanges[idRanges.length - 1];
+      if (!isLastId) {
+        const remaining = (range.end - id) + totalFailed;
+        console.log(`  Waiting ${delayMs / 1000}s... (approx ${remaining} remaining)\n`);
+        await sleep(delayMs);
+      }
     }
 
-    // Delay before next request (skip delay after last item)
-    if (i < toActuallySync.length - 1) {
-      const remaining = toActuallySync.length - synced - failed;
-      console.log(`  Waiting ${delayMs / 1000}s... (${remaining} remaining)\n`);
-      await sleep(delayMs);
-    }
+    console.log(`\n${range.genName} complete: Synced: ${synced}, Failed: ${failed}`);
   }
 
-  // Sync types
-  console.log("\nSyncing types...");
+  // Sync types (only once)
+  console.log(`\n${'='.repeat(50)}`);
+  console.log("Syncing types...");
   try {
     const types = await syncTypes();
     await client.mutation(api => api.pokemon.ingestTypes, { types });
@@ -180,7 +208,9 @@ async function main() {
     console.error("✗ Types:", e.message);
   }
 
-  console.log(`\nDone! Synced: ${synced}, Failed: ${failed}, Skipped: ${toSync.length - toActuallySync.length}`);
+  console.log(`\n${'='.repeat(50)}`);
+  console.log(`TOTAL: Synced: ${totalSynced}, Failed: ${totalFailed}`);
+  console.log(`${'='.repeat(50)}`);
   process.exit(0);
 }
 
