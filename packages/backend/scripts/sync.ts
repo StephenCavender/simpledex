@@ -40,6 +40,9 @@ async function syncPokemon(id: number) {
       isHidden: a.is_hidden,
     })),
     speciesId: speciesData.id,
+    generationId: speciesData.generation?.url
+      ? parseInt(speciesData.generation.url.split("/").filter(Boolean).pop())
+      : undefined,
   };
 
   const chainUrl = speciesData.evolution_chain?.url;
@@ -87,11 +90,13 @@ async function main() {
   const args = process.argv.slice(2);
   const limitArg = args.find(arg => arg.startsWith('--limit='));
   const limit = limitArg ? parseInt(limitArg.split('=')[1]) : undefined;
+  const force = args.includes('--force');
   const delayMs = 30_000; // 30 seconds between requests
 
   console.log(`Syncing Pokemon from PokeAPI to Convex...`);
   console.log(`URL: ${convexUrl}`);
   console.log(`Delay between requests: ${delayMs / 1000}s`);
+  console.log(`Force re-sync: ${force}`);
   if (limit) console.log(`Limit: ${limit} Pokemon`);
 
   // Test connection first
@@ -103,6 +108,19 @@ async function main() {
     console.error("✗ Convex connection failed:", e);
     console.error("Make sure you're running from packages/backend with convex dev running");
     process.exit(1);
+  }
+
+  // Fetch existing Pokemon to skip
+  let existingIds = new Set<number>();
+  if (!force) {
+    console.log("\nFetching existing Pokemon from Convex...");
+    try {
+      const existing = await client.query(api => api.pokemon.list({ limit: 10000 }));
+      existing.pokemon.forEach((p: any) => existingIds.add(p.id));
+      console.log(`✓ Found ${existingIds.size} existing Pokemon in Convex`);
+    } catch (e) {
+      console.error("✗ Failed to fetch existing data:", e);
+    }
   }
 
   // Fetch full Pokemon list
@@ -117,13 +135,20 @@ async function main() {
   }
 
   const toSync = limit ? pokemonList.slice(0, limit) : pokemonList;
-  console.log(`\nSyncing ${toSync.length} Pokemon...\n`);
+  const toActuallySync = force ? toSync : toSync.filter((entry: any) => {
+    const id = parseInt(entry.url.split("/").filter(Boolean).pop());
+    return !existingIds.has(id);
+  });
+
+  console.log(`\nTotal in range: ${toSync.length}`);
+  console.log(`To sync (new): ${toActuallySync.length}`);
+  console.log(`Skipping (existing): ${toSync.length - toActuallySync.length}\n`);
 
   let synced = 0;
   let failed = 0;
 
-  for (let i = 0; i < toSync.length; i++) {
-    const pokemonEntry = toSync[i];
+  for (let i = 0; i < toActuallySync.length; i++) {
+    const pokemonEntry = toActuallySync[i];
     // Extract ID from URL like "https://pokeapi.co/api/v2/pokemon/1/"
     const id = parseInt(pokemonEntry.url.split("/").filter(Boolean).pop());
 
@@ -131,15 +156,15 @@ async function main() {
       const { pokemon, species } = await syncPokemon(id);
       await client.mutation(api => api.pokemon.ingestPokemon, { pokemon, species });
       synced++;
-      console.log(`✓ ${synced}/${toSync.length}: ${pokemon.name} (ID: ${id})`);
+      console.log(`✓ ${synced}/${toActuallySync.length}: ${pokemon.name} (ID: ${id})`);
     } catch (e: any) {
       failed++;
-      console.error(`✗ ${i + 1}/${toSync.length}: Failed to sync ID ${id}:`, e.message);
+      console.error(`✗ ${i + 1}/${toActuallySync.length}: Failed to sync ID ${id}:`, e.message);
     }
 
     // Delay before next request (skip delay after last item)
-    if (i < toSync.length - 1) {
-      const remaining = toSync.length - synced - failed;
+    if (i < toActuallySync.length - 1) {
+      const remaining = toActuallySync.length - synced - failed;
       console.log(`  Waiting ${delayMs / 1000}s... (${remaining} remaining)\n`);
       await sleep(delayMs);
     }
@@ -155,7 +180,7 @@ async function main() {
     console.error("✗ Types:", e.message);
   }
 
-  console.log(`\nDone! Synced: ${synced}, Failed: ${failed}`);
+  console.log(`\nDone! Synced: ${synced}, Failed: ${failed}, Skipped: ${toSync.length - toActuallySync.length}`);
   process.exit(0);
 }
 
