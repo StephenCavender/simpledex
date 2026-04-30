@@ -6,8 +6,8 @@ node_modules
 # Build outputs
 dist
 build
-_site
 _site/
+apps/marketing/_site/
 *.tsbuildinfo
 
 # Convex generated
