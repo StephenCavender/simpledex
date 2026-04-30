@@ -16,9 +16,14 @@ export const list = query({
     search: v.optional(v.string()),
     limit: v.optional(v.number()),
     cursor: v.optional(v.string()),
+    generation: v.optional(v.number()),
   },
-  handler: async ({ db }, { type, search, limit = 50, cursor }) => {
+  handler: async ({ db }, { type, search, limit = 50, cursor, generation }) => {
     let results = await db.query("pokemon").take(1000);
+
+    if (generation) {
+      results = results.filter((p) => p.generationId === generation);
+    }
 
     if (type) {
       results = results.filter((p) => p.types.includes(type.toLowerCase()));

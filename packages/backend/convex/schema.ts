@@ -23,10 +23,12 @@ export default defineSchema({
       }),
     ),
     speciesId: v.number(),
+    generationId: v.optional(v.number()),
   })
     .index("by_name", ["name"])
     .index("by_speciesId", ["speciesId"])
-    .index("by_type", ["types"]),
+    .index("by_type", ["types"])
+    .index("by_generationId", ["generationId"]),
 
   species: defineTable({
     id: v.number(),
