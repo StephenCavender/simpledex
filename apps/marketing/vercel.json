@@ -1,5 +1,5 @@
 {
-  "buildCommand": "bun run build",
+  "buildCommand": "turbo run build --filter=marketing",
   "outputDirectory": "_site",
   "devCommand": "bun run dev:marketing",
   "installCommand": "echo 'Skipping install - using git'",
