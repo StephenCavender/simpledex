@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd .. && bun run build",
+  "buildCommand": "bun run build",
   "outputDirectory": "_site",
   "devCommand": "bun run dev:marketing",
-  "installCommand": "cd .. && bun install",
+  "installCommand": "echo 'Skipping install - using git'",
   "framework": null
 }
