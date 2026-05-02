@@ -1,7 +1,5 @@
 {
-  "buildCommand": "npx turbo run build --filter=marketing",
-  "outputDirectory": "_site",
-  "devCommand": "bun run dev:marketing",
   "installCommand": "bun install",
-  "framework": null
+  "buildCommand": "bunx turbo run build --filter=marketing",
+  "outputDirectory": "apps/marketing/_site"
 }

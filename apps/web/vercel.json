@@ -1,7 +1,5 @@
-{
-  "buildCommand": "npx turbo run build --filter=web",
-  "outputDirectory": "dist",
-  "devCommand": "bun run dev",
+  {
   "installCommand": "bun install",
-  "framework": null
+  "buildCommand": "bunx turbo run build --filter=web",
+  "outputDirectory": "apps/web/dist"
 }
