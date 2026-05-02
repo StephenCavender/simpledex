@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd .. && turbo run build --filter=marketing",
+  "buildCommand": "npx turbo run build --filter=marketing",
   "outputDirectory": "_site",
   "devCommand": "bun run dev:marketing",
-  "installCommand": "cd .. && bun install",
+  "installCommand": "bun install",
   "framework": null
 }
