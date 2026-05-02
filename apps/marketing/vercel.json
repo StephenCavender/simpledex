@@ -1,7 +1,7 @@
 {
-  "buildCommand": "turbo run build --filter=marketing",
+  "buildCommand": "cd .. && turbo run build --filter=marketing",
   "outputDirectory": "_site",
   "devCommand": "bun run dev:marketing",
-  "installCommand": "echo 'Skipping install - using git'",
+  "installCommand": "cd .. && bun install",
   "framework": null
 }
