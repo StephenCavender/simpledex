@@ -1,14 +1,11 @@
 {
   "name": "simpledex",
   "private": true,
-  "workspaces": {
-    "apps": [
-      "apps/*"
-    ],
-    "packages": [
-      "packages/*"
-    ]
-  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+  ,
   "catalog": {
     "dotenv": "^17.2.2",
     "zod": "^4.1.13",
