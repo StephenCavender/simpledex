@@ -1,3 +1,7 @@
 node_modules/
 packages/*/node_modules/
-*.lock
+
+# ignore other lockfiles, but NOT bun
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
