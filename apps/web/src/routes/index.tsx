@@ -103,7 +103,11 @@ function HomeComponent() {
 
   useEffect(() => {
     if (pokemonData?.pokemon) {
-      setAllPokemon((prev) => [...prev, ...pokemonData.pokemon]);
+      setAllPokemon((prev) => {
+        const existingIds = new Set(prev.map((p: any) => p.id));
+        const newPokemon = pokemonData.pokemon.filter((p: any) => !existingIds.has(p.id));
+        return [...prev, ...newPokemon];
+      });
     }
   }, [pokemonData]);
 
