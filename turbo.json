@@ -23,6 +23,9 @@
     "dev:setup": {
       "cache": false,
       "persistent": true
+    },
+    "@simpledex/backend#build": {
+      "outputs": []
     }
   },
   "globalEnv": ["VITE_CONVEX_URL", "CONVEX_DEPLOY_KEY"]
