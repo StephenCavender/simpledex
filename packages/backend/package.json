@@ -6,7 +6,9 @@
   "author": "",
   "scripts": {
     "dev": "convex dev",
-    "dev:setup": "convex dev --configure --until-success"
+    "dev:setup": "convex dev --configure --until-success",
+    "codegen": "convex codegen",
+    "build": "echo 'noop'"
   },
   "dependencies": {
     "convex": "catalog:",
