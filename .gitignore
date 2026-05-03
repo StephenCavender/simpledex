@@ -10,6 +10,25 @@ _site/
 apps/marketing/_site/
 *.tsbuildinfo
 
+# Compiled JS output (from TypeScript)
+apps/web/src/*.js
+apps/web/src/**/*.js
+apps/web/src/*.js.map
+apps/web/src/**/*.js.map
+packages/backend/*.js
+packages/backend/**/*.js
+packages/backend/*.js.map
+packages/backend/**/*.js.map
+packages/env/src/*.js
+packages/env/src/**/*.js
+packages/ui/src/*.js
+packages/ui/src/**/*.js
+packages/ui/src/*.js.map
+packages/ui/src/**/*.js.map
+apps/web/*.js
+apps/web/vite.config.js
+apps/web/vitest.config.js
+
 # Convex generated
 packages/*/convex/_generated/
 apps/*/convex/_generated/
