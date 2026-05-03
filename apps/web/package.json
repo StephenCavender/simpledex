@@ -14,6 +14,7 @@
     "generate-pwa-assets": "pwa-assets-generator"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.61.3",
     "@hookform/resolvers": "^5.2.2",
     "@simpledex/backend": "workspace:*",
     "@simpledex/env": "workspace:*",
