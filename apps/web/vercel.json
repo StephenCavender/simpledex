@@ -1,5 +1,5 @@
   {
   "installCommand": "bun install",
-  "buildCommand": "bunx turbo run build --filter=web",
+  "buildCommand": "bunx turbo run build --filter=@simpledex/web",
   "outputDirectory": "apps/web/dist"
 }
