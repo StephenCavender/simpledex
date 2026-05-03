@@ -26,15 +26,11 @@ function AdminComponent() {
   const totalSynced = allPokemon?.pokemon?.length || 0;
 
   const genCounts = GENERATIONS.map((gen) => {
-    const count = allPokemon?.pokemon?.filter(
-      (p: any) => p.generationId === gen.id
-    ).length || 0;
+    const count = allPokemon?.pokemon?.filter((p: any) => p.generationId === gen.id).length || 0;
     return { ...gen, synced: count };
   });
 
-  const filteredCounts = genFilter
-    ? genCounts.filter((g) => g.id === genFilter)
-    : genCounts;
+  const filteredCounts = genFilter ? genCounts.filter((g) => g.id === genFilter) : genCounts;
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-6">
@@ -63,9 +59,7 @@ function AdminComponent() {
       <div className="mb-4">
         <select
           value={genFilter || ""}
-          onChange={(e) =>
-            setGenFilter(e.target.value ? parseInt(e.target.value) : null)
-          }
+          onChange={(e) => setGenFilter(e.target.value ? parseInt(e.target.value) : null)}
           className="h-10 rounded-lg border bg-background px-4 text-sm outline-none"
         >
           <option value="">All Generations</option>
@@ -84,15 +78,10 @@ function AdminComponent() {
         </div>
         <div className="divide-y">
           {filteredCounts.map((gen) => (
-            <div
-              key={gen.id}
-              className="flex items-center justify-between px-4 py-3"
-            >
+            <div key={gen.id} className="flex items-center justify-between px-4 py-3">
               <div>
                 <p className="font-medium">{gen.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  IDs: {gen.range}
-                </p>
+                <p className="text-sm text-muted-foreground">IDs: {gen.range}</p>
               </div>
               <div className="text-right">
                 <p className="font-medium">
@@ -108,10 +97,7 @@ function AdminComponent() {
                           : "bg-gray-300"
                     }`}
                     style={{
-                      width: `${Math.min(
-                        (gen.synced / gen.count) * 100,
-                        100
-                      )}%`,
+                      width: `${Math.min((gen.synced / gen.count) * 100, 100)}%`,
                     }}
                   />
                 </div>
@@ -125,38 +111,31 @@ function AdminComponent() {
       <div className="mt-6 rounded-lg border bg-card p-6">
         <h2 className="mb-3 font-semibold">How to Sync</h2>
         <p className="mb-4 text-sm text-muted-foreground">
-          Run the sync script from the backend directory. Use --limit to specify
-          how many Pokemon to sync (by ID range).
+          Run the sync script from the backend directory. Use --limit to specify how many Pokemon to
+          sync (by ID range).
         </p>
         <div className="space-y-2 text-sm">
           <p>
             <code className="rounded bg-muted px-2 py-1">
               bun packages/backend/scripts/sync.ts --limit=251
             </code>
-            <span className="ml-2 text-muted-foreground">
-              (syncs Gen 1-2)
-            </span>
+            <span className="ml-2 text-muted-foreground">(syncs Gen 1-2)</span>
           </p>
           <p>
             <code className="rounded bg-muted px-2 py-1">
               bun packages/backend/scripts/sync.ts --limit=1025
             </code>
-            <span className="ml-2 text-muted-foreground">
-              (syncs all generations)
-            </span>
+            <span className="ml-2 text-muted-foreground">(syncs all generations)</span>
           </p>
           <p>
             <code className="rounded bg-muted px-2 py-1">
               bun packages/backend/scripts/sync.ts --limit=251 --force
             </code>
-            <span className="ml-2 text-muted-foreground">
-              (force re-sync)
-            </span>
+            <span className="ml-2 text-muted-foreground">(force re-sync)</span>
           </p>
         </div>
         <p className="mt-4 text-xs text-muted-foreground">
-          Note: 30s delay between each Pokemon to avoid rate limiting.
-          A full sync takes ~8.5 hours.
+          Note: 30s delay between each Pokemon to avoid rate limiting. A full sync takes ~8.5 hours.
         </p>
       </div>
     </div>

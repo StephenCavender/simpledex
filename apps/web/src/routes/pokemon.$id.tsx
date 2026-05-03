@@ -2,7 +2,26 @@ import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useAction } from "convex/react";
 import { useEffect, useState, type ReactNode, type ComponentType } from "react";
-import { ArrowLeft, Info, Zap, Flame as Fire, Droplets as Water, Leaf as Grass, Snowflake as Ice, Mountain, Bug, Ghost, Skull, Brain, Bird, Biohazard, Anvil, Sparkles, Circle, Swords } from "lucide-react";
+import {
+  ArrowLeft,
+  Info,
+  Zap,
+  Flame as Fire,
+  Droplets as Water,
+  Leaf as Grass,
+  Snowflake as Ice,
+  Mountain,
+  Bug,
+  Ghost,
+  Skull,
+  Brain,
+  Bird,
+  Biohazard,
+  Anvil,
+  Sparkles,
+  Circle,
+  Swords,
+} from "lucide-react";
 
 export const Route = createFileRoute("/pokemon/$id")({
   component: PokemonDetail,
@@ -58,7 +77,7 @@ function PokemonDetail() {
 
   const evolutionData = useQuery(
     evolutionChainId ? api.pokemon.getEvolutionChain : undefined,
-    evolutionChainId ? { id: evolutionChainId } : undefined
+    evolutionChainId ? { id: evolutionChainId } : undefined,
   );
 
   const fetchEvolution = useAction(api.pokemon.fetchEvolutionChain);
@@ -105,17 +124,21 @@ function PokemonDetail() {
               <img
                 src={node.sprite}
                 alt={node.species}
-                className={`h-20 w-20 object-contain hover:scale-110 transition-transform ${isCurrent ? 'ring-2 ring-primary rounded-full' : ''}`}
+                className={`h-20 w-20 object-contain hover:scale-110 transition-transform ${isCurrent ? "ring-2 ring-primary rounded-full" : ""}`}
               />
             </Link>
           )}
           <p className="text-sm capitalize mt-1">{node.species}</p>
           {node.method && <p className="text-xs text-muted-foreground">{node.method}</p>}
-        </div>
+        </div>,
       );
       if (node.evolvesTo?.length) {
         node.evolvesTo.forEach((ev: any) => {
-          nodes.push(<span key={`arrow-${node.id}-${ev.id}`} className="text-2xl mx-1">→</span>);
+          nodes.push(
+            <span key={`arrow-${node.id}-${ev.id}`} className="text-2xl mx-1">
+              →
+            </span>,
+          );
           traverse(ev);
         });
       }
@@ -131,7 +154,10 @@ function PokemonDetail() {
   if (pokemon === undefined) {
     return (
       <div className="container mx-auto max-w-4xl px-4 py-6">
-        <a href="/" className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
+        <a
+          href="/"
+          className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+        >
           <ArrowLeft className="mr-1 h-4 w-4" />
           Back
         </a>
@@ -143,7 +169,10 @@ function PokemonDetail() {
   if (!pokemon) {
     return (
       <div className="container mx-auto max-w-4xl px-4 py-6">
-        <a href="/" className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
+        <a
+          href="/"
+          className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+        >
           <ArrowLeft className="mr-1 h-4 w-4" />
           Back
         </a>
@@ -157,18 +186,27 @@ function PokemonDetail() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-6">
       <div className="flex items-center justify-between mb-4">
-        <a href="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
+        <a
+          href="/"
+          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+        >
           <ArrowLeft className="mr-1 h-4 w-4" />
           Back
         </a>
         <div className="flex gap-2">
           {prevId && (
-            <a href={`/pokemon/${prevId}`} className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80">
+            <a
+              href={`/pokemon/${prevId}`}
+              className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
+            >
               ← Prev
             </a>
           )}
           {nextId && (
-            <a href={`/pokemon/${nextId}`} className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80">
+            <a
+              href={`/pokemon/${nextId}`}
+              className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
+            >
               Next →
             </a>
           )}
@@ -177,7 +215,9 @@ function PokemonDetail() {
 
       <div className="rounded-lg border bg-card p-6">
         <div className="mb-6 text-center">
-          <p className="mb-1 text-sm text-muted-foreground">#{String(pokemon.id).padStart(3, "0")}</p>
+          <p className="mb-1 text-sm text-muted-foreground">
+            #{String(pokemon.id).padStart(3, "0")}
+          </p>
           <h1 className="mb-4 text-4xl font-bold capitalize">{pokemon.name}</h1>
           <div className="flex justify-center gap-2">
             {pokemon.types.map((type) => {
@@ -197,17 +237,9 @@ function PokemonDetail() {
 
         <div className="mb-8 flex justify-center">
           {pokemon.artwork ? (
-            <img
-              src={pokemon.artwork}
-              alt={pokemon.name}
-              className="h-48 w-48 object-contain"
-            />
+            <img src={pokemon.artwork} alt={pokemon.name} className="h-48 w-48 object-contain" />
           ) : pokemon.sprite ? (
-            <img
-              src={pokemon.sprite}
-              alt={pokemon.name}
-              className="h-48 w-48 object-contain"
-            />
+            <img src={pokemon.sprite} alt={pokemon.name} className="h-48 w-48 object-contain" />
           ) : (
             <div className="flex h-48 w-48 items-center justify-center text-muted-foreground">
               <Info className="h-16 w-16" />
@@ -277,7 +309,9 @@ function PokemonDetail() {
           <div className="mt-6">
             <h2 className="text-lg font-semibold mb-3">Evolutions</h2>
             {evolutionError ? (
-              <p className="text-sm text-destructive">Failed to load evolutions: {evolutionError}</p>
+              <p className="text-sm text-destructive">
+                Failed to load evolutions: {evolutionError}
+              </p>
             ) : evolutionData?.chain ? (
               <div className="flex items-center gap-2 flex-wrap">
                 {renderEvolutionChain(evolutionData.chain, pokemonId)}
