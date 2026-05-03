@@ -34,14 +34,10 @@ export const list = query({
       results = results.filter((p) => p.name.includes(s));
     }
 
-    const startIndex = cursor
-      ? results.findIndex((p) => p._id === cursor) + 1
-      : 0;
+    const startIndex = cursor ? results.findIndex((p) => p._id === cursor) + 1 : 0;
     const paginated = results.slice(startIndex, startIndex + limit);
     const nextCursor =
-      startIndex + limit < results.length
-        ? paginated[paginated.length - 1]?._id
-        : undefined;
+      startIndex + limit < results.length ? paginated[paginated.length - 1]?._id : undefined;
 
     return {
       pokemon: paginated,
@@ -53,7 +49,10 @@ export const list = query({
 export const getById = query({
   args: { id: v.number() },
   handler: async ({ db }, { id }) => {
-    return db.query("pokemon").filter((q) => q.eq(q.field("id"), id)).first();
+    return db
+      .query("pokemon")
+      .filter((q) => q.eq(q.field("id"), id))
+      .first();
   },
 });
 
@@ -70,7 +69,10 @@ export const getByName = query({
 export const getSpecies = query({
   args: { id: v.number() },
   handler: async ({ db }, { id }) => {
-    return db.query("species").filter((q) => q.eq(q.field("id"), id)).first();
+    return db
+      .query("species")
+      .filter((q) => q.eq(q.field("id"), id))
+      .first();
   },
 });
 
@@ -214,7 +216,7 @@ export const fetchEvolutionChain = action({
 const simplifyEvolutionChain = (chain: any): any => {
   const extractSpeciesId = (url: string): number => {
     const match = url.match(/\/(\d+)\/$/);
-    return match ? parseInt(match[1], 10) : 1;
+    return match?.[1] ? parseInt(match[1], 10) : 1;
   };
 
   const getSprite = (id: number): string =>
