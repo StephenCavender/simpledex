@@ -25,5 +25,5 @@
       "persistent": true
     }
   },
-  "globalEnv": ["VITE_CONVEX_URL"]
+  "globalEnv": ["VITE_CONVEX_URL", "CONVEX_DEPLOY_KEY"]
 }
