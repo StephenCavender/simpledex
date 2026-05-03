@@ -23,14 +23,14 @@ SimpleDex is a Pokemon reference app with a React web frontend, Eleventy marketi
 
 ## Where to Look
 
-| Task | Location |
-|------|----------|
-| Add a page/route | `apps/web/src/routes/` (TanStack Router) |
-| Add a component | `apps/web/src/components/` |
-| Add Convex function | `packages/backend/convex/` |
-| Add Convex schema | `packages/backend/convex/schema.ts` |
-| Add types | inline or `packages/backend/` |
-| Add env vars | `.env.local` (never commit) |
+| Task                | Location                                 |
+| ------------------- | ---------------------------------------- |
+| Add a page/route    | `apps/web/src/routes/` (TanStack Router) |
+| Add a component     | `apps/web/src/components/`               |
+| Add Convex function | `packages/backend/convex/`               |
+| Add Convex schema   | `packages/backend/convex/schema.ts`      |
+| Add types           | inline or `packages/backend/`            |
+| Add env vars        | `.env.local` (never commit)              |
 
 ## Development
 
@@ -44,6 +44,7 @@ bun run lint         # Check linting (if configured)
 ## Coding Standards
 
 **React**
+
 - React Compiler enabled - avoid manual `useMemo`/`useCallback`
 - Functional components only
 - Colocate code that changes together
@@ -52,17 +53,20 @@ bun run lint         # Check linting (if configured)
 - Use v4 Tailwind format with global CSS variables
 
 **TypeScript**
+
 - No `any` casts
 - No unnecessary try/catch
 - Explicit return types on exported functions
 
 **Functional Programming**
+
 - Prefer pure functions with no side effects
 - Use immutability — avoid mutating objects/arrays directly
 - Favor composition over inheritance
 - Leverage array methods (map, filter, reduce) over loops
 
 **Code Clarity**
+
 - Write code that is easily understood and maintained by human engineers
 - Prioritize clarity over cleverness — avoid terse or obscure patterns
 - Use descriptive variable and function names
@@ -70,6 +74,7 @@ bun run lint         # Check linting (if configured)
 - Prefer explicit logic over implicit behavior
 
 **General**
+
 - Indentation: 2 spaces, no tabs
 - Use descriptive names for variables and functions
 - Single responsibility per function
@@ -77,6 +82,7 @@ bun run lint         # Check linting (if configured)
 ## Git Workflow
 
 **Commit Standards** (Conventional Commits)
+
 ```
 feat(auth): add login with Convex
 fix(api): handle null user in profile query
@@ -86,12 +92,14 @@ chore(deps): upgrade bun to 1.x
 Types: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`
 
 **Rules**
+
 - Make **atomic commits** - one logical change per commit
 - **Never push without explicit instruction** from the user
 - Stage and commit related changes together
 - Write clear, concise commit messages describing the "why"
 
 **Commands**
+
 ```bash
 git status                    # Check what's changed
 git add <specific-files>       # Stage related changes

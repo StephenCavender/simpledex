@@ -3,50 +3,61 @@
 ## Features
 
 ### Error Handling
+
 - [x] Add error handling UI for failed PokeAPI fetches in fetchEvolutionChain action
 - [x] Show user-friendly error messages when data fails to load
 - [x] Implement retry logic for transient failures
 
 ### Search & Filtering
+
 - [x] Debounce the search field input to avoid excessive queries
 - [x] Add loading state while search is being processed
 
 ### Pagination
+
 - [x] Implement proper pagination for Pokemon list (currently returns up to 1000)
 - [x] Add "Load More" button
 
 ### PWA
+
 - [x] Test PWA offline functionality
 - [x] Verify service worker caches static assets properly
 
 ## Technical Debt
 
 ### TypeScript
+
 - [x] Remove `--typecheck disable` from convex dev script once Node.js version is updated
 - [x] Enable strict TypeScript mode and fix any resulting type errors
 
 ### Testing
+
 - [x] Add unit tests for Convex functions
 - [x] Add integration tests for web app
 
 ### Deployment
+
 - [ ] Set up production deployment (Vercel/Cloudflare for web, Convex for backend)
 - [ ] Configure environment variables for production
 
 ## Nice to Have
+
 - [x] Show Pokemon types with color-coded badges
 - [x] Add share functionality for Pokemon detail pages
 - [ ] Add favorites/watchlist feature (requires auth)
 - [x] Support for more than Gen 1 Pokemon (currently 151)
 
 ## Admin
+
 - [x] Add generation filter to Pokemon list
 - [x] Add generation combobox (Gen I-IX)
 - [x] Create admin dashboard route (/admin)
 - [ ] Add user management to admin (requires auth)
 
 ## Bugs
+
 - [x] Fix "Unterminated regular expression" parse error in pokemon.$id.tsx
 
 ## Marketing
+
 - [x] Update copyright on marketing page to Stephen Cavender, current year, link to https://cavender.foo
