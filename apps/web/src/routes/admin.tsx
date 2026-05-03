@@ -1,7 +1,8 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { useState } from "react";
+import { useUser } from "@clerk/clerk-react";
 
 export const Route = createFileRoute("/admin")({
   component: AdminComponent,
@@ -20,8 +21,33 @@ const GENERATIONS = [
 ];
 
 function AdminComponent() {
+  const user = useUser();
+  const navigate = useNavigate();
   const allPokemon = useQuery(api.pokemon.list, { limit: 10000 });
   const [genFilter, setGenFilter] = useState<number | null>(null);
+
+  // Restrict access to steve only
+  if (user && user.user?.username !== "steve") {
+    return (
+      <div className="container mx-auto max-w-4xl px-4 py-6">
+        <div className="rounded-lg border bg-card p-6 text-center">
+          <h1 className="mb-2 text-2xl font-bold">Access Denied</h1>
+          <p className="mb-4 text-muted-foreground">
+            The admin page is restricted to authorized users only.
+          </p>
+          <Link to="/" className="text-sm text-primary hover:underline">
+            ← Back to Pokemon
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect if not logged in
+  if (!user) {
+    navigate({ to: "/" });
+    return null;
+  }
 
   const totalSynced = allPokemon?.pokemon?.length || 0;
 
@@ -117,19 +143,25 @@ function AdminComponent() {
         <div className="space-y-2 text-sm">
           <p>
             <code className="rounded bg-muted px-2 py-1">
-              bun packages/backend/scripts/sync.ts --limit=251
+              bun packages/backend/scripts/sync.ts --gen=1,2
             </code>
             <span className="ml-2 text-muted-foreground">(syncs Gen 1-2)</span>
           </p>
           <p>
             <code className="rounded bg-muted px-2 py-1">
-              bun packages/backend/scripts/sync.ts --limit=1025
+              bun packages/backend/scripts/sync.ts --gen=1,2,3,4,5,6,7,8,9
             </code>
             <span className="ml-2 text-muted-foreground">(syncs all generations)</span>
           </p>
           <p>
             <code className="rounded bg-muted px-2 py-1">
-              bun packages/backend/scripts/sync.ts --limit=251 --force
+              bun packages/backend/scripts/sync.ts --test
+            </code>
+            <span className="ml-2 text-muted-foreground">(syncs starter Pokemon 1-9)</span>
+          </p>
+          <p>
+            <code className="rounded bg-muted px-2 py-1">
+              bun packages/backend/scripts/sync.ts --gen=1,2 --force
             </code>
             <span className="ml-2 text-muted-foreground">(force re-sync)</span>
           </p>
