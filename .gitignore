@@ -32,6 +32,7 @@ apps/web/vitest.config.js
 # Convex generated
 packages/*/convex/_generated/
 apps/*/convex/_generated/
+out/
 
 # Convex AI/agents
 packages/backend/.agents/
