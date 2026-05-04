@@ -100,6 +100,7 @@ async function main() {
   const args = process.argv.slice(2);
   const force = args.includes("--force");
   const testMode = args.includes("--test");
+  const clearMode = args.includes("--clear");
 
   console.log(`Syncing Pokemon from PokeAPI to Convex...`);
   console.log(`URL: ${convexUrl}\n`);
@@ -112,6 +113,67 @@ async function main() {
   } catch (e) {
     console.error("✗ Convex connection failed:", e);
     process.exit(1);
+  }
+
+  // Clear all data if --clear flag is set
+  if (clearMode) {
+    console.log("🧹 CLEAR MODE: Wiping all data...\n");
+    try {
+      const result = await client.mutation(api.pokemon.clearAll);
+      console.log(`✓ Deleted ${result.deleted} records\n`);
+    } catch (e: any) {
+      console.error("✗ Failed to clear data:", e.message);
+      process.exit(1);
+    }
+  }
+
+  // Test mode: sync only starter Pokemon from each generation
+  if (testMode) {
+    // Starter Pokemon IDs (Grass/Fire/Water starters + their evolutions)
+    const starterIds = [
+      1,
+      2,
+      3, // Bulbasaur line
+      4,
+      5,
+      6, // Charmander line
+      7,
+      8,
+      9, // Squirtle line
+      152,
+      153,
+      154, // Chikorita line
+      155,
+      156,
+      157, // Cyndaquil line
+      158,
+      159,
+      160, // Totodile line
+      252,
+      253,
+      254, // Treecko line
+      255,
+      256,
+      257, // Torchic line
+      258,
+      259,
+      260, // Mudkip line
+    ];
+
+    console.log(`🧪 TEST MODE: Syncing ${starterIds.length} starter Pokemon only\n`);
+
+    for (const id of starterIds) {
+      try {
+        const { pokemon, species } = await syncPokemon(id);
+        await client.mutation(api.pokemon.ingestPokemon, { pokemon, species });
+        console.log(`✓ ${pokemon.name} (ID: ${id})`);
+      } catch (e: any) {
+        console.error(`✗ [${id}] Failed:`, e.message);
+      }
+      await sleep(1000); // 1s delay in test mode
+    }
+    console.log("\n✓ Test sync complete!");
+    process.exit(0);
   }
 
   // Test mode: sync only Pokemon 1-9 (starters + evolutions)

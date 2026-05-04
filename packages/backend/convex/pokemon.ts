@@ -22,19 +22,19 @@ export const list = query({
     let results = await db.query("pokemon").take(1000);
 
     if (generation) {
-      results = results.filter((p) => p.generationId === generation);
+      results = results.filter((p: any) => p.generationId === generation);
     }
 
     if (type) {
-      results = results.filter((p) => p.types.includes(type.toLowerCase()));
+      results = results.filter((p: any) => p.types.includes(type.toLowerCase()));
     }
 
     if (search) {
       const s = search.toLowerCase();
-      results = results.filter((p) => p.name.includes(s));
+      results = results.filter((p: any) => p.name.includes(s));
     }
 
-    const startIndex = cursor ? results.findIndex((p) => p._id === cursor) + 1 : 0;
+    const startIndex = cursor ? results.findIndex((p: any) => p._id === cursor) + 1 : 0;
     const paginated = results.slice(startIndex, startIndex + limit);
     const nextCursor =
       startIndex + limit < results.length ? paginated[paginated.length - 1]?._id : undefined;
@@ -61,27 +61,17 @@ export const getByName = query({
   handler: async ({ db }, { name }) => {
     return db
       .query("pokemon")
-      .filter((q) => q.eq(q.field("name"), name.toLowerCase()))
+      .filter((q) => q.eq(q.field("name"), name))
       .first();
   },
 });
 
-export const getSpecies = query({
+export const getBySpeciesId = query({
   args: { id: v.number() },
   handler: async ({ db }, { id }) => {
     return db
-      .query("species")
-      .filter((q) => q.eq(q.field("id"), id))
-      .first();
-  },
-});
-
-export const getEvolutionChain = query({
-  args: { id: v.number() },
-  handler: async ({ db }, { id }) => {
-    return db
-      .query("evolutionChain")
-      .filter((q) => q.eq(q.field("id"), id))
+      .query("pokemon")
+      .filter((q) => q.eq(q.field("speciesId"), id))
       .first();
   },
 });
@@ -124,9 +114,9 @@ export const ingestPokemon = mutation({
       .first();
 
     if (existing) {
-      await db.patch(existing._id, pokemon);
+      await db.patch(existing._id, pokemon as any);
     } else {
-      await db.insert("pokemon", pokemon);
+      await db.insert("pokemon" as any, pokemon);
     }
 
     const existingSpecies = await db
@@ -135,9 +125,9 @@ export const ingestPokemon = mutation({
       .first();
 
     if (existingSpecies) {
-      await db.patch(existingSpecies._id, species);
+      await db.patch(existingSpecies._id, species as any);
     } else {
-      await db.insert("species", species);
+      await db.insert("species" as any, species);
     }
 
     return { success: true };
@@ -146,25 +136,19 @@ export const ingestPokemon = mutation({
 
 export const ingestTypes = mutation({
   args: {
-    types: v.array(
-      v.object({
-        id: v.number(),
-        name: v.string(),
-        damageRelations: v.any(),
-      }),
-    ),
+    types: v.array(v.object({ id: v.number(), name: v.string(), damageRelations: v.any() })),
   },
   handler: async ({ db }, { types }) => {
     for (const type of types) {
       const existing = await db
-        .query("types")
-        .filter((q) => q.eq(q.field("id"), type.id))
+        .query("types" as any)
+        .filter((q: any) => q.eq(q.field("id"), type.id))
         .first();
 
       if (existing) {
-        await db.patch(existing._id, type);
+        await db.patch(existing._id, { name: type.name, damageRelations: type.damageRelations });
       } else {
-        await db.insert("types", type);
+        await db.insert("types" as any, type);
       }
     }
 
@@ -173,23 +157,35 @@ export const ingestTypes = mutation({
 });
 
 export const ingestEvolutionChain = mutation({
-  args: {
-    id: v.number(),
-    chain: v.any(),
-  },
+  args: { id: v.number(), chain: v.any() },
   handler: async ({ db }, { id, chain }) => {
     const existing = await db
-      .query("evolutionChain")
-      .filter((q) => q.eq(q.field("id"), id))
+      .query("evolutionChain" as any)
+      .filter((q: any) => q.eq(q.field("id"), id))
       .first();
 
     if (existing) {
-      await db.patch(existing._id, { id, chain });
+      await db.patch(existing._id, { chain });
     } else {
-      await db.insert("evolutionChain", { id, chain });
+      await db.insert("evolutionChain" as any, { id, chain });
     }
 
     return { success: true };
+  },
+});
+
+export const clearAll = mutation({
+  handler: async ({ db }) => {
+    const tables = ["pokemon", "species", "evolutionChain", "types"];
+    let deleted = 0;
+    for (const table of tables) {
+      const docs = await db.query(table as any).collect();
+      for (const doc of docs) {
+        await db.delete(doc._id);
+        deleted++;
+      }
+    }
+    return { deleted };
   },
 });
 
