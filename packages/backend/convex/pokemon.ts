@@ -105,6 +105,7 @@ export const ingestPokemon = mutation({
       stats: v.array(v.object({ name: v.string(), value: v.number() })),
       abilities: v.array(v.object({ name: v.string(), isHidden: v.boolean() })),
       speciesId: v.number(),
+      generationId: v.optional(v.number()),
     }),
     species: v.object({
       id: v.number(),

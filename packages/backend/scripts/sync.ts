@@ -57,6 +57,9 @@ async function syncPokemon(id: number) {
       isHidden: a.is_hidden,
     })),
     speciesId: speciesData.id,
+    generationId: speciesData.generation?.url
+      ? parseInt(speciesData.generation.url.split("/").filter(Boolean).pop()!)
+      : undefined,
   };
 
   const chainUrl = speciesData.evolution_chain?.url;
