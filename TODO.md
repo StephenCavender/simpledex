@@ -41,9 +41,9 @@
 
 ## UI/UX
 
-- [ ] Add page transitions so clicking through Pokemon maintains app scroll position
-- [ ] Add skeleton loading states for smoother loading experience
-- [ ] Implement virtual scrolling for large Pokemon lists
+- [x] Add page transitions so clicking through Pokemon maintains app scroll position
+- [x] Add skeleton loading states for smoother loading experience
+- [x] Implement virtual scrolling for large Pokemon lists
 
 ## Bugs
 

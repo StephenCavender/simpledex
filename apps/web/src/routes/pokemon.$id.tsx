@@ -154,14 +154,26 @@ function PokemonDetail() {
   if (pokemon === undefined) {
     return (
       <div className="container mx-auto max-w-4xl px-4 py-6">
-        <a
-          href="/"
+        <Link
+          to="/"
           className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="mr-1 h-4 w-4" />
           Back
-        </a>
-        <div className="text-center py-12 text-muted-foreground">Loading...</div>
+        </Link>
+        <div className="space-y-4">
+          <div className="flex justify-center">
+            <div className="h-48 w-48 rounded bg-muted animate-pulse" />
+          </div>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="rounded-lg bg-muted p-4 animate-pulse">
+                <div className="h-4 w-16 mx-auto mb-2 rounded bg-background/50" />
+                <div className="h-6 w-24 mx-auto rounded bg-background/50" />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
