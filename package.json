@@ -16,7 +16,8 @@
     "codegen": "turbo run codegen",
     "ci:check": "rm -rf node_modules .turbo && bun install --frozen-lockfile && bun run build",
     "check-types": "turbo run check-types",
-    "test": "cd apps/web && bun test",
+    "test": "turbo run test",
+    "test:e2e": "turbo run e2e",
     "check": "oxlint && oxfmt --write && knip",
     "knip": "knip"
   },

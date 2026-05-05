@@ -16,6 +16,14 @@
     "check-types": {
       "dependsOn": ["^check-types"]
     },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "e2e": {
+      "dependsOn": ["@simpledex/web#build"],
+      "cache": false
+    },
     "dev": {
       "cache": false,
       "persistent": true
