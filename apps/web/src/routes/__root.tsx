@@ -1,8 +1,6 @@
-import { Toaster } from "@simpledex/ui/components/sonner";
+import { Toast } from "@simpledex/ui/components/sonner";
 import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-
-import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 
 import "../index.css";
@@ -14,11 +12,11 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
     meta: [
       {
-        title: "simpledex",
+        title: "SimpleDex",
       },
       {
         name: "description",
-        content: "simpledex is a web application",
+        content: "SimpleDex is a web application",
       },
     ],
     links: [

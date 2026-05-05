@@ -11,12 +11,9 @@
     "build": "echo 'noop'"
   },
   "dependencies": {
-    "convex": "catalog:",
-    "dotenv": "^17.4.2",
-    "zod": "catalog:"
+    "convex": "catalog:"
   },
   "devDependencies": {
-    "@simpledex/config": "workspace:*",
     "@types/node": "^25.6.0",
     "typescript": "catalog:"
   }
