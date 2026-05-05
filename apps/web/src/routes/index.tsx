@@ -168,15 +168,15 @@ function HomeComponent() {
           className="h-10 rounded-lg border bg-background px-4 text-sm outline-none"
         >
           <option value="">All Generations</option>
-          <option value="1">Gen I (Kanto)</option>
-          <option value="2">Gen II (Johto)</option>
-          <option value="3">Gen III (Hoenn)</option>
-          <option value="4">Gen IV (Sinnoh)</option>
-          <option value="5">Gen V (Unova)</option>
-          <option value="6">Gen VI (Kalos)</option>
-          <option value="7">Gen VII (Alola)</option>
-          <option value="8">Gen VIII (Galar)</option>
-          <option value="9">Gen IX (Paldea)</option>
+          <option value="1">Gen I (Kanto) — Red/Blue/Yellow</option>
+          <option value="2">Gen II (Johto) — Gold/Silver/Crystal</option>
+          <option value="3">Gen III (Hoenn) — Ruby/Sapphire/Emerald</option>
+          <option value="4">Gen IV (Sinnoh) — Diamond/Pearl/Platinum</option>
+          <option value="5">Gen V (Unova) — Black/White</option>
+          <option value="6">Gen VI (Kalos) — X/Y</option>
+          <option value="7">Gen VII (Alola) — Sun/Moon</option>
+          <option value="8">Gen VIII (Galar) — Sword/Shield</option>
+          <option value="9">Gen IX (Paldea) — Scarlet/Violet</option>
         </select>
       </div>
 
