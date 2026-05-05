@@ -8,8 +8,8 @@
 
 ### PWA
 
-- [ ] Add "Add to Home Screen" install prompt
-- [ ] Implement background sync for offline actions
+- [x] Add "Add to Home Screen" install prompt
+- [x] Implement background sync for offline actions
 
 ## Technical Debt
 
@@ -36,7 +36,7 @@
 
 ## Admin
 
-- [ ] Hide /admin page - restrict access to only steve
+- [x] Hide /admin page - restrict access to only steve
 - [ ] Add user management to admin (requires auth)
 
 ## UI/UX

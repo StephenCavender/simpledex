@@ -1,9 +1,11 @@
-import { Toast } from "@simpledex/ui/components/sonner";
+import { Toaster } from "@simpledex/ui/components/sonner";
 import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { ThemeProvider } from "@/components/theme-provider";
 
 import "../index.css";
+import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
+import { useBackgroundSync } from "@/hooks/use-background-sync";
 
 export interface RouterAppContext {}
 
@@ -29,6 +31,8 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootComponent() {
+  useBackgroundSync();
+
   return (
     <>
       <HeadContent />
@@ -39,10 +43,10 @@ function RootComponent() {
         storageKey="vite-ui-theme"
       >
         <div className="grid grid-rows-[auto_1fr] h-svh">
-          <Header />
           <Outlet />
         </div>
         <Toaster richColors />
+        <PWAInstallPrompt />
       </ThemeProvider>
       <TanStackRouterDevtools position="bottom-left" />
     </>

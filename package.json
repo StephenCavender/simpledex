@@ -1,23 +1,11 @@
 {
   "name": "simpledex",
-  "devDependencies": {
-    "@simpledex/config": "workspace:*",
-    "@types/node": "^25.6.0",
-    "knip": "^6.11.0",
-    "oxfmt": "^0.46.0",
-    "oxlint": "^1.61.0",
-    "turbo": "^2.8.12",
-    "typescript": "^6.0.3"
-  },
-  "catalog": {
-    "zod": "^4.1.13",
-    "typescript": "^6",
-    "next-themes": "^0.4.6",
-    "convex": "^1.33.1",
-    "@types/react-dom": "^19.2.3"
-  },
-  "packageManager": "bun@1.3.10",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
   "scripts": {
     "dev": "turbo run dev",
     "dev:web": "turbo run dev --filter=@simpledex/web",
@@ -32,9 +20,21 @@
     "check": "oxlint && oxfmt --write && knip",
     "knip": "knip"
   },
-  "type": "module",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "devDependencies": {
+    "@simpledex/config": "workspace:*",
+    "@types/node": "^25.6.0",
+    "knip": "^6.11.0",
+    "oxfmt": "^0.46.0",
+    "oxlint": "^1.61.0",
+    "turbo": "^2.8.12",
+    "typescript": "^6.0.3"
+  },
+  "packageManager": "bun@1.3.10",
+  "catalog": {
+    "zod": "^4.1.13",
+    "typescript": "^6",
+    "next-themes": "^0.4.6",
+    "convex": "^1.33.1",
+    "@types/react-dom": "^19.2.3"
+  }
 }
