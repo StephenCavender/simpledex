@@ -3,6 +3,7 @@ import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { ThemeProvider } from "@/components/theme-provider";
 
+import Header from "@/components/header";
 import "../index.css";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { useBackgroundSync } from "@/hooks/use-background-sync";
@@ -43,6 +44,7 @@ function RootComponent() {
         storageKey="vite-ui-theme"
       >
         <div className="grid grid-rows-[auto_1fr] h-svh">
+          <Header />
           <Outlet />
         </div>
         <Toaster richColors />

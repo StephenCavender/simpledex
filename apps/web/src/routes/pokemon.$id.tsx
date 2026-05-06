@@ -76,8 +76,8 @@ function PokemonDetail() {
   const evolutionChainId = species?.evolutionChainId;
 
   const evolutionData = useQuery(
-    evolutionChainId ? api.pokemon.getEvolutionChain : undefined,
-    evolutionChainId ? { id: evolutionChainId } : undefined,
+    api.pokemon.getEvolutionChain,
+    evolutionChainId ? { id: evolutionChainId } : "skip",
   );
 
   const fetchEvolution = useAction(api.pokemon.fetchEvolutionChain);

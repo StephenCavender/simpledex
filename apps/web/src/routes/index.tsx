@@ -1,8 +1,9 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import {
+  Search,
   Info,
   Zap,
   Flame as Fire,
@@ -21,7 +22,6 @@ import {
   Circle,
   Swords,
 } from "lucide-react";
-import { PokemonListSkeleton } from "@/components/pokemon-skeleton";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -68,37 +68,64 @@ const TYPE_COLORS: Record<string, string> = {
 };
 
 function HomeComponent() {
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedGen, setSelectedGen] = useState<number | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
+  const [cursor, setCursor] = useState<string | undefined>(undefined);
   const [allPokemon, setAllPokemon] = useState<any[]>([]);
-  const parentRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef(0);
 
   useEffect(() => {
     setAllPokemon([]);
-  }, [selectedType, selectedGen]);
+    setCursor(undefined);
+  }, [search, selectedType, selectedGen]);
+
+  useEffect(() => {
+    if (search !== debouncedSearch) {
+      setIsSearching(true);
+      const timer = setTimeout(() => {
+        setDebouncedSearch(search);
+        setIsSearching(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [search, debouncedSearch]);
 
   const pokemonData = useQuery(api.pokemon.list, {
-    search: "",
+    search: debouncedSearch || undefined,
     type: selectedType || undefined,
     limit: 50,
+    cursor,
     generation: selectedGen || undefined,
   });
 
   useEffect(() => {
     if (pokemonData?.pokemon) {
-      setAllPokemon((prev) => {
-        const existingIds = new Set(prev.map((p: any) => p.id));
-        const newPokemon = pokemonData.pokemon.filter((p: any) => !existingIds.has(p.id));
-        return [...prev, ...newPokemon];
-      });
+      setAllPokemon((prev) => [...prev, ...pokemonData.pokemon]);
     }
   }, [pokemonData]);
 
+  useEffect(() => {
+    if (scrollRef.current && allPokemon.length > 0) {
+      window.scrollTo(0, scrollRef.current);
+      scrollRef.current = 0;
+    }
+  }, [allPokemon.length]);
+
   const loadMore = useCallback(() => {
+    scrollRef.current = window.scrollY;
     if (pokemonData?.nextCursor) {
       setCursor(pokemonData.nextCursor);
     }
   }, [pokemonData]);
+
+  const handleSearchChange = useCallback((value: string) => {
+    setSearch(value);
+  }, []);
+
+  const types = useQuery(api.pokemon.listTypes);
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-6">
@@ -114,21 +141,38 @@ function HomeComponent() {
       </div>
 
       <div className="mb-6">
+        <div className="relative">
+          {isSearching ? (
+            <div className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin border-2 border-primary border-t-transparent rounded-full" />
+          ) : (
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          )}
+          <input
+            type="text"
+            placeholder="Search Pokemon..."
+            value={search}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            className="h-10 w-full rounded-lg border bg-background pl-10 pr-4 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/50"
+          />
+        </div>
+      </div>
+
+      <div className="mb-6">
         <select
           value={selectedGen || ""}
           onChange={(e) => setSelectedGen(e.target.value ? parseInt(e.target.value) : null)}
           className="h-10 rounded-lg border bg-background px-4 text-sm outline-none"
         >
           <option value="">All Generations</option>
-          <option value="1">Gen I (Kanto) — Red/Blue/Yellow</option>
-          <option value="2">Gen II (Johto) — Gold/Silver/Crystal</option>
-          <option value="3">Gen III (Hoenn) — Ruby/Sapphire/Emerald</option>
-          <option value="4">Gen IV (Sinnoh) — Diamond/Pearl/Platinum</option>
-          <option value="5">Gen V (Unova) — Black/White</option>
-          <option value="6">Gen VI (Kalos) — X/Y</option>
-          <option value="7">Gen VII (Alola) — Sun/Moon</option>
-          <option value="8">Gen VIII (Galar) — Sword/Shield</option>
-          <option value="9">Gen IX (Paldea) — Scarlet/Violet</option>
+          <option value="1">Gen I (Kanto)</option>
+          <option value="2">Gen II (Johto)</option>
+          <option value="3">Gen III (Hoenn)</option>
+          <option value="4">Gen IV (Sinnoh)</option>
+          <option value="5">Gen V (Unova)</option>
+          <option value="6">Gen VI (Kalos)</option>
+          <option value="7">Gen VII (Alola)</option>
+          <option value="8">Gen VIII (Galar)</option>
+          <option value="9">Gen IX (Paldea)</option>
         </select>
       </div>
 
@@ -159,85 +203,63 @@ function HomeComponent() {
       )}
 
       {!pokemonData ? (
-        <PokemonListSkeleton count={12} />
+        <div className="text-center py-12 text-muted-foreground">Loading...</div>
       ) : allPokemon.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">No Pokemon found</div>
       ) : (
         <>
-          <div ref={parentRef} className="h-[600px] overflow-auto">
-            <div
-              style={{
-                height: `${virtualizer.getTotalSize()}px`,
-                width: "100%",
-                position: "relative",
-              }}
-            >
-              {virtualizer.getVirtualItems().map((virtualItem) => {
-                const p = allPokemon[virtualItem.index];
-                return (
-                  <div
-                    key={p._id}
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
-                      height: `${virtualItem.size}px`,
-                      transform: `translateY(${virtualItem.start}px)`,
-                    }}
-                  >
-                    <a
-                      href={`/pokemon/${p.id}`}
-                      className="group block rounded-lg border bg-card p-4 transition-colors hover:bg-accent"
-                    >
-                      <div className="mb-2 text-center">
-                        {p.artwork ? (
-                          <img
-                            src={p.artwork}
-                            alt={p.name}
-                            className="mx-auto h-24 w-24 object-contain"
-                            loading="lazy"
-                          />
-                        ) : p.sprite ? (
-                          <img
-                            src={p.sprite}
-                            alt={p.name}
-                            className="mx-auto h-24 w-24 object-contain"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="mx-auto flex h-24 w-24 items-center justify-center text-muted-foreground">
-                            <Info className="h-8 w-8" />
-                          </div>
-                        )}
-                      </div>
-                      <div className="text-center">
-                        <span className="mb-1 block text-xs text-muted-foreground">
-                          #{String(p.id).padStart(3, "0")}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {allPokemon.map((p) => (
+              <a
+                key={p._id}
+                href={`/pokemon/${p.id}`}
+                className="group block rounded-lg border bg-card p-4 transition-colors hover:bg-accent"
+              >
+                <div className="mb-2 text-center">
+                  {p.artwork ? (
+                    <img
+                      src={p.artwork}
+                      alt={p.name}
+                      className="mx-auto h-24 w-24 object-contain"
+                      loading="lazy"
+                    />
+                  ) : p.sprite ? (
+                    <img
+                      src={p.sprite}
+                      alt={p.name}
+                      className="mx-auto h-24 w-24 object-contain"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="mx-auto flex h-24 w-24 items-center justify-center text-muted-foreground">
+                      <Info className="h-8 w-8" />
+                    </div>
+                  )}
+                </div>
+                <div className="text-center">
+                  <span className="mb-1 block text-xs text-muted-foreground">
+                    #{String(p.id).padStart(3, "0")}
+                  </span>
+                  <span className="block font-medium capitalize">{p.name}</span>
+                  <div className="mt-2 flex justify-center gap-1">
+                    {p.types.map((type: string) => {
+                      const Icon = TYPE_ICONS[type] || Info;
+                      return (
+                        <span
+                          key={type}
+                          className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium text-white ${TYPE_COLORS[type] || "bg-gray-400"}`}
+                        >
+                          <Icon className="mr-1 h-3 w-3" />
+                          {type}
                         </span>
-                        <span className="block font-medium capitalize">{p.name}</span>
-                        <div className="mt-2 flex justify-center gap-1">
-                          {p.types.map((type: string) => {
-                            const Icon = TYPE_ICONS[type] || Info;
-                            return (
-                              <span
-                                key={type}
-                                className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium text-white ${TYPE_COLORS[type] || "bg-gray-400"}`}
-                              >
-                                <Icon className="mr-1 h-3 w-3" />
-                                {type}
-                              </span>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </a>
+                      );
+                    })}
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              </a>
+            ))}
           </div>
-          {virtualizer.getVirtualItems().length < allPokemon.length && (
+          {pokemonData?.nextCursor && (
             <div className="mt-6 text-center">
               <button
                 onClick={loadMore}
