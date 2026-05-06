@@ -66,6 +66,30 @@ export const getByName = query({
   },
 });
 
+// Get a species by its id
+export const getSpecies = query({
+  args: { id: v.number() },
+  handler: async ({ db }, { id }) => {
+    return db
+      .query("species")
+      .filter((q) => q.eq(q.field("id"), id))
+      .first();
+  },
+});
+
+// Get an evolution chain by its id and return the chain data
+export const getEvolutionChain = query({
+  args: { id: v.number() },
+  handler: async ({ db }, { id }) => {
+    const existing = await db
+      .query("evolutionChain" as any)
+      .filter((q: any) => q.eq(q.field("id"), id))
+      .first();
+
+    return existing?.chain;
+  },
+});
+
 export const getBySpeciesId = query({
   args: { id: v.number() },
   handler: async ({ db }, { id }) => {
