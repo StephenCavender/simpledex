@@ -20,7 +20,7 @@
     "test:e2e": "turbo run e2e",
     "check": "oxlint && oxfmt --write && knip",
     "knip": "knip",
-    "deploy:preview": "vercel",
+     "deploy:preview": "vercel",
     "deploy:prod": "vercel --prod"
   },
   "devDependencies": {
