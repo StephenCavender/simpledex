@@ -257,9 +257,9 @@ function HomeComponent() {
                     })}
                   </div>
                 </div>
-              </a>
-            ))}
-          </div>
+              </Link>
+             ))}
+           </div>
           {pokemonData?.nextCursor && (
             <div className="mt-6 text-center">
               <button
