@@ -15,14 +15,15 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.3",
+    "@convex-dev/auth": "^0.0.92",
     "@simpledex/backend": "workspace:*",
     "@simpledex/env": "workspace:*",
     "@simpledex/ui": "workspace:*",
     "@tailwindcss/vite": "^4.2.2",
     "@tanstack/react-router": "^1.168.22",
-     "convex": "catalog:",
+    "convex": "catalog:",
     "lucide-react": "^1.8.0",
-     "next-themes": "catalog:",
+    "next-themes": "catalog:",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "vite-plugin-pwa": "^1.2.0"
@@ -32,11 +33,11 @@
     "@tanstack/router-plugin": "^1.167.22",
     "@types/node": "^22.13.14",
     "@types/react": "^19.2.14",
-     "@types/react-dom": "catalog:",
+    "@types/react-dom": "catalog:",
     "@vite-pwa/assets-generator": "^1.0.2",
     "@vitejs/plugin-react": "^6.0.1",
     "happy-dom": "^17.4.2",
-     "typescript": "catalog:",
+    "typescript": "catalog:",
     "vite": "^8.0.8",
     "vitest": "^3.0.0"
   }

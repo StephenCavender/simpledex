@@ -11,6 +11,8 @@
     "build": "echo 'noop'"
   },
   "dependencies": {
+    "@auth/core": "^0.34.3",
+    "@convex-dev/auth": "^0.0.92",
     "convex": "catalog:"
   },
   "devDependencies": {
