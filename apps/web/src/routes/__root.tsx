@@ -21,11 +21,23 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         name: "description",
         content: "SimpleDex is a web application",
       },
+      {
+        name: "apple-mobile-web-app-capable",
+        content: "yes",
+      },
+      {
+        name: "apple-mobile-web-app-status-bar-style",
+        content: "black-translucent",
+      },
     ],
     links: [
       {
         rel: "icon",
         href: "/favicon.ico",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "/apple-touch-icon-180x180.png",
       },
     ],
   }),
