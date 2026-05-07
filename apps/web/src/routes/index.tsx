@@ -1,5 +1,5 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { useState, useCallback, useEffect, useRef } from "react";
 import {
@@ -210,11 +210,12 @@ function HomeComponent() {
         <>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {allPokemon.map((p) => (
-              <a
-                key={p._id}
-                href={`/pokemon/${p.id}`}
-                className="group block rounded-lg border bg-card p-4 transition-colors hover:bg-accent"
-              >
+              <Link
+                 key={p._id}
+                 to="/pokemon/$id"
+                 params={{ id: String(p.id) }}
+                 className="group block rounded-lg border bg-card p-4 transition-colors hover:bg-accent"
+               >
                 <div className="mb-2 text-center">
                   {p.artwork ? (
                     <img

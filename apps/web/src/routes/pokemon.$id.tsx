@@ -181,16 +181,16 @@ function PokemonDetail() {
   if (!pokemon) {
     return (
       <div className="container mx-auto max-w-4xl px-4 py-6">
-        <a
-          href="/"
-          className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="mr-1 h-4 w-4" />
-          Back
-        </a>
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">Pokemon not found</p>
-        </div>
+        <Link
+           to="/"
+           className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+         >
+           <ArrowLeft className="mr-1 h-4 w-4" />
+           Back
+         </Link>
+         <div className="text-center py-12">
+           <p className="text-muted-foreground">Pokemon not found</p>
+         </div>
       </div>
     );
   }
@@ -198,30 +198,32 @@ function PokemonDetail() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-6">
       <div className="flex items-center justify-between mb-4">
-        <a
-          href="/"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="mr-1 h-4 w-4" />
-          Back
-        </a>
+        <Link
+           to="/"
+           className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+         >
+           <ArrowLeft className="mr-1 h-4 w-4" />
+           Back
+         </Link>
         <div className="flex gap-2">
-          {prevId && (
-            <a
-              href={`/pokemon/${prevId}`}
-              className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
-            >
-              ← Prev
-            </a>
-          )}
-          {nextId && (
-            <a
-              href={`/pokemon/${nextId}`}
-              className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
-            >
-              Next →
-            </a>
-          )}
+           {prevId && (
+             <Link
+               to="/pokemon/$id"
+               params={{ id: String(prevId) }}
+               className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
+             >
+               ← Prev
+             </Link>
+           )}
+           {nextId && (
+             <Link
+               to="/pokemon/$id"
+               params={{ id: String(nextId) }}
+               className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
+             >
+               Next →
+             </Link>
+           )}
         </div>
       </div>
 
