@@ -1,0 +1,6 @@
+{
+  "framework": "vite",
+  "outputDirectory": "dist",
+  "buildCommand": "cd ../../packages/backend && npx convex deploy --cmd 'cd ../../apps/web && vite build'",
+  "ignoredBuildStep": "npx turbo-ignore --fallback=HEAD^1"
+}
