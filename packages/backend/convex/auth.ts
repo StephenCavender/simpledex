@@ -20,9 +20,9 @@ export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
         return args.existingUserId;
       }
       const userId = await ctx.db.insert("users", {
-        name: args.profile?.name,
-        email: args.profile?.email,
-        image: args.profile?.image,
+        name: args.profile?.name as string | undefined,
+        email: args.profile?.email as string | undefined,
+        image: args.profile?.image as string | undefined,
       });
       return userId;
     },

@@ -11,12 +11,13 @@
     "build": "echo 'noop'"
   },
   "dependencies": {
-    "@auth/core": "^0.34.3",
+    "@auth/core": "0.37.0",
     "@convex-dev/auth": "^0.0.92",
-    "convex": "catalog:"
+    "convex": "^1.37.0"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
+    "jose": "^6.2.3",
     "typescript": "catalog:"
   }
 }

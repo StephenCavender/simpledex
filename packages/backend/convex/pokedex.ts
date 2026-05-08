@@ -47,10 +47,11 @@ export const listPokedexRecords = query({
   },
   handler: async (ctx, args) => {
     if (args.gameId) {
+      const gameId: string = args.gameId;
       return await ctx.db
         .query("pokedexRecords")
         .withIndex("by_user_and_game", (q) =>
-          q.eq("userId", args.userId).eq("gameId", args.gameId),
+          q.eq("userId", args.userId).eq("gameId", gameId),
         )
         .first();
     }
@@ -72,7 +73,7 @@ export const getPokedexSummary = query({
       ? [await ctx.db
           .query("pokedexRecords")
           .withIndex("by_user_and_game", (q) =>
-            q.eq("userId", args.userId).eq("gameId", args.gameId),
+            q.eq("userId", args.userId).eq("gameId", args.gameId!),
           )
           .first()]
       : await ctx.db
