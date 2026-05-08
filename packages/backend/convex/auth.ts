@@ -1,7 +1,7 @@
 import { convexAuth } from "@convex-dev/auth/server";
 import Google from "@auth/core/providers/google";
 import Discord from "@auth/core/providers/discord";
-import { MutationCtx } from "./_generated/server";
+import { query, MutationCtx } from "./_generated/server";
 
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
   providers: [
@@ -26,5 +26,12 @@ export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
       });
       return userId;
     },
+  },
+});
+
+export const getCurrentUser = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.auth.getUserIdentity();
   },
 });

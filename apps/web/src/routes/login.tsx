@@ -21,14 +21,14 @@ function LoginPage() {
       <div className="flex w-full max-w-sm flex-col gap-3">
         <Button
           onClick={() => void signIn("google", { redirectTo: window.location.origin })}
-          className="w-full"
+          className="w-full cursor-pointer"
           size="lg"
         >
           Sign in with Google
         </Button>
         <Button
           onClick={() => void signIn("discord", { redirectTo: window.location.origin })}
-          className="w-full"
+          className="w-full cursor-pointer"
           variant="secondary"
           size="lg"
         >

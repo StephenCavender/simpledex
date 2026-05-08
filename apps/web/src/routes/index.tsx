@@ -161,7 +161,7 @@ function HomeComponent() {
         <select
           value={selectedGen || ""}
           onChange={(e) => setSelectedGen(e.target.value ? parseInt(e.target.value) : null)}
-          className="h-10 rounded-lg border bg-background px-4 text-sm outline-none"
+          className="h-10 cursor-pointer rounded-lg border bg-background px-4 text-sm outline-none"
         >
           <option value="">All Generations</option>
           <option value="1">Gen I (Kanto)</option>
@@ -180,7 +180,7 @@ function HomeComponent() {
         <div className="mb-6 flex flex-wrap gap-2">
           <button
             onClick={() => setSelectedType(null)}
-            className={`px-3 py-1 text-xs rounded-full transition-colors ${
+            className={`cursor-pointer px-3 py-1 text-xs rounded-full transition-colors ${
               selectedType === null ? "bg-foreground text-background" : "bg-muted hover:bg-muted/80"
             }`}
           >
@@ -190,7 +190,7 @@ function HomeComponent() {
             <button
               key={t.name}
               onClick={() => setSelectedType(selectedType === t.name ? null : t.name)}
-              className={`px-3 py-1 text-xs rounded-full transition-colors ${
+              className={`cursor-pointer px-3 py-1 text-xs rounded-full transition-colors ${
                 selectedType === t.name
                   ? "bg-foreground text-background"
                   : "bg-muted hover:bg-muted/80"
