@@ -20,14 +20,14 @@ function LoginPage() {
 
       <div className="flex w-full max-w-sm flex-col gap-3">
         <Button
-          onClick={() => void signIn("Google")}
+          onClick={() => void signIn("google")}
           className="w-full"
           size="lg"
         >
           Sign in with Google
         </Button>
         <Button
-          onClick={() => void signIn("Discord")}
+          onClick={() => void signIn("discord")}
           className="w-full"
           variant="secondary"
           size="lg"
