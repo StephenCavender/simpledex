@@ -3,10 +3,6 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/images");
   eleventyConfig.addPassthroughCopy("src/llms.txt");
 
-  eleventyConfig.addGlobalData("webAppUrl", () => {
-    return process.env.WEB_APP_URL || "http://localhost:3001";
-  });
-
   return {
     dir: {
       input: "src",
