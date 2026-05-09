@@ -15,7 +15,14 @@ const router = createRouter({
   defaultPendingComponent: () => <Loader />,
   context: {},
   Wrap: function WrapComponent({ children }: { children: React.ReactNode }) {
-    return <ConvexAuthProvider client={convex}>{children}</ConvexAuthProvider>;
+    return (
+      <ConvexAuthProvider
+        client={convex}
+        replaceURL={(url) => window.history.replaceState({}, "", url)}
+      >
+        {children}
+      </ConvexAuthProvider>
+    );
   },
 });
 
