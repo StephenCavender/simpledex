@@ -6,6 +6,16 @@
 
 SimpleDex is a Pokemon reference app with a React web frontend, Eleventy marketing site, and Convex backend. Browse, search, and explore Pokemon details across all generations.
 
+## Philosophy
+
+**Reference-first** — Every UI decision makes Pokemon data more accessible. The UI gets out of the way; artwork and stats are the hero.
+
+**Convex for state** — All server state flows through Convex queries and mutations. No REST endpoints, no manual caching, no polling. Components use `useQuery` directly.
+
+**Functional & typed** — Pure functions, immutability, and TypeScript end-to-end. No `any` casts. React Compiler handles memoization; manual `useMemo`/`useCallback` is unnecessary.
+
+**Dark by default** — The app defaults to dark mode (like a Pokedex in a dim room), with light mode for accessibility.
+
 ## Structure
 
 ```
