@@ -1,7 +1,7 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useAction } from "convex/react";
-import { useEffect, useState, type ReactNode, type ComponentType } from "react";
+import { useEffect, useState, useRef, type ReactNode, type ComponentType } from "react";
 import {
   ArrowLeft,
   Info,
@@ -83,12 +83,29 @@ function PokemonDetail() {
   const fetchEvolution = useAction(api.pokemon.fetchEvolutionChain);
 
   const [evolutionError, setEvolutionError] = useState<string | null>(null);
+  const evolutionChainRef = useRef<number | undefined>(undefined);
+  const evolutionLoadedRef = useRef(false);
 
-  const retryFetch = async (fn: () => Promise<any>, maxRetries = 3): Promise<any> => {
+  useEffect(() => {
+    if (evolutionData) {
+      evolutionLoadedRef.current = true;
+    }
+  }, [evolutionData]);
+
+  const retryFetch = async (
+    fn: () => Promise<any>,
+    maxRetries = 3,
+    timeout = 30000,
+  ): Promise<any> => {
     let lastError: string | null = null;
     for (let i = 0; i < maxRetries; i++) {
       try {
-        const result = await fn();
+        const result = await Promise.race([
+          fn(),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error("Request timed out")), timeout),
+          ),
+        ]);
         if (result?.success !== false) return result;
         lastError = result?.error;
         if (i < maxRetries - 1) await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
@@ -101,15 +118,22 @@ function PokemonDetail() {
   };
 
   useEffect(() => {
-    setEvolutionError(null);
+    if (!evolutionChainId) return;
 
-    if (evolutionChainId && !evolutionData) {
-      retryFetch(() => fetchEvolution({ chainId: evolutionChainId })).then((result: any) => {
-        if (result?.success === false) {
-          setEvolutionError(result.error);
-        }
-      });
-    }
+    setEvolutionError(null);
+    evolutionChainRef.current = evolutionChainId;
+    evolutionLoadedRef.current = false;
+
+    retryFetch(() => fetchEvolution({ chainId: evolutionChainId })).then((result: any) => {
+      // Only surface the error if data still hasn't loaded and chain hasn't changed
+      if (
+        result?.success === false &&
+        !evolutionLoadedRef.current &&
+        evolutionChainRef.current === evolutionChainId
+      ) {
+        setEvolutionError(result.error);
+      }
+    });
   }, [pokemonId, evolutionChainId]);
 
   const renderEvolutionChain = (chain: any, currentId: number): ReactNode[] => {
@@ -322,17 +346,17 @@ function PokemonDetail() {
         {evolutionChainId && (
           <div className="mt-6">
             <h2 className="text-lg font-semibold mb-3">Evolutions</h2>
-            {evolutionError ? (
-              <p className="text-sm text-destructive">
-                Failed to load evolutions: {evolutionError}
-              </p>
-            ) : evolutionData?.chain ? (
-              <div className="flex items-center gap-2 flex-wrap">
-                {renderEvolutionChain(evolutionData.chain, pokemonId)}
-              </div>
-            ) : (
-              <p className="text-sm text-muted-foreground">Loading evolutions...</p>
-            )}
+      {evolutionError ? (
+        <p className="text-sm text-destructive">
+          Failed to load evolutions: {evolutionError}
+        </p>
+      ) : evolutionData ? (
+        <div className="flex items-center gap-2 flex-wrap">
+          {renderEvolutionChain(evolutionData, pokemonId)}
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground">Loading evolutions...</p>
+      )}
           </div>
         )}
       </div>

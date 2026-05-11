@@ -22,7 +22,23 @@ export const list = query({
     let results = await db.query("pokemon").take(1000);
 
     if (generation) {
-      results = results.filter((p: any) => p.generationId === generation);
+      const GEN_ID_RANGES: Record<number, { min: number; max: number }> = {
+        1: { min: 1, max: 151 },
+        2: { min: 152, max: 251 },
+        3: { min: 252, max: 386 },
+        4: { min: 387, max: 493 },
+        5: { min: 494, max: 649 },
+        6: { min: 650, max: 721 },
+        7: { min: 722, max: 809 },
+        8: { min: 810, max: 905 },
+        9: { min: 906, max: 1025 },
+      };
+      const range = GEN_ID_RANGES[generation];
+      results = results.filter(
+        (p: any) =>
+          p.generationId === generation ||
+          (range && p.id >= range.min && p.id <= range.max),
+      );
     }
 
     if (type) {
@@ -103,6 +119,12 @@ export const getBySpeciesId = query({
 export const listTypes = query({
   handler: async ({ db }) => {
     return db.query("types").order("asc").collect();
+  },
+});
+
+export const listSpecies = query({
+  handler: async ({ db }) => {
+    return db.query("species").collect();
   },
 });
 
@@ -198,6 +220,44 @@ export const ingestEvolutionChain = mutation({
   },
 });
 
+export const backfillGenerationIds = mutation({
+  handler: async ({ db }) => {
+    const GEN_ID_RANGES: Record<number, { min: number; max: number }> = {
+      1: { min: 1, max: 151 },
+      2: { min: 152, max: 251 },
+      3: { min: 252, max: 386 },
+      4: { min: 387, max: 493 },
+      5: { min: 494, max: 649 },
+      6: { min: 650, max: 721 },
+      7: { min: 722, max: 809 },
+      8: { min: 810, max: 905 },
+      9: { min: 906, max: 1025 },
+    };
+
+    const genLookup: Record<number, number> = {};
+    for (const [gen, range] of Object.entries(GEN_ID_RANGES)) {
+      for (let id = range.min; id <= range.max; id++) {
+        genLookup[id] = Number(gen);
+      }
+    }
+
+    const allPokemon = await db.query("pokemon").collect();
+    let updated = 0;
+
+    for (const p of allPokemon) {
+      if (!p.generationId) {
+        const genId = genLookup[p.id as number];
+        if (genId) {
+          await db.patch(p._id, { generationId: genId });
+          updated++;
+        }
+      }
+    }
+
+    return { updated, total: allPokemon.length };
+  },
+});
+
 export const clearAll = mutation({
   handler: async ({ db }) => {
     const tables = ["pokemon", "species", "evolutionChain", "types"];
@@ -231,6 +291,42 @@ export const fetchEvolutionChain = action({
     } catch (e) {
       return { success: false, error: String(e) };
     }
+  },
+});
+
+export const syncAllEvolutionChains = action({
+  args: {},
+  handler: async (ctx) => {
+    const species = await ctx.runQuery(api.pokemon.listSpecies);
+    const chainIds: number[] = [
+      ...new Set(
+        species
+          .map((s: any) => s.evolutionChainId)
+          .filter((id: any) => id != null),
+      ),
+    ];
+
+    let synced = 0;
+    let failed = 0;
+
+    for (const chainId of chainIds) {
+      try {
+        const data = await fetchJson(`${POKEAPI_BASE}/evolution-chain/${chainId}`);
+        const chain = simplifyEvolutionChain(data.chain);
+        await ctx.runMutation(api.pokemon.ingestEvolutionChain, {
+          id: chainId,
+          chain,
+        });
+        synced++;
+      } catch (e) {
+        failed++;
+      }
+
+      // Be nice to PokeAPI
+      await new Promise((r) => setTimeout(r, 500));
+    }
+
+    return { synced, failed, total: chainIds.length };
   },
 });
 
