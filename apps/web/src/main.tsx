@@ -1,3 +1,4 @@
+import { Theme } from "@radix-ui/themes";
 import { env } from "@simpledex/env/web";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { ConvexReactClient } from "convex/react";
@@ -33,5 +34,9 @@ if (!rootElement) {
 
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
-  root.render(<RouterProvider router={router} />);
+  root.render(
+    <Theme appearance="dark" accentColor="grass" grayColor="slate" radius="medium">
+      <RouterProvider router={router} />
+    </Theme>,
+  );
 }
