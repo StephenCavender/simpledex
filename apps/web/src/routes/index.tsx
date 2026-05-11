@@ -2,6 +2,7 @@ import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useDebounce } from "@/hooks/use-debounce";
 import {
   Search,
   Info,
@@ -69,29 +70,19 @@ const TYPE_COLORS: Record<string, string> = {
 
 function HomeComponent() {
   const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 300);
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedGen, setSelectedGen] = useState<number | null>(null);
-  const [isSearching, setIsSearching] = useState(false);
   const [cursor, setCursor] = useState<string | undefined>(undefined);
   const [allPokemon, setAllPokemon] = useState<any[]>([]);
   const scrollRef = useRef(0);
 
+  const isSearching = search !== debouncedSearch;
+
   useEffect(() => {
     setAllPokemon([]);
     setCursor(undefined);
-  }, [search, selectedType, selectedGen]);
-
-  useEffect(() => {
-    if (search !== debouncedSearch) {
-      setIsSearching(true);
-      const timer = setTimeout(() => {
-        setDebouncedSearch(search);
-        setIsSearching(false);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [search, debouncedSearch]);
+  }, [debouncedSearch, selectedType, selectedGen]);
 
   const pokemonData = useQuery(api.pokemon.list, {
     search: debouncedSearch || undefined,
