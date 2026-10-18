@@ -133,3 +133,13 @@ git push origin master         # ONLY when instructed
 - Marketing site includes `llms.txt` for AI indexing
   - Update at `/apps/marketing/src/llms.txt`
   - Rebuild with `cd apps/marketing && bun run build`
+
+## Agent skills
+
+### Issue tracker
+
+Issues live as GitHub issues on `StephenCavender/simpledex`, via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Domain docs
+
+Single-context layout: one `GLOSSARY.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
