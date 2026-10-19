@@ -19,6 +19,7 @@ packages/backend/*.js
 packages/backend/**/*.js
 packages/backend/*.js.map
 packages/backend/**/*.js.map
+!packages/backend/convex/_generated/**
 packages/env/src/*.js
 packages/env/src/**/*.js
 packages/ui/src/*.js
