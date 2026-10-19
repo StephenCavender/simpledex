@@ -29,9 +29,7 @@ apps/web/*.js
 apps/web/vite.config.js
 apps/web/vitest.config.js
 
-# Convex generated
-packages/*/convex/_generated/
-apps/*/convex/_generated/
+# Build outputs (continued)
 out/
 
 # Convex AI/agents
@@ -40,9 +38,6 @@ packages/backend/.claude/
 packages/backend/AGENTS.md
 packages/backend/CLAUDE.md
 packages/backend/skills-lock.json
-
-# Route tree generated
-apps/web/src/routeTree.gen.ts
 
 # Environment variables
 .env
@@ -81,6 +76,8 @@ lerna-debug.log*
 # Testing
 coverage
 .nyc_output
+apps/web-e2e/playwright-report/
+apps/web-e2e/test-results/
 
 # Misc
 *.tgz

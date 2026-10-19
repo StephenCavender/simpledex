@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          # Keep in sync with the "packageManager" field in package.json.
+          bun-version: "1.4.3"
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+        env:
+          # Build-time env validation only; no live Convex deployment is used.
+          VITE_CONVEX_URL: "https://example.convex.cloud"
+      - run: bun run check-types
+      - run: bun run test
+
+  e2e:
+    name: E2E (non-gating)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.3"
+      - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium firefox
+        working-directory: apps/web-e2e
+      - run: bun run e2e
+        working-directory: apps/web-e2e
+        env:
+          CI: "true"
+          # Satisfies env validation for the dev server; the specs only assert
+          # that the shell renders.
+          VITE_CONVEX_URL: "https://example.convex.cloud"

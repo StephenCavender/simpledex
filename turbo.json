@@ -6,7 +6,7 @@
       "inputs": ["convex/**"]
     },
     "build": {
-      "dependsOn": ["^build", "^codegen"],
+      "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", "_site/**"]
     },
