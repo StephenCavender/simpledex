@@ -19,14 +19,18 @@
     "test": "turbo run test",
     "test:e2e": "turbo run e2e",
     "check": "oxlint && oxfmt --write && knip",
+    "lint": "oxlint && oxfmt --check && knip",
     "knip": "knip",
     "deploy:preview": "vercel",
-    "deploy:prod": "vercel --prod"
+    "deploy:prod": "vercel --prod",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@simpledex/config": "workspace:*",
     "@types/node": "catalog:",
+    "husky": "^9.1.7",
     "knip": "^6.42.0",
+    "lint-staged": "^17.6.0",
     "oxfmt": "^0.73.0",
     "oxlint": "^1.88.0",
     "turbo": "^2.11.9",

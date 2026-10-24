@@ -3,7 +3,8 @@
 A Pokémon reference app: React web app, Eleventy marketing site, and Convex backend in a Bun + Turborepo monorepo.
 
 - Package manager: **Bun** (`bun install`, `bun run <script>`). `bun test` is not the test command; use `bun run test`.
-- Verify work with `bun run check-types`, `bun run test`, and `bun run check` (oxlint + oxfmt + knip).
+- A Husky pre-commit hook (`.husky/pre-commit`) lints/formats staged files and runs `check-types`, `test`, and `knip`. Run `bun run check` to auto-fix lint/format issues before committing.
+- Never commit with `--no-verify`. If the hook fails, fix the cause.
 - Never push without explicit instruction. Use Conventional Commits.
 
 Read when relevant:

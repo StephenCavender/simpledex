@@ -20,6 +20,7 @@ jobs:
           # Keep in sync with the "packageManager" field in package.json.
           bun-version: "1.4.3"
       - run: bun install --frozen-lockfile
+      - run: bun run lint
       - run: bun run build
         env:
           # Build-time env validation only; no live Convex deployment is used.
