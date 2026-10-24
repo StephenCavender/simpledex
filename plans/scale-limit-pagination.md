@@ -1,6 +1,6 @@
 # Plan: Remove `.take(1000)` Limit — Proper Pagination for `pokemon.list`
 
-**Status**: Draft
+**Status**: Superseded by [pokedex-listing.md](pokedex-listing.md) and [ADR-0002](../docs/adr/0002-load-whole-pokedex-filter-client-side.md)
 **Priority**: High
 **Owner**: TBD
 

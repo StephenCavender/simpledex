@@ -2,7 +2,7 @@
 
 ## In Progress
 
-- [ ] Scale `.take(1000)` to handle all 1025 Pokemon
+- [ ] Scale `.take(1000)` to handle all 1025 Pokemon — see plans/pokedex-listing.md
 - [ ] Add evolution chain sync for remaining species
 
 ## Backlog
