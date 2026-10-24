@@ -9,12 +9,13 @@
     "dev:setup": "convex dev --configure --until-success",
     "codegen": "convex codegen",
     "build": "echo 'noop'",
-    "check-types": "tsc --noEmit -p convex"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "convex": "catalog:"
   },
   "devDependencies": {
+    "@simpledex/config": "workspace:*",
     "@types/node": "catalog:",
     "typescript": "catalog:"
   }
