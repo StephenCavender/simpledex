@@ -32,12 +32,11 @@ Use Convex's built-in `.paginate()` which uses index-based cursors and only fetc
 
 ```ts
 const paginationOpts = { numItems: limit, cursor: cursor ?? null };
-const page = await db.query("pokemon")
-  .order("asc")
-  .paginate(paginationOpts);
+const page = await db.query("pokemon").order("asc").paginate(paginationOpts);
 ```
 
 This requires:
+
 1. Adding the correct Convex pagination import and args
 2. Adjusting the return shape to match Convex's `paginate` response (has `page`, `isDone`, `continueCursor`)
 3. Updating the frontend `useQuery` call to pass pagination opts
@@ -51,7 +50,7 @@ Since the schema already has indexes on `by_generationId`, `by_type`, and `by_na
 
 ```ts
 let query = db.query("pokemon");
-if (generation) query = query.filter(q => q.eq(q.field("generationId"), generation));
+if (generation) query = query.filter((q) => q.eq(q.field("generationId"), generation));
 // ...etc
 ```
 

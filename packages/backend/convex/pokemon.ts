@@ -36,8 +36,7 @@ export const list = query({
       const range = GEN_ID_RANGES[generation];
       results = results.filter(
         (p: any) =>
-          p.generationId === generation ||
-          (range && p.id >= range.min && p.id <= range.max),
+          p.generationId === generation || (range && p.id >= range.min && p.id <= range.max),
       );
     }
 
@@ -299,11 +298,7 @@ export const syncAllEvolutionChains = action({
   handler: async (ctx) => {
     const species = await ctx.runQuery(api.pokemon.listSpecies);
     const chainIds: number[] = [
-      ...new Set(
-        species
-          .map((s: any) => s.evolutionChainId)
-          .filter((id: any) => id != null),
-      ),
+      ...new Set(species.map((s: any) => s.evolutionChainId).filter((id: any) => id != null)),
     ];
 
     let synced = 0;

@@ -15,6 +15,7 @@ bun run build
 ```
 
 This runs Turboreto which builds all packages and apps. Output:
+
 - `apps/web/dist/` — React app (Vite build)
 - `apps/marketing/_site/` — Eleventy static site
 
@@ -22,9 +23,9 @@ This runs Turboreto which builds all packages and apps. Output:
 
 The project is configured for Vercel deployment. Required environment variables:
 
-| Variable | Source |
-|---|---|
-| `VITE_CONVEX_URL` | Convex production deployment URL |
+| Variable            | Source                                              |
+| ------------------- | --------------------------------------------------- |
+| `VITE_CONVEX_URL`   | Convex production deployment URL                    |
 | `CONVEX_DEPLOY_KEY` | Create in Convex dashboard (Settings > Deploy Keys) |
 
 ## Deploying Backend
@@ -54,5 +55,6 @@ npx convex run --prod api.pokemon.syncAllEvolutionChains
 ## Environment
 
 The project uses two Convex deployments:
+
 - **Dev**: `apps/web/.env` — local development
 - **Production**: `apps/web/.env.production` — production build

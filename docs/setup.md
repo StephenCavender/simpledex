@@ -1,6 +1,7 @@
 # Setup
 
 ## Prerequisites
+
 - [Bun](https://bun.sh) (package manager)
 - [Convex](https://convex.dev) account (backend)
 
@@ -19,6 +20,7 @@ bun run dev
 ```
 
 This starts:
+
 - Web app at `http://localhost:3001` (Vite + React)
 - Marketing site at `http://localhost:8080` (Eleventy)
 - Convex backend (auto-deploys on changes)
@@ -55,10 +57,10 @@ cp packages/backend/.env.example packages/backend/.env.local  # Backend
 
 Required vars:
 
-| Variable | Description |
-|---|---|
-| `VITE_CONVEX_URL` | Convex deployment URL |
-| `CONVEX_DEPLOYMENT` | Convex deployment name (dev) |
+| Variable            | Description                       |
+| ------------------- | --------------------------------- |
+| `VITE_CONVEX_URL`   | Convex deployment URL             |
+| `CONVEX_DEPLOYMENT` | Convex deployment name (dev)      |
 | `CONVEX_DEPLOY_KEY` | Convex deploy key (CI/production) |
 
 ## Convex

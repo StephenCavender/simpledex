@@ -202,11 +202,11 @@ function HomeComponent() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {allPokemon.map((p) => (
               <Link
-                 key={p._id}
-                 to="/pokemon/$id"
-                 params={{ id: String(p.id) }}
-                 className="group block rounded-lg border bg-card p-4 transition-colors hover:bg-accent"
-               >
+                key={p._id}
+                to="/pokemon/$id"
+                params={{ id: String(p.id) }}
+                className="group block rounded-lg border bg-card p-4 transition-colors hover:bg-accent"
+              >
                 <div className="mb-2 text-center">
                   {p.artwork ? (
                     <img
@@ -249,8 +249,8 @@ function HomeComponent() {
                   </div>
                 </div>
               </Link>
-             ))}
-           </div>
+            ))}
+          </div>
           {pokemonData?.nextCursor && (
             <div className="mt-6 text-center">
               <button

@@ -20,9 +20,9 @@
     "@simpledex/ui": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-router": "^1.170.45",
-     "convex": "catalog:",
+    "convex": "catalog:",
     "lucide-react": "catalog:",
-     "next-themes": "catalog:",
+    "next-themes": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "vite-plugin-pwa": "^2.0.0"
@@ -32,11 +32,11 @@
     "@tanstack/router-plugin": "^1.168.47",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
-     "@types/react-dom": "catalog:",
+    "@types/react-dom": "catalog:",
     "@vite-pwa/assets-generator": "^2.0.0",
     "@vitejs/plugin-react": "^6.1.2",
     "happy-dom": "^21.0.3",
-     "typescript": "catalog:",
+    "typescript": "catalog:",
     "vite": "^8.3.4",
     "vitest": "^5.0.5"
   }
