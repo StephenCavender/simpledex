@@ -1,7 +1,6 @@
-// Declare ambient used by React testing environment to satisfy TS typings
-declare var IS_REACT_ACT_ENVIRONMENT: boolean | undefined;
 import { beforeAll } from "vitest";
 
+// Declare ambient used by React testing environment to satisfy TS typings
 declare global {
   var IS_REACT_ACT_ENVIRONMENT: boolean | undefined;
 }

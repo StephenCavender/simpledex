@@ -318,7 +318,7 @@ export const syncAllEvolutionChains = action({
           chain,
         });
         synced++;
-      } catch (e) {
+      } catch {
         failed++;
       }
 
