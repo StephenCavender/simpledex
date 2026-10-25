@@ -22,6 +22,12 @@ _Avoid_: summary, list item, card
 A numbered era of Pokémon games (I–IX) with its home region, covering a contiguous range of Pokédex numbers.
 _Avoid_: gen (in prose), region (as a synonym)
 
+### Data
+
+**Sync**:
+Copying Pokémon, Species, Evolution Chain, and Type data from PokeAPI into SimpleDex so the app never reads PokeAPI at request time.
+_Avoid_: ingest, import, fetch (for this process)
+
 ### Tooling
 
 **Catalog**:
