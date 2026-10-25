@@ -39,6 +39,6 @@
     "happy-dom": "^21.0.3",
     "typescript": "catalog:",
     "vite": "^8.3.4",
-    "vitest": "^5.0.5"
+    "vitest": "catalog:"
   }
 }

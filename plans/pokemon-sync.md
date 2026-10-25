@@ -1,6 +1,6 @@
 # Plan: Sync module (PokeAPI → SimpleDex)
 
-**Status**: Ready
+**Status**: In progress: steps 1–6, 9, and 10 are done; steps 7–8 need production deploys.
 **Origin**: Architecture review candidate 4; also does the client-side half of candidate 2.
 
 Terms follow [GLOSSARY.md](../GLOSSARY.md): Pokémon, Pokédex number, Pokédex entry, Generation, Sync.
@@ -32,12 +32,12 @@ Behind the interface:
 - **Mapping.** PokeAPI JSON → Pokémon, Species, Evolution Chain, and Type documents.
 - **Batching.** Each action syncs 50 Pokédex numbers, then `ctx.scheduler.runAfter(0, …)` starts the next batch. This stays well under the 10-minute action limit.
 - **Order.** Types sync once at the start of a run. Evolution Chains are synced once per chain, deduplicated within a run and skipped if already stored (unless `force`).
-- **Saving.** One internal save mutation per table that inserts or calls `db.replace` (never `db.patch`), looking documents up through a `by_id` index. Using `replace` means a forced Sync removes stale fields.
+- **Saving.** One internal save mutation per table that inserts or calls `db.replace` (never `db.patch`), looking documents up through a `by_pokeapi_id` index. Using `replace` means a forced Sync removes stale fields.
 - **Failures.** A failing Pokémon is logged as `sync: #N failed: <reason>` and skipped. Each batch logs `sync: batch A–B synced X, skipped Y, failed Z`. There are no automatic retries; re-running `sync:run` only re-attempts the missing Pokémon.
 
 ### Schema (`convex/schema.ts`)
 
-- Add a `by_id` index to `pokemon`, `species`, `evolutionChain`, and `types`. Replace every `.filter(q.eq(q.field("id"), …))` with `.withIndex("by_id", …)`.
+- Add a `by_pokeapi_id` index to `pokemon`, `species`, `evolutionChain`, and `types`. Replace every `.filter(q.eq(q.field("id"), …))` with `.withIndex("by_id", …)`.
 - Remove the `by_type` index (it is on an array, so useless) and `by_generationId`.
 - `evolutionChain`: `{ id, stages: Array<{ id, name, sprite, from?: number, method?: string }> }`.
   - `id` in each stage is the Pokédex number; `from` is the Pokédex number of the previous stage.
@@ -87,14 +87,14 @@ Behind the interface:
 ## Implementation steps
 
 1. Backend test setup: vitest + convex-test, the fixture recorder, and recorded fixtures.
-2. Schema, deploy 1 (both shapes accepted): add the `by_id` indexes, `evolutionChain.stages` (optional while `chain` is still allowed), and the typed `damageRelations`. Keep the old fields optional.
+2. Schema, deploy 1 (both shapes accepted): add the `by_pokeapi_id` indexes, `evolutionChain.stages` (optional while `chain` is still allowed), and the typed `damageRelations`. Keep the old fields optional.
 3. Sync module: write the tests from the "Tests" section first, then implement until they pass.
 4. Delete the old functions and `sync.sh`; switch the remaining queries to `withIndex`; run codegen.
 5. Detail route: render stages and drop the on-view fetch. Admin: new "How to Sync" text.
 6. Verify locally: `bunx convex run sync:run '{"gens":[1]}'`, then check the home page, the detail page (Evolutions), and the admin counts.
-7. **You, production:** run `npx convex deploy`, then `bunx convex run --prod sync:run '{"force":true}'`. Wait until the admin page shows 1025/1025.
+7. **You, production:** deploy the web app and Convex together. The live web bundle still calls `pokemon.list` and `pokemon.fetchEvolutionChain`, which no longer exist, so a backend-only deploy breaks the home and detail pages until the web app ships. Run `npx convex deploy`, then `bunx convex run --prod sync:run '{"force":true}'`. Wait until the admin page shows 1025/1025.
 8. Schema, deploy 2: drop `generationId`, `species.generation`, `species.evolvesFrom`, and `evolutionChain.chain`; make `stages` required. **You:** deploy to production.
-9. CI e2e: start a local, account-free Convex backend in the job, push the functions, run `sync:run '{"numbers":[1,4,25,1025]}'` against live PokeAPI, and point `VITE_CONVEX_URL` at it. The job stays non-gating.
+9. CI e2e: start a local, account-free Convex backend in the job, push the functions, run `sync:run '{"numbers":[1,25,133,1025]}'` against live PokeAPI, and point `VITE_CONVEX_URL` at it. The job stays non-gating.
 10. Docs: update `docs/deployment.md` (Data Sync section) and `packages/backend/README.md`.
 
 ## Out of scope

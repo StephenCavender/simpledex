@@ -1,0 +1,84 @@
+{
+  "id": 3,
+  "name": "venusaur",
+  "order": 3,
+  "gender_rate": 1,
+  "capture_rate": 45,
+  "base_happiness": 70,
+  "is_baby": false,
+  "is_legendary": false,
+  "is_mythical": false,
+  "hatch_counter": 20,
+  "has_gender_differences": true,
+  "forms_switchable": true,
+  "growth_rate": {
+    "name": "medium-slow",
+    "url": "https://pokeapi.co/api/v2/growth-rate/4/"
+  },
+  "egg_groups": [
+    {
+      "name": "monster",
+      "url": "https://pokeapi.co/api/v2/egg-group/1/"
+    },
+    {
+      "name": "plant",
+      "url": "https://pokeapi.co/api/v2/egg-group/7/"
+    }
+  ],
+  "color": {
+    "name": "green",
+    "url": "https://pokeapi.co/api/v2/pokemon-color/5/"
+  },
+  "shape": {
+    "name": "quadruped",
+    "url": "https://pokeapi.co/api/v2/pokemon-shape/8/"
+  },
+  "evolves_from_species": {
+    "name": "ivysaur",
+    "url": "https://pokeapi.co/api/v2/pokemon-species/2/"
+  },
+  "evolution_chain": {
+    "url": "https://pokeapi.co/api/v2/evolution-chain/1/"
+  },
+  "habitat": {
+    "name": "grassland",
+    "url": "https://pokeapi.co/api/v2/pokemon-habitat/3/"
+  },
+  "generation": {
+    "name": "generation-i",
+    "url": "https://pokeapi.co/api/v2/generation/1/"
+  },
+  "pal_park_encounters": [
+    {
+      "base_score": 90,
+      "rate": 3,
+      "area": {
+        "name": "field",
+        "url": "https://pokeapi.co/api/v2/pal-park-area/2/"
+      }
+    }
+  ],
+  "varieties": [
+    {
+      "is_default": true,
+      "pokemon": {
+        "name": "venusaur",
+        "url": "https://pokeapi.co/api/v2/pokemon/3/"
+      }
+    },
+    {
+      "is_default": false,
+      "pokemon": {
+        "name": "venusaur-mega",
+        "url": "https://pokeapi.co/api/v2/pokemon/10033/"
+      }
+    },
+    {
+      "is_default": false,
+      "pokemon": {
+        "name": "venusaur-gmax",
+        "url": "https://pokeapi.co/api/v2/pokemon/10195/"
+      }
+    }
+  ]
+}

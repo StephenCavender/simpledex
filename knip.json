@@ -10,8 +10,8 @@
       "project": ["src/**/*.ts", "src/**/*.tsx"]
     },
     "packages/backend": {
-      "entry": ["convex/*.ts"],
-      "project": ["convex/**/*.ts"]
+      "entry": ["convex/*.ts", "scripts/*.ts"],
+      "project": ["convex/**/*.ts", "scripts/**/*.ts", "test/**/*.ts"]
     },
     "packages/env": {
       "entry": ["src/**/*.ts"],

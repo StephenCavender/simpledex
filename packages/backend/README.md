@@ -1,24 +1,28 @@
-# Sync Script
+# @simpledex/backend
 
-Run this locally to ingest Pokemon data from PokeAPI into Convex.
+Convex functions and schema for SimpleDex.
 
-## Usage
+- `convex/pokemon.ts`: public queries the web app reads (`pokedex`, `getById`, `getSpecies`, `getEvolutionChain`, `listTypes`).
+- `convex/sync.ts`: the Sync from PokeAPI. Internal only, so it can't be called from the browser.
+- `convex/generations.ts`: the Generation table, shared with the web app.
+
+## Sync
+
+Run from this directory. Already-synced Pokémon and Evolution Chains are skipped unless `force` is set. Add `--prod` to target production.
 
 ```bash
-# Set your Convex admin key
-export CONVEX_ADMIN_KEY=your_admin_key_from_convex_dashboard
-
-# Run the sync (default: first 151 Pokemon)
-bunx tsx scripts/sync.ts
-
-# Sync more Pokemon
-bunx tsx scripts/sync.ts 500
+bunx convex run sync:run                         # all Generations (~5–10 minutes)
+bunx convex run sync:run '{"gens":[1,2]}'        # Gen I and II
+bunx convex run sync:run '{"numbers":[25,133]}'  # specific Pokédex numbers
+bunx convex run sync:run '{"force":true}'        # re-sync everything
+bunx convex run sync:clear                       # wipe synced data (local use)
 ```
 
-## Setup
+The Sync runs in scheduled batches of 50 Pokémon. Progress is logged as `sync: batch A–B synced X, skipped Y, failed Z`; failures are logged per Pokémon and can be retried by running the same command again.
 
-1. Get your admin key from the Convex dashboard (Settings > API Keys)
-2. Set it as an environment variable
-3. Run the script
+## Tests
 
-The script calls `ingestPokemon` and `ingestTypes` mutations in Convex to store PokeAPI data.
+```bash
+bun run test             # Sync tests via convex-test, against recorded PokeAPI fixtures
+bun run record-fixtures  # re-record test/fixtures/pokeapi from live PokeAPI
+```

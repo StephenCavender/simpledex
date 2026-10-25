@@ -40,17 +40,14 @@ This typechecks, bundles, and pushes functions + schema to the production deploy
 
 ## Data Sync
 
-### Backfill generation IDs
+Data is copied from PokeAPI by the internal Sync module. After a deploy that changes the synced data's shape, run a forced Sync:
 
 ```bash
-npx convex run --prod api.pokemon.backfillGenerationIds
+cd packages/backend
+bunx convex run --prod sync:run '{"force":true}'
 ```
 
-### Sync evolution chains
-
-```bash
-npx convex run --prod api.pokemon.syncAllEvolutionChains
-```
+See [packages/backend/README.md](../packages/backend/README.md) for all Sync options.
 
 ## Environment
 

@@ -40,10 +40,31 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bunx playwright install --with-deps chromium firefox
         working-directory: apps/web-e2e
+      - name: Start local Convex backend
+        working-directory: packages/backend
+        env:
+          # Account-free local deployment; no secrets needed.
+          CONVEX_AGENT_MODE: anonymous
+        run: |
+          nohup bunx convex dev --tail-logs disable > "$RUNNER_TEMP/convex.log" 2>&1 &
+          for _ in $(seq 1 60); do
+            grep -q "Convex functions ready" "$RUNNER_TEMP/convex.log" && exit 0
+            sleep 2
+          done
+          cat "$RUNNER_TEMP/convex.log"
+          exit 1
+      - name: Sync e2e Pokémon from PokeAPI
+        working-directory: packages/backend
+        run: |
+          bunx convex run sync:run '{"numbers":[1,25,133,1025]}'
+          for _ in $(seq 1 30); do
+            [ "$(bunx convex run pokemon:pokedex | jq length)" = 4 ] && exit 0
+            sleep 2
+          done
+          echo "Sync did not finish"
+          exit 1
       - run: bun run e2e
         working-directory: apps/web-e2e
         env:
           CI: "true"
-          # Satisfies env validation for the dev server; the specs only assert
-          # that the shell renders.
-          VITE_CONVEX_URL: "https://example.convex.cloud"
+          VITE_CONVEX_URL: "http://127.0.0.1:3210"

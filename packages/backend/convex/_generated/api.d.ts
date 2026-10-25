@@ -10,6 +10,7 @@
 
 import type * as generations from "../generations.js";
 import type * as pokemon from "../pokemon.js";
+import type * as sync from "../sync.js";
 
 import type {
   ApiFromModules,
@@ -20,6 +21,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   generations: typeof generations;
   pokemon: typeof pokemon;
+  sync: typeof sync;
 }>;
 
 /**

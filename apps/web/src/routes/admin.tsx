@@ -9,6 +9,13 @@ export const Route = createFileRoute("/admin")({
   component: AdminComponent,
 });
 
+const SYNC_COMMANDS = [
+  { args: "", description: "all Generations" },
+  { args: `'{"gens":[1,2]}'`, description: "Gen I and II" },
+  { args: `'{"numbers":[25,133]}'`, description: "specific Pokédex numbers" },
+  { args: `'{"force":true}'`, description: "re-sync everything" },
+];
+
 function AdminComponent() {
   const user = useUser();
   const navigate = useNavigate();
@@ -131,37 +138,20 @@ function AdminComponent() {
       <div className="mt-6 rounded-lg border bg-card p-6">
         <h2 className="mb-3 font-semibold">How to Sync</h2>
         <p className="mb-4 text-sm text-muted-foreground">
-          Run the sync script from the backend directory. Use --limit to specify how many Pokemon to
-          sync (by ID range).
+          Run from <code>packages/backend</code>. Already-synced Pokémon are skipped unless{" "}
+          <code>force</code> is set. Add <code>--prod</code> to sync production.
         </p>
         <div className="space-y-2 text-sm">
-          <p>
-            <code className="rounded bg-muted px-2 py-1">
-              bun packages/backend/scripts/sync.ts --gen=1,2
-            </code>
-            <span className="ml-2 text-muted-foreground">(syncs Gen 1-2)</span>
-          </p>
-          <p>
-            <code className="rounded bg-muted px-2 py-1">
-              bun packages/backend/scripts/sync.ts --gen=1,2,3,4,5,6,7,8,9
-            </code>
-            <span className="ml-2 text-muted-foreground">(syncs all generations)</span>
-          </p>
-          <p>
-            <code className="rounded bg-muted px-2 py-1">
-              bun packages/backend/scripts/sync.ts --test
-            </code>
-            <span className="ml-2 text-muted-foreground">(syncs starter Pokemon 1-9)</span>
-          </p>
-          <p>
-            <code className="rounded bg-muted px-2 py-1">
-              bun packages/backend/scripts/sync.ts --gen=1,2 --force
-            </code>
-            <span className="ml-2 text-muted-foreground">(force re-sync)</span>
-          </p>
+          {SYNC_COMMANDS.map(({ args, description }) => (
+            <p key={args}>
+              <code className="rounded bg-muted px-2 py-1">bunx convex run sync:run {args}</code>
+              <span className="ml-2 text-muted-foreground">({description})</span>
+            </p>
+          ))}
         </div>
         <p className="mt-4 text-xs text-muted-foreground">
-          Note: 30s delay between each Pokemon to avoid rate limiting. A full sync takes ~8.5 hours.
+          Runs in batches of 50 Pokémon; a full Sync takes about 5–10 minutes. Watch progress above
+          or in the Convex logs.
         </p>
       </div>
     </div>

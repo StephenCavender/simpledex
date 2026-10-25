@@ -1,0 +1,63 @@
+{
+  "id": 172,
+  "name": "pichu",
+  "order": 25,
+  "gender_rate": 4,
+  "capture_rate": 190,
+  "base_happiness": 70,
+  "is_baby": true,
+  "is_legendary": false,
+  "is_mythical": false,
+  "hatch_counter": 10,
+  "has_gender_differences": false,
+  "forms_switchable": false,
+  "growth_rate": {
+    "name": "medium",
+    "url": "https://pokeapi.co/api/v2/growth-rate/2/"
+  },
+  "egg_groups": [
+    {
+      "name": "no-eggs",
+      "url": "https://pokeapi.co/api/v2/egg-group/15/"
+    }
+  ],
+  "color": {
+    "name": "yellow",
+    "url": "https://pokeapi.co/api/v2/pokemon-color/10/"
+  },
+  "shape": {
+    "name": "quadruped",
+    "url": "https://pokeapi.co/api/v2/pokemon-shape/8/"
+  },
+  "evolves_from_species": null,
+  "evolution_chain": {
+    "url": "https://pokeapi.co/api/v2/evolution-chain/10/"
+  },
+  "habitat": {
+    "name": "forest",
+    "url": "https://pokeapi.co/api/v2/pokemon-habitat/2/"
+  },
+  "generation": {
+    "name": "generation-ii",
+    "url": "https://pokeapi.co/api/v2/generation/2/"
+  },
+  "pal_park_encounters": [
+    {
+      "base_score": 80,
+      "rate": 10,
+      "area": {
+        "name": "field",
+        "url": "https://pokeapi.co/api/v2/pal-park-area/2/"
+      }
+    }
+  ],
+  "varieties": [
+    {
+      "is_default": true,
+      "pokemon": {
+        "name": "pichu",
+        "url": "https://pokeapi.co/api/v2/pokemon/172/"
+      }
+    }
+  ]
+}

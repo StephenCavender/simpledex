@@ -1,8 +1,8 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { MAX_POKEDEX_NUMBER } from "@simpledex/backend/convex/generations";
 import { createFileRoute, Link, useCanGoBack, useRouter } from "@tanstack/react-router";
-import { useQuery, useAction } from "convex/react";
-import { useEffect, useState, useRef, type ReactNode, type ComponentType } from "react";
+import { useQuery } from "convex/react";
+import { Fragment, type ComponentType } from "react";
 import {
   ArrowLeft,
   Info,
@@ -99,102 +99,11 @@ function PokemonDetail() {
   const species = useQuery(api.pokemon.getSpecies, { id: pokemonId });
   const evolutionChainId = species?.evolutionChainId;
 
-  const evolutionData = useQuery(
+  // undefined while loading; null when the Pokémon has no synced Evolution Chain.
+  const evolutionStages = useQuery(
     api.pokemon.getEvolutionChain,
     evolutionChainId ? { id: evolutionChainId } : "skip",
   );
-
-  const fetchEvolution = useAction(api.pokemon.fetchEvolutionChain);
-
-  const [evolutionError, setEvolutionError] = useState<string | null>(null);
-  const evolutionChainRef = useRef<number | undefined>(undefined);
-  const evolutionLoadedRef = useRef(false);
-
-  useEffect(() => {
-    if (evolutionData) {
-      evolutionLoadedRef.current = true;
-    }
-  }, [evolutionData]);
-
-  const retryFetch = async (
-    fn: () => Promise<any>,
-    maxRetries = 3,
-    timeout = 30000,
-  ): Promise<any> => {
-    let lastError: string | null = null;
-    for (let i = 0; i < maxRetries; i++) {
-      try {
-        const result = await Promise.race([
-          fn(),
-          new Promise<never>((_, reject) =>
-            setTimeout(() => reject(new Error("Request timed out")), timeout),
-          ),
-        ]);
-        if (result?.success !== false) return result;
-        lastError = result?.error;
-        if (i < maxRetries - 1) await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
-      } catch (e) {
-        lastError = String(e);
-        if (i < maxRetries - 1) await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
-      }
-    }
-    return { success: false, error: lastError || "Max retries exceeded" };
-  };
-
-  useEffect(() => {
-    if (!evolutionChainId) return;
-
-    setEvolutionError(null);
-    evolutionChainRef.current = evolutionChainId;
-    evolutionLoadedRef.current = false;
-
-    retryFetch(() => fetchEvolution({ chainId: evolutionChainId })).then((result: any) => {
-      // Only surface the error if data still hasn't loaded and chain hasn't changed
-      if (
-        result?.success === false &&
-        !evolutionLoadedRef.current &&
-        evolutionChainRef.current === evolutionChainId
-      ) {
-        setEvolutionError(result.error);
-      }
-    });
-  }, [pokemonId, evolutionChainId]);
-
-  const renderEvolutionChain = (chain: any, currentId: number): ReactNode[] => {
-    const nodes: ReactNode[] = [];
-
-    const traverse = (node: any) => {
-      const isCurrent = node.id === currentId;
-      nodes.push(
-        <div key={node.id} className="text-center">
-          {node.sprite && (
-            <Link to="/pokemon/$id" params={{ id: String(node.id) }}>
-              <img
-                src={node.sprite}
-                alt={node.species}
-                className={`h-20 w-20 object-contain hover:scale-110 transition-transform ${isCurrent ? "ring-2 ring-primary rounded-full" : ""}`}
-              />
-            </Link>
-          )}
-          <p className="text-sm capitalize mt-1">{node.species}</p>
-          {node.method && <p className="text-xs text-muted-foreground">{node.method}</p>}
-        </div>,
-      );
-      if (node.evolvesTo?.length) {
-        node.evolvesTo.forEach((ev: any) => {
-          nodes.push(
-            <span key={`arrow-${node.id}-${ev.id}`} className="text-2xl mx-1">
-              →
-            </span>,
-          );
-          traverse(ev);
-        });
-      }
-    };
-
-    traverse(chain);
-    return nodes;
-  };
 
   const prevId = pokemonId > 1 ? pokemonId - 1 : null;
   const nextId = pokemonId < MAX_POKEDEX_NUMBER ? pokemonId + 1 : null;
@@ -351,16 +260,29 @@ function PokemonDetail() {
           </div>
         )}
 
-        {evolutionChainId && (
+        {evolutionChainId !== undefined && evolutionStages !== null && (
           <div className="mt-6">
             <h2 className="text-lg font-semibold mb-3">Evolutions</h2>
-            {evolutionError ? (
-              <p className="text-sm text-destructive">
-                Failed to load evolutions: {evolutionError}
-              </p>
-            ) : evolutionData ? (
+            {evolutionStages ? (
               <div className="flex items-center gap-2 flex-wrap">
-                {renderEvolutionChain(evolutionData, pokemonId)}
+                {evolutionStages.map((stage) => (
+                  <Fragment key={stage.id}>
+                    {stage.from !== undefined && <span className="text-2xl mx-1">→</span>}
+                    <div className="text-center">
+                      <Link to="/pokemon/$id" params={{ id: String(stage.id) }}>
+                        <img
+                          src={stage.sprite}
+                          alt={stage.name}
+                          className={`h-20 w-20 object-contain hover:scale-110 transition-transform ${stage.id === pokemonId ? "ring-2 ring-primary rounded-full" : ""}`}
+                        />
+                      </Link>
+                      <p className="text-sm capitalize mt-1">{stage.name}</p>
+                      {stage.method && (
+                        <p className="text-xs text-muted-foreground">{stage.method}</p>
+                      )}
+                    </div>
+                  </Fragment>
+                ))}
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">Loading evolutions...</p>

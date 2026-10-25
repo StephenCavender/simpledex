@@ -1,0 +1,91 @@
+{
+  "id": 26,
+  "name": "raichu",
+  "order": 27,
+  "gender_rate": 4,
+  "capture_rate": 75,
+  "base_happiness": 70,
+  "is_baby": false,
+  "is_legendary": false,
+  "is_mythical": false,
+  "hatch_counter": 10,
+  "has_gender_differences": true,
+  "forms_switchable": false,
+  "growth_rate": {
+    "name": "medium",
+    "url": "https://pokeapi.co/api/v2/growth-rate/2/"
+  },
+  "egg_groups": [
+    {
+      "name": "ground",
+      "url": "https://pokeapi.co/api/v2/egg-group/5/"
+    },
+    {
+      "name": "fairy",
+      "url": "https://pokeapi.co/api/v2/egg-group/6/"
+    }
+  ],
+  "color": {
+    "name": "yellow",
+    "url": "https://pokeapi.co/api/v2/pokemon-color/10/"
+  },
+  "shape": {
+    "name": "upright",
+    "url": "https://pokeapi.co/api/v2/pokemon-shape/6/"
+  },
+  "evolves_from_species": {
+    "name": "pikachu",
+    "url": "https://pokeapi.co/api/v2/pokemon-species/25/"
+  },
+  "evolution_chain": {
+    "url": "https://pokeapi.co/api/v2/evolution-chain/10/"
+  },
+  "habitat": {
+    "name": "forest",
+    "url": "https://pokeapi.co/api/v2/pokemon-habitat/2/"
+  },
+  "generation": {
+    "name": "generation-i",
+    "url": "https://pokeapi.co/api/v2/generation/1/"
+  },
+  "pal_park_encounters": [
+    {
+      "base_score": 90,
+      "rate": 3,
+      "area": {
+        "name": "forest",
+        "url": "https://pokeapi.co/api/v2/pal-park-area/1/"
+      }
+    }
+  ],
+  "varieties": [
+    {
+      "is_default": true,
+      "pokemon": {
+        "name": "raichu",
+        "url": "https://pokeapi.co/api/v2/pokemon/26/"
+      }
+    },
+    {
+      "is_default": false,
+      "pokemon": {
+        "name": "raichu-alola",
+        "url": "https://pokeapi.co/api/v2/pokemon/10100/"
+      }
+    },
+    {
+      "is_default": false,
+      "pokemon": {
+        "name": "raichu-mega-x",
+        "url": "https://pokeapi.co/api/v2/pokemon/10304/"
+      }
+    },
+    {
+      "is_default": false,
+      "pokemon": {
+        "name": "raichu-mega-y",
+        "url": "https://pokeapi.co/api/v2/pokemon/10305/"
+      }
+    }
+  ]
+}

@@ -9,14 +9,20 @@
     "dev:setup": "convex dev --configure --until-success",
     "codegen": "convex codegen",
     "build": "echo 'noop'",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "test": "vitest run",
+    "record-fixtures": "bun run ./scripts/record-fixtures.ts"
   },
   "dependencies": {
-    "convex": "catalog:"
+    "convex": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
+    "@edge-runtime/vm": "^5.0.0",
     "@simpledex/config": "workspace:*",
     "@types/node": "catalog:",
-    "typescript": "catalog:"
+    "convex-test": "^0.0.65",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

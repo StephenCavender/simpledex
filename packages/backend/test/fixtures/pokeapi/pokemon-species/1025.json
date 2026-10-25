@@ -1,0 +1,51 @@
+{
+  "id": 1025,
+  "name": "pecharunt",
+  "order": 1027,
+  "gender_rate": -1,
+  "capture_rate": 3,
+  "base_happiness": 0,
+  "is_baby": false,
+  "is_legendary": false,
+  "is_mythical": true,
+  "hatch_counter": 20,
+  "has_gender_differences": false,
+  "forms_switchable": false,
+  "growth_rate": {
+    "name": "slow",
+    "url": "https://pokeapi.co/api/v2/growth-rate/1/"
+  },
+  "egg_groups": [
+    {
+      "name": "no-eggs",
+      "url": "https://pokeapi.co/api/v2/egg-group/15/"
+    }
+  ],
+  "color": {
+    "name": "purple",
+    "url": "https://pokeapi.co/api/v2/pokemon-color/7/"
+  },
+  "shape": {
+    "name": "ball",
+    "url": "https://pokeapi.co/api/v2/pokemon-shape/1/"
+  },
+  "evolves_from_species": null,
+  "evolution_chain": {
+    "url": "https://pokeapi.co/api/v2/evolution-chain/549/"
+  },
+  "habitat": null,
+  "generation": {
+    "name": "generation-ix",
+    "url": "https://pokeapi.co/api/v2/generation/9/"
+  },
+  "pal_park_encounters": [],
+  "varieties": [
+    {
+      "is_default": true,
+      "pokemon": {
+        "name": "pecharunt",
+        "url": "https://pokeapi.co/api/v2/pokemon/1025/"
+      }
+    }
+  ]
+}
