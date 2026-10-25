@@ -14,29 +14,32 @@
 bun run build
 ```
 
-This runs Turboreto which builds all packages and apps. Output:
+This runs Turborepo, which builds all packages and apps. Output:
 
 - `apps/web/dist/` — React app (Vite build)
 - `apps/marketing/_site/` — Eleventy static site
 
 ### Deploy to Vercel
 
-The project is configured for Vercel deployment. Required environment variables:
+Production deploys from the `prod` branch (`git push origin master:prod`). The `simpledex-web` Vercel project uses Root Directory `apps/web` and framework Vite; its build command comes from [`apps/web/vercel.json`](../apps/web/vercel.json), which overrides the dashboard setting.
 
-| Variable            | Source                                              |
-| ------------------- | --------------------------------------------------- |
-| `VITE_CONVEX_URL`   | Convex production deployment URL                    |
-| `CONVEX_DEPLOY_KEY` | Create in Convex dashboard (Settings > Deploy Keys) |
+Environment variables:
+
+| Variable            | Scope                | Source                                                            |
+| ------------------- | -------------------- | ----------------------------------------------------------------- |
+| `CONVEX_DEPLOY_KEY` | Production only      | Convex dashboard → production deployment → Settings → Deploy Keys |
+| `VITE_CONVEX_URL`   | Preview (and others) | Convex deployment URL previews should read from                   |
 
 ## Deploying Backend
 
-Push Convex functions and schema to production:
+Production builds deploy Convex automatically: [`apps/web/scripts/vercel-build.sh`](../apps/web/scripts/vercel-build.sh) runs `convex deploy`, which typechecks and pushes functions and schema, then builds the web app against the production Convex URL. If the Convex push fails (for example, a schema change that existing data doesn't satisfy), the build fails and the current production deployment stays live. Preview builds never deploy Convex.
+
+To deploy Convex by hand (deploys to production by default):
 
 ```bash
-npx convex deploy --prod
+cd packages/backend
+npx convex deploy
 ```
-
-This typechecks, bundles, and pushes functions + schema to the production deployment.
 
 ## Data Sync
 
