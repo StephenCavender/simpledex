@@ -1,4 +1,5 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
+import { GENERATIONS } from "@simpledex/backend/convex/generations";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { useState } from "react";
@@ -8,22 +9,10 @@ export const Route = createFileRoute("/admin")({
   component: AdminComponent,
 });
 
-const GENERATIONS = [
-  { id: 1, name: "Gen I (Kanto)", range: "1-151", count: 151 },
-  { id: 2, name: "Gen II (Johto)", range: "152-251", count: 100 },
-  { id: 3, name: "Gen III (Hoenn)", range: "252-386", count: 135 },
-  { id: 4, name: "Gen IV (Sinnoh)", range: "387-493", count: 107 },
-  { id: 5, name: "Gen V (Unova)", range: "494-649", count: 156 },
-  { id: 6, name: "Gen VI (Kalos)", range: "650-721", count: 72 },
-  { id: 7, name: "Gen VII (Alola)", range: "722-809", count: 88 },
-  { id: 8, name: "Gen VIII (Galar)", range: "810-905", count: 96 },
-  { id: 9, name: "Gen IX (Paldea)", range: "906-1025", count: 120 },
-];
-
 function AdminComponent() {
   const user = useUser();
   const navigate = useNavigate();
-  const allPokemon = useQuery(api.pokemon.list, { limit: 10000 });
+  const pokedex = useQuery(api.pokemon.pokedex);
   const [genFilter, setGenFilter] = useState<number | null>(null);
 
   // Restrict access to steve only
@@ -49,14 +38,15 @@ function AdminComponent() {
     return null;
   }
 
-  const totalSynced = allPokemon?.pokemon?.length || 0;
+  const totalSynced = pokedex?.length ?? 0;
 
-  const genCounts = GENERATIONS.map((gen) => {
-    const count = allPokemon?.pokemon?.filter((p: any) => p.generationId === gen.id).length || 0;
-    return { ...gen, synced: count };
-  });
+  const genCounts = GENERATIONS.map((gen) => ({
+    ...gen,
+    count: gen.last - gen.first + 1,
+    synced: pokedex?.filter((entry) => entry.generation === gen.number).length ?? 0,
+  }));
 
-  const filteredCounts = genFilter ? genCounts.filter((g) => g.id === genFilter) : genCounts;
+  const filteredCounts = genFilter ? genCounts.filter((g) => g.number === genFilter) : genCounts;
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-6">
@@ -90,8 +80,8 @@ function AdminComponent() {
         >
           <option value="">All Generations</option>
           {GENERATIONS.map((g) => (
-            <option key={g.id} value={g.id}>
-              {g.name}
+            <option key={g.number} value={g.number}>
+              {g.label} ({g.region})
             </option>
           ))}
         </select>
@@ -104,10 +94,14 @@ function AdminComponent() {
         </div>
         <div className="divide-y">
           {filteredCounts.map((gen) => (
-            <div key={gen.id} className="flex items-center justify-between px-4 py-3">
+            <div key={gen.number} className="flex items-center justify-between px-4 py-3">
               <div>
-                <p className="font-medium">{gen.name}</p>
-                <p className="text-sm text-muted-foreground">IDs: {gen.range}</p>
+                <p className="font-medium">
+                  {gen.label} ({gen.region})
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Pokédex numbers: {gen.first}–{gen.last}
+                </p>
               </div>
               <div className="text-right">
                 <p className="font-medium">

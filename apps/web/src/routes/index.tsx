@@ -1,8 +1,8 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { GENERATIONS } from "@simpledex/backend/convex/generations";
 import { useQuery } from "convex/react";
-import { useState, useCallback, useEffect, useRef } from "react";
-import { useDebounce } from "@/hooks/use-debounce";
+import { filterPokedex, type PokedexFilters } from "@/lib/pokedex";
 import {
   Search,
   Info,
@@ -25,6 +25,11 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
+  validateSearch: (search: Record<string, unknown>): PokedexFilters => ({
+    q: typeof search.q === "string" && search.q !== "" ? search.q : undefined,
+    type: typeof search.type === "string" && search.type !== "" ? search.type : undefined,
+    gen: GENERATIONS.some((g) => g.number === Number(search.gen)) ? Number(search.gen) : undefined,
+  }),
   component: HomeComponent,
 });
 
@@ -69,54 +74,15 @@ const TYPE_COLORS: Record<string, string> = {
 };
 
 function HomeComponent() {
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 300);
-  const [selectedType, setSelectedType] = useState<string | null>(null);
-  const [selectedGen, setSelectedGen] = useState<number | null>(null);
-  const [cursor, setCursor] = useState<string | undefined>(undefined);
-  const [allPokemon, setAllPokemon] = useState<any[]>([]);
-  const scrollRef = useRef(0);
-
-  const isSearching = search !== debouncedSearch;
-
-  useEffect(() => {
-    setAllPokemon([]);
-    setCursor(undefined);
-  }, [debouncedSearch, selectedType, selectedGen]);
-
-  const pokemonData = useQuery(api.pokemon.list, {
-    search: debouncedSearch || undefined,
-    type: selectedType || undefined,
-    limit: 50,
-    cursor,
-    generation: selectedGen || undefined,
-  });
-
-  useEffect(() => {
-    if (pokemonData?.pokemon) {
-      setAllPokemon((prev) => [...prev, ...pokemonData.pokemon]);
-    }
-  }, [pokemonData]);
-
-  useEffect(() => {
-    if (scrollRef.current && allPokemon.length > 0) {
-      window.scrollTo(0, scrollRef.current);
-      scrollRef.current = 0;
-    }
-  }, [allPokemon.length]);
-
-  const loadMore = useCallback(() => {
-    scrollRef.current = window.scrollY;
-    if (pokemonData?.nextCursor) {
-      setCursor(pokemonData.nextCursor);
-    }
-  }, [pokemonData]);
-
-  const handleSearchChange = useCallback((value: string) => {
-    setSearch(value);
-  }, []);
-
+  const filters = Route.useSearch();
+  const navigate = Route.useNavigate();
+  const pokedex = useQuery(api.pokemon.pokedex);
   const types = useQuery(api.pokemon.listTypes);
+  const entries = pokedex ? filterPokedex(pokedex, filters) : undefined;
+
+  const setFilters = (next: PokedexFilters): void => {
+    void navigate({ search: (prev) => ({ ...prev, ...next }), replace: true });
+  };
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-6">
@@ -133,16 +99,12 @@ function HomeComponent() {
 
       <div className="mb-6">
         <div className="relative">
-          {isSearching ? (
-            <div className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin border-2 border-primary border-t-transparent rounded-full" />
-          ) : (
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          )}
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
-            type="text"
-            placeholder="Search Pokemon..."
-            value={search}
-            onChange={(e) => handleSearchChange(e.target.value)}
+            type="search"
+            placeholder="Search by name or number..."
+            value={filters.q ?? ""}
+            onChange={(e) => setFilters({ q: e.target.value || undefined })}
             className="h-10 w-full rounded-lg border bg-background pl-10 pr-4 py-2 text-sm outline-none focus:ring-2 focus:ring-ring/50"
           />
         </div>
@@ -150,29 +112,27 @@ function HomeComponent() {
 
       <div className="mb-6">
         <select
-          value={selectedGen || ""}
-          onChange={(e) => setSelectedGen(e.target.value ? parseInt(e.target.value) : null)}
+          value={filters.gen ?? ""}
+          onChange={(e) => setFilters({ gen: e.target.value ? Number(e.target.value) : undefined })}
           className="h-10 rounded-lg border bg-background px-4 text-sm outline-none"
         >
           <option value="">All Generations</option>
-          <option value="1">Gen I (Kanto)</option>
-          <option value="2">Gen II (Johto)</option>
-          <option value="3">Gen III (Hoenn)</option>
-          <option value="4">Gen IV (Sinnoh)</option>
-          <option value="5">Gen V (Unova)</option>
-          <option value="6">Gen VI (Kalos)</option>
-          <option value="7">Gen VII (Alola)</option>
-          <option value="8">Gen VIII (Galar)</option>
-          <option value="9">Gen IX (Paldea)</option>
+          {GENERATIONS.map((g) => (
+            <option key={g.number} value={g.number}>
+              {g.label} ({g.region})
+            </option>
+          ))}
         </select>
       </div>
 
       {types && types.length > 0 && (
         <div className="mb-6 flex flex-wrap gap-2">
           <button
-            onClick={() => setSelectedType(null)}
+            onClick={() => setFilters({ type: undefined })}
             className={`px-3 py-1 text-xs rounded-full transition-colors ${
-              selectedType === null ? "bg-foreground text-background" : "bg-muted hover:bg-muted/80"
+              filters.type === undefined
+                ? "bg-foreground text-background"
+                : "bg-muted hover:bg-muted/80"
             }`}
           >
             All
@@ -180,9 +140,9 @@ function HomeComponent() {
           {types.map((t) => (
             <button
               key={t.name}
-              onClick={() => setSelectedType(selectedType === t.name ? null : t.name)}
+              onClick={() => setFilters({ type: filters.type === t.name ? undefined : t.name })}
               className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                selectedType === t.name
+                filters.type === t.name
                   ? "bg-foreground text-background"
                   : "bg-muted hover:bg-muted/80"
               }`}
@@ -193,75 +153,56 @@ function HomeComponent() {
         </div>
       )}
 
-      {!pokemonData ? (
+      {!entries ? (
         <div className="text-center py-12 text-muted-foreground">Loading...</div>
-      ) : allPokemon.length === 0 ? (
+      ) : entries.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">No Pokemon found</div>
       ) : (
-        <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {allPokemon.map((p) => (
-              <Link
-                key={p._id}
-                to="/pokemon/$id"
-                params={{ id: String(p.id) }}
-                className="group block rounded-lg border bg-card p-4 transition-colors hover:bg-accent"
-              >
-                <div className="mb-2 text-center">
-                  {p.artwork ? (
-                    <img
-                      src={p.artwork}
-                      alt={p.name}
-                      className="mx-auto h-24 w-24 object-contain"
-                      loading="lazy"
-                    />
-                  ) : p.sprite ? (
-                    <img
-                      src={p.sprite}
-                      alt={p.name}
-                      className="mx-auto h-24 w-24 object-contain"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="mx-auto flex h-24 w-24 items-center justify-center text-muted-foreground">
-                      <Info className="h-8 w-8" />
-                    </div>
-                  )}
-                </div>
-                <div className="text-center">
-                  <span className="mb-1 block text-xs text-muted-foreground">
-                    #{String(p.id).padStart(3, "0")}
-                  </span>
-                  <span className="block font-medium capitalize">{p.name}</span>
-                  <div className="mt-2 flex justify-center gap-1">
-                    {p.types.map((type: string) => {
-                      const Icon = TYPE_ICONS[type] || Info;
-                      return (
-                        <span
-                          key={type}
-                          className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium text-white ${TYPE_COLORS[type] || "bg-gray-400"}`}
-                        >
-                          <Icon className="mr-1 h-3 w-3" />
-                          {type}
-                        </span>
-                      );
-                    })}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {entries.map((p) => (
+            <Link
+              key={p.id}
+              to="/pokemon/$id"
+              params={{ id: String(p.id) }}
+              className="group block rounded-lg border bg-card p-4 transition-colors hover:bg-accent"
+            >
+              <div className="mb-2 text-center">
+                {p.image ? (
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    className="mx-auto h-24 w-24 object-contain"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="mx-auto flex h-24 w-24 items-center justify-center text-muted-foreground">
+                    <Info className="h-8 w-8" />
                   </div>
+                )}
+              </div>
+              <div className="text-center">
+                <span className="mb-1 block text-xs text-muted-foreground">
+                  #{String(p.id).padStart(3, "0")}
+                </span>
+                <span className="block font-medium capitalize">{p.name}</span>
+                <div className="mt-2 flex justify-center gap-1">
+                  {p.types.map((type: string) => {
+                    const Icon = TYPE_ICONS[type] || Info;
+                    return (
+                      <span
+                        key={type}
+                        className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium text-white ${TYPE_COLORS[type] || "bg-gray-400"}`}
+                      >
+                        <Icon className="mr-1 h-3 w-3" />
+                        {type}
+                      </span>
+                    );
+                  })}
                 </div>
-              </Link>
-            ))}
-          </div>
-          {pokemonData?.nextCursor && (
-            <div className="mt-6 text-center">
-              <button
-                onClick={loadMore}
-                className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-              >
-                Load More
-              </button>
-            </div>
-          )}
-        </>
+              </div>
+            </Link>
+          ))}
+        </div>
       )}
     </div>
   );

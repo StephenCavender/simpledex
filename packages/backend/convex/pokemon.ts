@@ -1,6 +1,7 @@
 import { query, mutation, action } from "./_generated/server";
 import { v } from "convex/values";
 import { api } from "./_generated/api";
+import { generationOf } from "./generations";
 
 const POKEAPI_BASE = "https://pokeapi.co/api/v2";
 
@@ -10,54 +11,23 @@ const fetchJson = async (url: string) => {
   return res.json();
 };
 
-export const list = query({
-  args: {
-    type: v.optional(v.string()),
-    search: v.optional(v.string()),
-    limit: v.optional(v.number()),
-    cursor: v.optional(v.string()),
-    generation: v.optional(v.number()),
-  },
-  handler: async ({ db }, { type, search, limit = 50, cursor, generation }) => {
-    let results = await db.query("pokemon").take(1000);
-
-    if (generation) {
-      const GEN_ID_RANGES: Record<number, { min: number; max: number }> = {
-        1: { min: 1, max: 151 },
-        2: { min: 152, max: 251 },
-        3: { min: 252, max: 386 },
-        4: { min: 387, max: 493 },
-        5: { min: 494, max: 649 },
-        6: { min: 650, max: 721 },
-        7: { min: 722, max: 809 },
-        8: { min: 810, max: 905 },
-        9: { min: 906, max: 1025 },
-      };
-      const range = GEN_ID_RANGES[generation];
-      results = results.filter(
-        (p: any) =>
-          p.generationId === generation || (range && p.id >= range.min && p.id <= range.max),
-      );
-    }
-
-    if (type) {
-      results = results.filter((p: any) => p.types.includes(type.toLowerCase()));
-    }
-
-    if (search) {
-      const s = search.toLowerCase();
-      results = results.filter((p: any) => p.name.includes(s));
-    }
-
-    const startIndex = cursor ? results.findIndex((p: any) => p._id === cursor) + 1 : 0;
-    const paginated = results.slice(startIndex, startIndex + limit);
-    const nextCursor =
-      startIndex + limit < results.length ? paginated[paginated.length - 1]?._id : undefined;
-
-    return {
-      pokemon: paginated,
-      nextCursor,
-    };
+/**
+ * The whole Pokédex as Pokédex entries, sorted by Pokédex number.
+ * Filtering happens on the client; see ADR-0002.
+ */
+export const pokedex = query({
+  args: {},
+  handler: async ({ db }) => {
+    const all = await db.query("pokemon").collect();
+    return all
+      .map((p) => ({
+        id: p.id,
+        name: p.name,
+        types: p.types,
+        image: p.artwork ?? p.sprite,
+        generation: generationOf(p.id),
+      }))
+      .sort((a, b) => a.id - b.id);
   },
 });
 

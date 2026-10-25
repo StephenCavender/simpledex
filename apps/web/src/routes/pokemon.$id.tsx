@@ -1,5 +1,6 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { MAX_POKEDEX_NUMBER } from "@simpledex/backend/convex/generations";
+import { createFileRoute, Link, useCanGoBack, useRouter } from "@tanstack/react-router";
 import { useQuery, useAction } from "convex/react";
 import { useEffect, useState, useRef, type ReactNode, type ComponentType } from "react";
 import {
@@ -66,6 +67,29 @@ const TYPE_COLORS: Record<string, string> = {
   fighting: "bg-red-700",
   electric: "bg-yellow-400",
 };
+
+/**
+ * Returns to the previous page (so the Pokédex keeps its filters and scroll
+ * position), falling back to the Pokédex when opened directly.
+ */
+function BackLink({ className = "" }: { className?: string }) {
+  const router = useRouter();
+  const canGoBack = useCanGoBack();
+  return (
+    <Link
+      to="/"
+      onClick={(e) => {
+        if (!canGoBack) return;
+        e.preventDefault();
+        router.history.back();
+      }}
+      className={`${className} inline-flex items-center text-sm text-muted-foreground hover:text-foreground`}
+    >
+      <ArrowLeft className="mr-1 h-4 w-4" />
+      Back
+    </Link>
+  );
+}
 
 function PokemonDetail() {
   const { id } = Route.useParams();
@@ -173,18 +197,12 @@ function PokemonDetail() {
   };
 
   const prevId = pokemonId > 1 ? pokemonId - 1 : null;
-  const nextId = pokemonId < 151 ? pokemonId + 1 : null;
+  const nextId = pokemonId < MAX_POKEDEX_NUMBER ? pokemonId + 1 : null;
 
   if (pokemon === undefined) {
     return (
       <div className="container mx-auto max-w-4xl px-4 py-6">
-        <Link
-          to="/"
-          className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="mr-1 h-4 w-4" />
-          Back
-        </Link>
+        <BackLink className="mb-4" />
         <div className="space-y-4">
           <div className="flex justify-center">
             <div className="h-48 w-48 rounded bg-muted animate-pulse" />
@@ -205,13 +223,7 @@ function PokemonDetail() {
   if (!pokemon) {
     return (
       <div className="container mx-auto max-w-4xl px-4 py-6">
-        <Link
-          to="/"
-          className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="mr-1 h-4 w-4" />
-          Back
-        </Link>
+        <BackLink className="mb-4" />
         <div className="text-center py-12">
           <p className="text-muted-foreground">Pokemon not found</p>
         </div>
@@ -222,18 +234,13 @@ function PokemonDetail() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-6">
       <div className="flex items-center justify-between mb-4">
-        <Link
-          to="/"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="mr-1 h-4 w-4" />
-          Back
-        </Link>
+        <BackLink />
         <div className="flex gap-2">
           {prevId && (
             <Link
               to="/pokemon/$id"
               params={{ id: String(prevId) }}
+              replace
               className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
             >
               ← Prev
@@ -243,6 +250,7 @@ function PokemonDetail() {
             <Link
               to="/pokemon/$id"
               params={{ id: String(nextId) }}
+              replace
               className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
             >
               Next →

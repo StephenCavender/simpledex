@@ -1,6 +1,6 @@
 # Plan: Pokédex listing module (load whole Pokédex, filter client-side)
 
-**Status**: Ready
+**Status**: Done
 **Supersedes**: [scale-limit-pagination.md](scale-limit-pagination.md)
 **Decision**: [ADR-0002](../docs/adr/0002-load-whole-pokedex-filter-client-side.md)
 

@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as generations from "../generations.js";
 import type * as pokemon from "../pokemon.js";
 
 import type {
@@ -17,6 +18,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  generations: typeof generations;
   pokemon: typeof pokemon;
 }>;
 
