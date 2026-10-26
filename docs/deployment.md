@@ -32,7 +32,7 @@ Environment variables:
 
 ## Deploying Backend
 
-Production builds deploy Convex automatically: [`apps/web/scripts/vercel-build.sh`](../apps/web/scripts/vercel-build.sh) runs `convex deploy`, which typechecks and pushes functions and schema, then builds the web app against the production Convex URL. If the Convex push fails (for example, a schema change that existing data doesn't satisfy), the build fails and the current production deployment stays live. Preview builds never deploy Convex.
+Production builds deploy Convex automatically: [`apps/web/scripts/vercel-build.sh`](../apps/web/scripts/vercel-build.sh) runs `convex deploy`, which typechecks and pushes functions and schema, then builds the web app against the production Convex URL. If the Convex push fails (for example, a schema change that existing data doesn't satisfy), the build fails and the current production deployment stays live. Preview builds never deploy Convex. The script refuses any key that isn't a production deploy key for `adept-labrador-868`, because `convex deploy` points the site at whichever deployment the key belongs to.
 
 To deploy Convex by hand (deploys to production by default):
 
