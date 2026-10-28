@@ -42,6 +42,8 @@ export const run = internalAction({
         force,
         chainsSynced: [],
       });
+    } else {
+      await ctx.runMutation(internal.sync.pruneEvolutionChains, {});
     }
   },
 });
@@ -179,6 +181,8 @@ export const batch = internalAction({
         force,
         chainsSynced: [...chainsDone],
       });
+    } else {
+      await ctx.runMutation(internal.sync.pruneEvolutionChains, {});
     }
   },
 });
@@ -252,6 +256,25 @@ export const saveEvolutionChain = internalMutation({
       .unique();
     if (existing) await ctx.db.replace(existing._id, chain);
     else await ctx.db.insert("evolutionChain", chain);
+  },
+});
+
+/** Deletes Evolution Chains that no stored Species references. Runs at the end of a Sync. */
+export const pruneEvolutionChains = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const referenced = new Set<number>();
+    for (const species of await ctx.db.query("species").collect()) {
+      if (species.evolutionChainId !== undefined) referenced.add(species.evolutionChainId);
+    }
+    let deleted = 0;
+    for (const chain of await ctx.db.query("evolutionChain").collect()) {
+      if (!referenced.has(chain.id)) {
+        await ctx.db.delete(chain._id);
+        deleted++;
+      }
+    }
+    if (deleted > 0) console.log(`sync: removed ${deleted} unreferenced Evolution Chains`);
   },
 });
 

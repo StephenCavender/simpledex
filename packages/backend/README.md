@@ -19,7 +19,7 @@ bun run sync:status                  # live progress: counts, missing, running
 bunx convex run sync:clear           # wipe synced data (local use)
 ```
 
-`bun run sync` targets the deployment in `.env.local` (your dev or local deployment). `sync:run` returns as soon as the first batch is scheduled; the Sync then runs in scheduled batches of 50 Pokémon inside Convex. `sync:status` shows `running` until the last batch finishes, how many Pokédex numbers are still `missing`, and how many documents per table are still in the pre-Sync (`legacy`) shape. Progress is logged as `sync: batch A–B synced X, skipped Y, failed Z`; failures are logged per Pokémon and can be retried by running the same command again.
+`bun run sync` targets the deployment in `.env.local` (your dev or local deployment). `sync:run` returns as soon as the first batch is scheduled; the Sync then runs in scheduled batches of 50 Pokémon inside Convex. `sync:status` shows `running` until the last batch finishes, how many Pokédex numbers are still `missing`, and how many documents per table are still in the pre-Sync (`legacy`) shape. Progress is logged as `sync: batch A–B synced X, skipped Y, failed Z`; failures are logged per Pokémon. Re-running without `force` retries Pokémon that were never stored; to retry ones already stored, pass them explicitly: `'{"numbers":[24],"force":true}'`. Each run ends by removing Types no Pokémon has and Evolution Chains no Species references.
 
 ## Production
 

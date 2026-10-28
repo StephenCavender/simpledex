@@ -197,6 +197,29 @@ describe("sync.run", () => {
     expect(names).toHaveLength(18);
   });
 
+  it("removes Evolution Chains that no Species references", async () => {
+    const t = convexTest(schema, modules);
+    await t.run(async (ctx) => {
+      await ctx.db.insert("evolutionChain", { id: 999, chain: { species: "orphan" } });
+    });
+
+    await sync(t, { numbers: [25] });
+
+    expect(await t.query(internal.sync.status, {})).toMatchObject({
+      evolutionChains: { stored: 1, legacy: 0 },
+    });
+    expect(await t.query(api.pokemon.getEvolutionChain, { id: 10 })).not.toBeNull();
+  });
+
+  it("keeps Evolution Chains of Pokémon outside a partial Sync", async () => {
+    const t = convexTest(schema, modules);
+    await sync(t, { numbers: [1] });
+    await sync(t, { numbers: [25] });
+
+    expect(await t.query(api.pokemon.getEvolutionChain, { id: 1 })).not.toBeNull();
+    expect(await t.query(api.pokemon.getEvolutionChain, { id: 10 })).not.toBeNull();
+  });
+
   it("skips Pokémon already stored unless forced", async () => {
     const t = convexTest(schema, modules);
     await sync(t, { numbers: [25] });
