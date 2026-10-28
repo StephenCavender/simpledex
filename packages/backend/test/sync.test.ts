@@ -263,6 +263,66 @@ describe("sync.run", () => {
   });
 });
 
+describe("sync.status", () => {
+  it("reports an empty deployment with nothing running", async () => {
+    const t = convexTest(schema, modules);
+
+    expect(await t.query(internal.sync.status, {})).toEqual({
+      running: false,
+      missing: 1025,
+      pokemon: { stored: 0, legacy: 0 },
+      species: { stored: 0, legacy: 0 },
+      evolutionChains: { stored: 0, legacy: 0 },
+      types: { stored: 0, legacy: 0 },
+    });
+  });
+
+  it("reports a Sync in progress until its batches finish", async () => {
+    const t = convexTest(schema, modules);
+    await t.action(internal.sync.run, { numbers: [25] });
+
+    expect((await t.query(internal.sync.status, {})).running).toBe(true);
+
+    await t.finishAllScheduledFunctions(vi.runAllTimers);
+    expect(await t.query(internal.sync.status, {})).toMatchObject({
+      running: false,
+      missing: 1024,
+      pokemon: { stored: 1, legacy: 0 },
+      species: { stored: 1, legacy: 0 },
+      evolutionChains: { stored: 1, legacy: 0 },
+      types: { stored: 18, legacy: 0 },
+    });
+  });
+
+  it("counts documents still in the pre-Sync shape", async () => {
+    const t = convexTest(schema, modules);
+    await t.run(async (ctx) => {
+      await ctx.db.insert("pokemon", {
+        id: 1,
+        name: "bulbasaur",
+        types: ["grass"],
+        sprite: "old.png",
+        height: 0,
+        weight: 0,
+        stats: [],
+        abilities: [],
+        speciesId: 1,
+        generationId: 1,
+      });
+      await ctx.db.insert("species", { id: 1, name: "bulbasaur", generation: "generation-i" });
+      await ctx.db.insert("evolutionChain", { id: 1, chain: { species: "bulbasaur" } });
+      await ctx.db.insert("types", { id: 19, name: "stellar", damageRelations: {} });
+    });
+
+    expect(await t.query(internal.sync.status, {})).toMatchObject({
+      pokemon: { stored: 1, legacy: 1 },
+      species: { stored: 1, legacy: 1 },
+      evolutionChains: { stored: 1, legacy: 1 },
+      types: { stored: 1, legacy: 1 },
+    });
+  });
+});
+
 describe("sync.clear", () => {
   it("wipes synced data", async () => {
     const t = convexTest(schema, modules);

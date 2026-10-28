@@ -60,6 +60,67 @@ export const clear = internalMutation({
   },
 });
 
+/**
+ * Sync progress and data health. Watch it live with
+ * `bunx convex run sync:status --watch`. `legacy` counts documents still in
+ * the shape written before the Sync module (see plans/pokemon-sync.md, step 8).
+ */
+export const status = internalQuery({
+  args: {},
+  handler: async (ctx) => {
+    const [pokemon, species, chains, types] = await Promise.all([
+      ctx.db.query("pokemon").collect(),
+      ctx.db.query("species").collect(),
+      ctx.db.query("evolutionChain").collect(),
+      ctx.db.query("types").collect(),
+    ]);
+    const scheduled = await ctx.db.system.query("_scheduled_functions").collect();
+    const running = scheduled.some(
+      (job) =>
+        job.name.startsWith("sync") &&
+        (job.state.kind === "pending" || job.state.kind === "inProgress"),
+    );
+    const stored = new Set(pokemon.map((p) => p.id));
+    let missing = 0;
+    for (let n = 1; n <= MAX_POKEDEX_NUMBER; n++) if (!stored.has(n)) missing++;
+
+    return {
+      running,
+      missing,
+      pokemon: {
+        stored: pokemon.length,
+        legacy: pokemon.filter((p) => p.generationId !== undefined).length,
+      },
+      species: {
+        stored: species.length,
+        legacy: species.filter((s) => s.generation !== undefined || s.evolvesFrom !== undefined)
+          .length,
+      },
+      evolutionChains: {
+        stored: chains.length,
+        legacy: chains.filter((c) => c.stages === undefined || c.chain !== undefined).length,
+      },
+      types: {
+        stored: types.length,
+        legacy: types.filter((t) => !isTypedDamageRelations(t.damageRelations)).length,
+      },
+    };
+  },
+});
+
+const typedDamageRelations = z.object({
+  doubleDamageFrom: z.array(z.string()),
+  doubleDamageTo: z.array(z.string()),
+  halfDamageFrom: z.array(z.string()),
+  halfDamageTo: z.array(z.string()),
+  noDamageFrom: z.array(z.string()),
+  noDamageTo: z.array(z.string()),
+});
+
+function isTypedDamageRelations(value: unknown): boolean {
+  return typedDamageRelations.safeParse(value).success;
+}
+
 // ─── Batches ────────────────────────────────────────────────────────────────
 
 export const batch = internalAction({

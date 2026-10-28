@@ -15,10 +15,11 @@ bun run sync                         # all Generations (~5–10 minutes)
 bun run sync '{"gens":[1,2]}'        # Gen I and II
 bun run sync '{"numbers":[25,133]}'  # specific Pokédex numbers
 bun run sync '{"force":true}'        # re-sync everything
+bun run sync:status                  # live progress: counts, missing, running
 bunx convex run sync:clear           # wipe synced data (local use)
 ```
 
-`bun run sync` targets the deployment in `.env.local` (your dev or local deployment). The Sync runs in scheduled batches of 50 Pokémon. Progress is logged as `sync: batch A–B synced X, skipped Y, failed Z`; failures are logged per Pokémon and can be retried by running the same command again.
+`bun run sync` targets the deployment in `.env.local` (your dev or local deployment). `sync:run` returns as soon as the first batch is scheduled; the Sync then runs in scheduled batches of 50 Pokémon inside Convex. `sync:status` shows `running` until the last batch finishes, how many Pokédex numbers are still `missing`, and how many documents per table are still in the pre-Sync (`legacy`) shape. Progress is logged as `sync: batch A–B synced X, skipped Y, failed Z`; failures are logged per Pokémon and can be retried by running the same command again.
 
 ## Production
 
@@ -29,6 +30,7 @@ Production commands use a personal deploy key kept in `.env.prod.local` (gitigno
 
 ```bash
 bun run sync:prod '{"force":true}'  # Sync production
+bun run sync:status:prod            # watch production Sync progress (Ctrl-C to stop)
 bun run prod run pokemon:pokedex    # any Convex CLI command against production
 bun run prod logs                   # tail production logs
 ```
