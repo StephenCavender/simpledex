@@ -47,8 +47,10 @@ Data is copied from PokeAPI by the internal Sync module. After a deploy that cha
 
 ```bash
 cd packages/backend
-bunx convex run --prod sync:run '{"force":true}'
+bun run sync:prod '{"force":true}'
 ```
+
+This needs a personal deploy key in `packages/backend/.env.prod.local`.
 
 See [packages/backend/README.md](../packages/backend/README.md) for all Sync options.
 

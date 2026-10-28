@@ -8,17 +8,32 @@ Convex functions and schema for SimpleDex.
 
 ## Sync
 
-Run from this directory. Already-synced Pokémon and Evolution Chains are skipped unless `force` is set. Add `--prod` to target production.
+Run from this directory. Already-synced Pokémon and Evolution Chains are skipped unless `force` is set.
 
 ```bash
-bunx convex run sync:run                         # all Generations (~5–10 minutes)
-bunx convex run sync:run '{"gens":[1,2]}'        # Gen I and II
-bunx convex run sync:run '{"numbers":[25,133]}'  # specific Pokédex numbers
-bunx convex run sync:run '{"force":true}'        # re-sync everything
-bunx convex run sync:clear                       # wipe synced data (local use)
+bun run sync                         # all Generations (~5–10 minutes)
+bun run sync '{"gens":[1,2]}'        # Gen I and II
+bun run sync '{"numbers":[25,133]}'  # specific Pokédex numbers
+bun run sync '{"force":true}'        # re-sync everything
+bunx convex run sync:clear           # wipe synced data (local use)
 ```
 
-The Sync runs in scheduled batches of 50 Pokémon. Progress is logged as `sync: batch A–B synced X, skipped Y, failed Z`; failures are logged per Pokémon and can be retried by running the same command again.
+`bun run sync` targets the deployment in `.env.local` (your dev or local deployment). The Sync runs in scheduled batches of 50 Pokémon. Progress is logged as `sync: batch A–B synced X, skipped Y, failed Z`; failures are logged per Pokémon and can be retried by running the same command again.
+
+## Production
+
+Production commands use a personal deploy key kept in `.env.prod.local` (gitignored), never in `.env.local`, which the Convex CLI reads for every command.
+
+1. In the Convex dashboard, open `adept-labrador-868` → Settings → Deploy Keys and create a key with `deployment:functions:runInternalActions` and `deployment:functions:runInternalQueries` (add `deployment:logs:view` for logs).
+2. `cp .env.prod.local.example .env.prod.local` and paste the key.
+
+```bash
+bun run sync:prod '{"force":true}'  # Sync production
+bun run prod run pokemon:pokedex    # any Convex CLI command against production
+bun run prod logs                   # tail production logs
+```
+
+`scripts/prod.sh` refuses any key that isn't a production key for `adept-labrador-868`.
 
 ## Tests
 

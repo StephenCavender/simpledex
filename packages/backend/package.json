@@ -11,6 +11,9 @@
     "build": "echo 'noop'",
     "check-types": "tsc --noEmit",
     "test": "vitest run",
+    "sync": "convex run sync:run",
+    "sync:prod": "bash ./scripts/prod.sh run sync:run",
+    "prod": "bash ./scripts/prod.sh",
     "record-fixtures": "bun run ./scripts/record-fixtures.ts"
   },
   "dependencies": {

@@ -10,10 +10,10 @@ export const Route = createFileRoute("/admin")({
 });
 
 const SYNC_COMMANDS = [
-  { args: "", description: "all Generations" },
-  { args: `'{"gens":[1,2]}'`, description: "Gen I and II" },
-  { args: `'{"numbers":[25,133]}'`, description: "specific Pokédex numbers" },
-  { args: `'{"force":true}'`, description: "re-sync everything" },
+  { command: "bun run sync", description: "all Generations" },
+  { command: `bun run sync '{"gens":[1,2]}'`, description: "Gen I and II" },
+  { command: `bun run sync '{"numbers":[25,133]}'`, description: "specific Pokédex numbers" },
+  { command: `bun run sync:prod '{"force":true}'`, description: "re-sync production" },
 ];
 
 function AdminComponent() {
@@ -139,12 +139,13 @@ function AdminComponent() {
         <h2 className="mb-3 font-semibold">How to Sync</h2>
         <p className="mb-4 text-sm text-muted-foreground">
           Run from <code>packages/backend</code>. Already-synced Pokémon are skipped unless{" "}
-          <code>force</code> is set. Add <code>--prod</code> to sync production.
+          <code>force</code> is set. Production commands need a deploy key in{" "}
+          <code>.env.prod.local</code> (see the backend README).
         </p>
         <div className="space-y-2 text-sm">
-          {SYNC_COMMANDS.map(({ args, description }) => (
-            <p key={args}>
-              <code className="rounded bg-muted px-2 py-1">bunx convex run sync:run {args}</code>
+          {SYNC_COMMANDS.map(({ command, description }) => (
+            <p key={command}>
+              <code className="rounded bg-muted px-2 py-1">{command}</code>
               <span className="ml-2 text-muted-foreground">({description})</span>
             </p>
           ))}
