@@ -200,9 +200,14 @@ const typeValidator = v.object({
   damageRelations: damageRelationsValidator,
 });
 
+/** Replaces the whole Types table: `types` is every Type that has Pokémon. */
 export const saveTypes = internalMutation({
   args: { types: v.array(typeValidator) },
   handler: async (ctx, { types }) => {
+    const synced = new Set(types.map((type) => type.id));
+    for (const stale of await ctx.db.query("types").collect()) {
+      if (!synced.has(stale.id)) await ctx.db.delete(stale._id);
+    }
     for (const type of types) {
       const existing = await ctx.db
         .query("types")

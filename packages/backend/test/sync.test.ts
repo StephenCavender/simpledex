@@ -182,6 +182,21 @@ describe("sync.run", () => {
     expect(fire?.damageRelations.halfDamageFrom).toContain("fire");
   });
 
+  it("removes stored Types that no Pokémon has", async () => {
+    const t = convexTest(schema, modules);
+    await t.run(async (ctx) => {
+      await ctx.db.insert("types", { id: 19, name: "stellar", damageRelations: {} });
+      await ctx.db.insert("types", { id: 10001, name: "unknown", damageRelations: {} });
+    });
+
+    await sync(t, { numbers: [25] });
+
+    const names = (await t.query(api.pokemon.listTypes, {})).map((type) => type.name);
+    expect(names).not.toContain("stellar");
+    expect(names).not.toContain("unknown");
+    expect(names).toHaveLength(18);
+  });
+
   it("skips Pokémon already stored unless forced", async () => {
     const t = convexTest(schema, modules);
     await sync(t, { numbers: [25] });
