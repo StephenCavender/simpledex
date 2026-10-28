@@ -1,6 +1,6 @@
 # Plan: Sync module (PokeAPI → SimpleDex)
 
-**Status**: In progress: steps 1–6, 9, and 10 are done; steps 7–8 need production deploys.
+**Status**: Done
 **Origin**: Architecture review candidate 4; also does the client-side half of candidate 2.
 
 Terms follow [GLOSSARY.md](../GLOSSARY.md): Pokémon, Pokédex number, Pokédex entry, Generation, Sync.
@@ -96,6 +96,13 @@ Behind the interface:
 8. Schema, deploy 2: drop `generationId`, `species.generation`, `species.evolvesFrom`, and `evolutionChain.chain`; make `stages` required. **You:** deploy to production.
 9. CI e2e: start a local, account-free Convex backend in the job, push the functions, run `sync:run '{"numbers":[1,25,133,1025]}'` against live PokeAPI, and point `VITE_CONVEX_URL` at it. The job stays non-gating.
 10. Docs: update `docs/deployment.md` (Data Sync section) and `packages/backend/README.md`.
+
+## Outcome
+
+- Convex reserves the index name `by_id`, so the index is `by_pokeapi_id`.
+- Production is `adept-labrador-868`. The Vercel production build deploys Convex (`apps/web/vercel.json` → `apps/web/scripts/vercel-build.sh`) and refuses any key that isn't a production key for it. Personal production commands go through `bun run prod` / `bun run sync:prod` with a key in `packages/backend/.env.prod.local`.
+- The forced production Sync also exposed old documents the Sync never revisited: Types without Pokémon (`stellar`, `unknown`) and one Evolution Chain no Species referenced. Each Sync now ends by removing both.
+- `sync:status` reports Sync progress (`bun run sync:status[:prod]`).
 
 ## Out of scope
 

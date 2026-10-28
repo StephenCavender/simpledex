@@ -44,32 +44,18 @@ export const speciesFields = {
 };
 
 export default defineSchema({
-  pokemon: defineTable({
-    ...pokemonFields,
-    // Deprecated: removed after the forced production Sync (plans/pokemon-sync.md, step 8).
-    generationId: v.optional(v.number()),
-  }).index("by_pokeapi_id", ["id"]),
+  pokemon: defineTable(pokemonFields).index("by_pokeapi_id", ["id"]),
 
-  species: defineTable({
-    ...speciesFields,
-    // Deprecated: removed after the forced production Sync (plans/pokemon-sync.md, step 8).
-    generation: v.optional(v.string()),
-    evolvesFrom: v.optional(v.number()),
-  }).index("by_pokeapi_id", ["id"]),
+  species: defineTable(speciesFields).index("by_pokeapi_id", ["id"]),
 
   evolutionChain: defineTable({
     id: v.number(),
-    // Required after the forced production Sync (plans/pokemon-sync.md, step 8).
-    stages: v.optional(v.array(evolutionStageValidator)),
-    // Deprecated: the old recursive tree; removed in step 8.
-    chain: v.optional(v.any()),
+    stages: v.array(evolutionStageValidator),
   }).index("by_pokeapi_id", ["id"]),
 
   types: defineTable({
     id: v.number(),
     name: v.string(),
-    // Typed by damageRelationsValidator on write; the schema tightens to it in step 8,
-    // once the forced Sync has replaced documents holding the raw PokeAPI shape.
-    damageRelations: v.any(),
+    damageRelations: damageRelationsValidator,
   }).index("by_pokeapi_id", ["id"]),
 });

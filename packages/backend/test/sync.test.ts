@@ -185,8 +185,16 @@ describe("sync.run", () => {
   it("removes stored Types that no Pokémon has", async () => {
     const t = convexTest(schema, modules);
     await t.run(async (ctx) => {
-      await ctx.db.insert("types", { id: 19, name: "stellar", damageRelations: {} });
-      await ctx.db.insert("types", { id: 10001, name: "unknown", damageRelations: {} });
+      const damageRelations = {
+        doubleDamageFrom: [],
+        doubleDamageTo: [],
+        halfDamageFrom: [],
+        halfDamageTo: [],
+        noDamageFrom: [],
+        noDamageTo: [],
+      };
+      await ctx.db.insert("types", { id: 19, name: "stellar", damageRelations });
+      await ctx.db.insert("types", { id: 10001, name: "unknown", damageRelations });
     });
 
     await sync(t, { numbers: [25] });
@@ -200,14 +208,12 @@ describe("sync.run", () => {
   it("removes Evolution Chains that no Species references", async () => {
     const t = convexTest(schema, modules);
     await t.run(async (ctx) => {
-      await ctx.db.insert("evolutionChain", { id: 999, chain: { species: "orphan" } });
+      await ctx.db.insert("evolutionChain", { id: 999, stages: [] });
     });
 
     await sync(t, { numbers: [25] });
 
-    expect(await t.query(internal.sync.status, {})).toMatchObject({
-      evolutionChains: { stored: 1, legacy: 0 },
-    });
+    expect((await t.query(internal.sync.status, {})).evolutionChains).toBe(1);
     expect(await t.query(api.pokemon.getEvolutionChain, { id: 10 })).not.toBeNull();
   });
 
@@ -236,30 +242,6 @@ describe("sync.run", () => {
 
     await sync(t, { numbers: [25], force: true });
     expect((await t.query(api.pokemon.getById, { id: 25 }))?.name).toBe("pikachu");
-  });
-
-  it("removes stale fields when a forced Sync replaces a document", async () => {
-    const t = convexTest(schema, modules);
-    await t.run(async (ctx) => {
-      await ctx.db.insert("pokemon", {
-        id: 1,
-        name: "bulbasaur",
-        types: ["grass"],
-        sprite: "old.png",
-        height: 0,
-        weight: 0,
-        stats: [],
-        abilities: [],
-        speciesId: 1,
-        generationId: 1,
-      });
-    });
-
-    await sync(t, { numbers: [1], force: true });
-
-    const bulbasaur = await t.query(api.pokemon.getById, { id: 1 });
-    expect(bulbasaur).not.toHaveProperty("generationId");
-    expect(bulbasaur?.types).toEqual(["grass", "poison"]);
   });
 
   it("fails only the Pokémon PokeAPI can't serve", async () => {
@@ -293,10 +275,10 @@ describe("sync.status", () => {
     expect(await t.query(internal.sync.status, {})).toEqual({
       running: false,
       missing: 1025,
-      pokemon: { stored: 0, legacy: 0 },
-      species: { stored: 0, legacy: 0 },
-      evolutionChains: { stored: 0, legacy: 0 },
-      types: { stored: 0, legacy: 0 },
+      pokemon: 0,
+      species: 0,
+      evolutionChains: 0,
+      types: 0,
     });
   });
 
@@ -307,41 +289,13 @@ describe("sync.status", () => {
     expect((await t.query(internal.sync.status, {})).running).toBe(true);
 
     await t.finishAllScheduledFunctions(vi.runAllTimers);
-    expect(await t.query(internal.sync.status, {})).toMatchObject({
+    expect(await t.query(internal.sync.status, {})).toEqual({
       running: false,
       missing: 1024,
-      pokemon: { stored: 1, legacy: 0 },
-      species: { stored: 1, legacy: 0 },
-      evolutionChains: { stored: 1, legacy: 0 },
-      types: { stored: 18, legacy: 0 },
-    });
-  });
-
-  it("counts documents still in the pre-Sync shape", async () => {
-    const t = convexTest(schema, modules);
-    await t.run(async (ctx) => {
-      await ctx.db.insert("pokemon", {
-        id: 1,
-        name: "bulbasaur",
-        types: ["grass"],
-        sprite: "old.png",
-        height: 0,
-        weight: 0,
-        stats: [],
-        abilities: [],
-        speciesId: 1,
-        generationId: 1,
-      });
-      await ctx.db.insert("species", { id: 1, name: "bulbasaur", generation: "generation-i" });
-      await ctx.db.insert("evolutionChain", { id: 1, chain: { species: "bulbasaur" } });
-      await ctx.db.insert("types", { id: 19, name: "stellar", damageRelations: {} });
-    });
-
-    expect(await t.query(internal.sync.status, {})).toMatchObject({
-      pokemon: { stored: 1, legacy: 1 },
-      species: { stored: 1, legacy: 1 },
-      evolutionChains: { stored: 1, legacy: 1 },
-      types: { stored: 1, legacy: 1 },
+      pokemon: 1,
+      species: 1,
+      evolutionChains: 1,
+      types: 18,
     });
   });
 });
