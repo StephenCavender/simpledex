@@ -26,8 +26,24 @@ test.describe("Home page", () => {
 
   test("Generation filter in the URL includes Pokédex numbers above 1000", async ({ page }) => {
     await page.goto("/?gen=9");
+    await expect(page.getByRole("link", { name: /#906/ })).toBeVisible();
+
+    await page.keyboard.press("End");
 
     await expect(page.getByRole("link", { name: /#1025/ })).toBeVisible();
+  });
+
+  test("renders only the Pokédex entries near the viewport", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByRole("link", { name: /bulbasaur/i })).toBeVisible();
+
+    const cards = page.getByRole("link", { name: /#\d{3,}/ });
+    expect(await cards.count()).toBeLessThan(100);
+
+    await page.keyboard.press("End");
+
+    await expect(page.getByRole("link", { name: /pecharunt/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /bulbasaur/i })).toBeHidden();
   });
 
   test("Back from a Pokémon keeps the Pokédex filters", async ({ page }) => {

@@ -1,9 +1,8 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { GENERATIONS } from "@simpledex/backend/convex/generations";
 import { useQuery } from "convex/react";
-import { PokemonImage } from "@/components/pokemon-image";
-import { TypeBadge } from "@/components/type-badge";
+import { PokedexGrid } from "@/components/pokedex-grid";
 import { filterPokedex, type PokedexFilters } from "@/lib/pokedex";
 import { Search } from "lucide-react";
 
@@ -101,31 +100,7 @@ function HomeComponent() {
       ) : entries.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">No Pokemon found</div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {entries.map((p) => (
-            <Link
-              key={p.id}
-              to="/pokemon/$id"
-              params={{ id: String(p.id) }}
-              className="group block rounded-lg border bg-card p-4 transition-colors hover:bg-accent"
-            >
-              <div className="mb-2 text-center">
-                <PokemonImage src={p.image} name={p.name} size="md" className="mx-auto" />
-              </div>
-              <div className="text-center">
-                <span className="mb-1 block text-xs text-muted-foreground">
-                  #{String(p.id).padStart(3, "0")}
-                </span>
-                <span className="block font-medium capitalize">{p.name}</span>
-                <div className="mt-2 flex justify-center gap-1">
-                  {p.types.map((type) => (
-                    <TypeBadge key={type} type={type} />
-                  ))}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <PokedexGrid entries={entries} />
       )}
     </div>
   );

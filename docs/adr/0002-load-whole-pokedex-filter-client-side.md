@@ -12,4 +12,5 @@ The Pokédex list is served by one Convex query that returns every Pokédex entr
 ## Consequences
 
 - Revisit if the number of Pokédex entries grows by an order of magnitude (e.g. alternate forms or regional variants become separate entries) or the payload becomes noticeably slow on mobile.
+- Loading everything doesn't mean rendering everything: drawing all ~1025 cards took about 10 seconds in Firefox, so the home grid is virtualised (only rows near the viewport are in the DOM). That fixed the slowness without touching this decision. The trade-off is that the browser's find-in-page only sees the rendered rows; the search box covers that.
 - Pokédex entries are a projection; the full Pokémon record (stats, abilities) is only fetched on the detail route.

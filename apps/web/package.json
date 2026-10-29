@@ -21,6 +21,7 @@
     "@simpledex/ui": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-router": "^1.170.45",
+    "@tanstack/react-virtual": "^3.14.24",
     "convex": "catalog:",
     "lucide-react": "catalog:",
     "next-themes": "catalog:",
