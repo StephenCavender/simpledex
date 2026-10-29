@@ -11,6 +11,7 @@ Color, radius, and font tokens are CSS variables in `packages/ui/src/styles/glob
 - **Type badges**: `<TypeBadge>` (`apps/web/src/components/type-badge.tsx`): rounded-full pills, `--type-<name>` background, white small text, lucide icon + label.
 - **Pokémon images**: `<PokemonImage>` (`apps/web/src/components/pokemon-image.tsx`): lazy-loaded, with a placeholder when the image is missing or fails to load.
 - **Pokémon grid**: 2 / 3 / 4 columns (mobile / tablet / desktop), artwork + ID + name + badges, `hover:bg-accent`, lazy-loaded images.
+- **Evolutions**: `<Evolutions>` (`apps/web/src/components/evolutions.tsx`) on the detail page: what this Pokémon evolves from and into (with methods), then the whole Evolution Chain as small named sprites; single-stage Pokémon say "Does not evolve."
 - **Buttons**: solid with clear hover; outline for secondary; icon buttons for theme toggle and nav; dropdown items `rounded-none`.
 - **Search**: full-width with icon; filters instantly as you type (by name or Pokédex number).
 

@@ -2,7 +2,7 @@ import { api } from "@simpledex/backend/convex/_generated/api";
 import { MAX_POKEDEX_NUMBER } from "@simpledex/backend/convex/generations";
 import { createFileRoute, Link, useCanGoBack, useRouter } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-import { Fragment } from "react";
+import { Evolutions } from "@/components/evolutions";
 import { PokemonImage } from "@/components/pokemon-image";
 import { TypeBadge } from "@/components/type-badge";
 import { ArrowLeft } from "lucide-react";
@@ -40,13 +40,8 @@ function PokemonDetail() {
 
   const pokemon = useQuery(api.pokemon.getById, { id: pokemonId });
   const species = useQuery(api.pokemon.getSpecies, { id: pokemonId });
-  const evolutionChainId = species?.evolutionChainId;
-
   // undefined while loading; null when the Pokémon has no synced Evolution Chain.
-  const evolutionStages = useQuery(
-    api.pokemon.getEvolutionChain,
-    evolutionChainId ? { id: evolutionChainId } : "skip",
-  );
+  const evolutions = useQuery(api.pokemon.getEvolutions, { pokemon: pokemonId });
 
   const prevId = pokemonId > 1 ? pokemonId - 1 : null;
   const nextId = pokemonId < MAX_POKEDEX_NUMBER ? pokemonId + 1 : null;
@@ -186,31 +181,11 @@ function PokemonDetail() {
           </div>
         )}
 
-        {evolutionChainId !== undefined && evolutionStages !== null && (
+        {evolutions !== null && (
           <div className="mt-6">
             <h2 className="text-lg font-semibold mb-3">Evolutions</h2>
-            {evolutionStages ? (
-              <div className="flex items-center gap-2 flex-wrap">
-                {evolutionStages.map((stage) => (
-                  <Fragment key={stage.id}>
-                    {stage.from !== undefined && <span className="text-2xl mx-1">→</span>}
-                    <div className="text-center">
-                      <Link to="/pokemon/$id" params={{ id: String(stage.id) }}>
-                        <PokemonImage
-                          src={stage.sprite}
-                          name={stage.name}
-                          size="sm"
-                          className={`mx-auto hover:scale-110 transition-transform ${stage.id === pokemonId ? "ring-2 ring-primary rounded-full" : ""}`}
-                        />
-                      </Link>
-                      <p className="text-sm capitalize mt-1">{stage.name}</p>
-                      {stage.method && (
-                        <p className="text-xs text-muted-foreground">{stage.method}</p>
-                      )}
-                    </div>
-                  </Fragment>
-                ))}
-              </div>
+            {evolutions ? (
+              <Evolutions stages={evolutions} pokedexNumber={pokemonId} />
             ) : (
               <p className="text-sm text-muted-foreground">Loading evolutions...</p>
             )}

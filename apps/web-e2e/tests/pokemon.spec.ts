@@ -5,7 +5,15 @@ test.describe("Pokémon detail page", () => {
     await page.goto("/pokemon/133");
 
     const evolutions = page.getByRole("heading", { name: "Evolutions" }).locator("..");
-    await expect(evolutions.getByRole("img", { name: "vaporeon" })).toBeVisible();
-    await expect(evolutions).toContainText("Use Water Stone");
+    const into = evolutions.getByRole("region", { name: "Evolves into" });
+    await expect(into.getByRole("img", { name: "vaporeon" })).toBeVisible();
+    await expect(into).toContainText("Use Water Stone");
+  });
+
+  test("says a single-stage Pokémon does not evolve", async ({ page }) => {
+    await page.goto("/pokemon/1025");
+
+    const evolutions = page.getByRole("heading", { name: "Evolutions" }).locator("..");
+    await expect(evolutions).toContainText("Does not evolve.");
   });
 });

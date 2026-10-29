@@ -40,13 +40,24 @@ export const getSpecies = query({
   },
 });
 
-/** The stages of an Evolution Chain, or null if it hasn't been synced. */
-export const getEvolutionChain = query({
-  args: { id: v.number() },
-  handler: async ({ db }, { id }) => {
+/** The stages of a Pokémon's Evolution Chain, or null if it has none synced. */
+export const getEvolutions = query({
+  args: { pokemon: v.number() },
+  handler: async ({ db }, { pokemon: pokedexNumber }) => {
+    const pokemon = await db
+      .query("pokemon")
+      .withIndex("by_pokeapi_id", (q) => q.eq("id", pokedexNumber))
+      .unique();
+    if (!pokemon) return null;
+    const species = await db
+      .query("species")
+      .withIndex("by_pokeapi_id", (q) => q.eq("id", pokemon.speciesId))
+      .unique();
+    if (species?.evolutionChainId === undefined) return null;
+    const chainId = species.evolutionChainId;
     const chain = await db
       .query("evolutionChain")
-      .withIndex("by_pokeapi_id", (q) => q.eq("id", id))
+      .withIndex("by_pokeapi_id", (q) => q.eq("id", chainId))
       .unique();
     return chain?.stages ?? null;
   },

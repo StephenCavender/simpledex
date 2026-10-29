@@ -2,6 +2,7 @@ import { Info } from "lucide-react";
 import { useState } from "react";
 
 const SIZES = {
+  xs: { box: "h-12 w-12", icon: "h-5 w-5" },
   sm: { box: "h-20 w-20", icon: "h-8 w-8" },
   md: { box: "h-24 w-24", icon: "h-8 w-8" },
   lg: { box: "h-48 w-48", icon: "h-16 w-16" },

@@ -96,7 +96,7 @@ describe("sync.run", () => {
       const t = convexTest(schema, modules);
       await sync(t, { numbers: LINEAR });
 
-      expect(await t.query(api.pokemon.getEvolutionChain, { id: 1 })).toEqual([
+      expect(await t.query(api.pokemon.getEvolutions, { pokemon: 1 })).toEqual([
         { id: 1, name: "bulbasaur", sprite: sprite(1) },
         { id: 2, name: "ivysaur", sprite: sprite(2), from: 1, method: "Level 16" },
         { id: 3, name: "venusaur", sprite: sprite(3), from: 2, method: "Level 32" },
@@ -107,7 +107,7 @@ describe("sync.run", () => {
       const t = convexTest(schema, modules);
       await sync(t, { numbers: BABY });
 
-      expect(await t.query(api.pokemon.getEvolutionChain, { id: 10 })).toEqual([
+      expect(await t.query(api.pokemon.getEvolutions, { pokemon: 25 })).toEqual([
         { id: 172, name: "pichu", sprite: sprite(172) },
         { id: 25, name: "pikachu", sprite: sprite(25), from: 172, method: "High friendship" },
         { id: 26, name: "raichu", sprite: sprite(26), from: 25, method: "Use Thunder Stone" },
@@ -118,7 +118,7 @@ describe("sync.run", () => {
       const t = convexTest(schema, modules);
       await sync(t, { numbers: BRANCHING });
 
-      const stages = await t.query(api.pokemon.getEvolutionChain, { id: 67 });
+      const stages = await t.query(api.pokemon.getEvolutions, { pokemon: 134 });
       expect(stages?.map((s) => [s.name, s.from, s.method])).toEqual([
         ["eevee", undefined, undefined],
         ["vaporeon", 133, "Use Water Stone"],
@@ -133,20 +133,24 @@ describe("sync.run", () => {
       expect(pokeapi.requests.filter((p) => p === "evolution-chain/67")).toHaveLength(1);
     });
 
-    it("has no Evolution Chain before it is synced", async () => {
+    it("has no Evolution Chain for a Pokémon that isn't synced", async () => {
       const t = convexTest(schema, modules);
-      expect(await t.query(api.pokemon.getEvolutionChain, { id: 10 })).toBeNull();
+      await sync(t, { numbers: [25] });
+      expect(await t.query(api.pokemon.getEvolutions, { pokemon: 4 })).toBeNull();
+    });
+
+    it("has no Evolution Chain before anything is synced", async () => {
+      const t = convexTest(schema, modules);
+      expect(await t.query(api.pokemon.getEvolutions, { pokemon: 25 })).toBeNull();
     });
 
     it("stores a single-stage chain", async () => {
       const t = convexTest(schema, modules);
       await sync(t, { numbers: [1025] });
 
-      const species = await t.query(api.pokemon.getSpecies, { id: 1025 });
-      expect(species?.evolutionChainId).toBeDefined();
-      expect(
-        await t.query(api.pokemon.getEvolutionChain, { id: species?.evolutionChainId ?? 0 }),
-      ).toEqual([{ id: 1025, name: "pecharunt", sprite: sprite(1025) }]);
+      expect(await t.query(api.pokemon.getEvolutions, { pokemon: 1025 })).toEqual([
+        { id: 1025, name: "pecharunt", sprite: sprite(1025) },
+      ]);
     });
   });
 
@@ -214,7 +218,7 @@ describe("sync.run", () => {
     await sync(t, { numbers: [25] });
 
     expect((await t.query(internal.sync.status, {})).evolutionChains).toBe(1);
-    expect(await t.query(api.pokemon.getEvolutionChain, { id: 10 })).not.toBeNull();
+    expect(await t.query(api.pokemon.getEvolutions, { pokemon: 25 })).not.toBeNull();
   });
 
   it("keeps Evolution Chains of Pokémon outside a partial Sync", async () => {
@@ -222,8 +226,8 @@ describe("sync.run", () => {
     await sync(t, { numbers: [1] });
     await sync(t, { numbers: [25] });
 
-    expect(await t.query(api.pokemon.getEvolutionChain, { id: 1 })).not.toBeNull();
-    expect(await t.query(api.pokemon.getEvolutionChain, { id: 10 })).not.toBeNull();
+    expect(await t.query(api.pokemon.getEvolutions, { pokemon: 1 })).not.toBeNull();
+    expect(await t.query(api.pokemon.getEvolutions, { pokemon: 25 })).not.toBeNull();
   });
 
   it("skips Pokémon already stored unless forced", async () => {

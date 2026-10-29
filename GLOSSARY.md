@@ -22,6 +22,10 @@ _Avoid_: summary, list item, card
 A numbered era of Pokémon games (I–IX) with its home region, covering a contiguous range of Pokédex numbers.
 _Avoid_: gen (in prose), region (as a synonym)
 
+**Evolution Chain**:
+The set of Pokémon linked by evolution, from the first stage to every final stage; a chain can branch (Eevee) and most have one to three stages.
+_Avoid_: family, evolution line
+
 **Type**:
 A Pokémon's elemental classification (Fire, Water, and so on); each Pokémon has one or two, and Types determine damage matchups.
 _Avoid_: element, kind
