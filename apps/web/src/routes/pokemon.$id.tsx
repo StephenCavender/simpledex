@@ -2,71 +2,14 @@ import { api } from "@simpledex/backend/convex/_generated/api";
 import { MAX_POKEDEX_NUMBER } from "@simpledex/backend/convex/generations";
 import { createFileRoute, Link, useCanGoBack, useRouter } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-import { Fragment, type ComponentType } from "react";
-import {
-  ArrowLeft,
-  Info,
-  Zap,
-  Flame as Fire,
-  Droplets as Water,
-  Leaf as Grass,
-  Snowflake as Ice,
-  Mountain,
-  Bug,
-  Ghost,
-  Skull,
-  Brain,
-  Bird,
-  Biohazard,
-  Anvil,
-  Sparkles,
-  Circle,
-  Swords,
-} from "lucide-react";
+import { Fragment } from "react";
+import { PokemonImage } from "@/components/pokemon-image";
+import { TypeBadge } from "@/components/type-badge";
+import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/pokemon/$id")({
   component: PokemonDetail,
 });
-
-const TYPE_ICONS: Record<string, ComponentType<{ className?: string }>> = {
-  grass: Grass,
-  fire: Fire,
-  water: Water,
-  ice: Ice,
-  rock: Mountain,
-  bug: Bug,
-  ghost: Ghost,
-  dragon: Skull,
-  psychic: Brain,
-  flying: Bird,
-  ground: Mountain,
-  poison: Biohazard,
-  steel: Anvil,
-  fairy: Sparkles,
-  normal: Circle,
-  fighting: Swords,
-  electric: Zap,
-};
-
-const TYPE_COLORS: Record<string, string> = {
-  grass: "bg-green-500",
-  fire: "bg-red-500",
-  water: "bg-blue-500",
-  ice: "bg-cyan-500",
-  rock: "bg-yellow-700",
-  bug: "bg-green-700",
-  ghost: "bg-purple-700",
-  dragon: "bg-indigo-700",
-  psychic: "bg-pink-600",
-  flying: "bg-sky-300",
-  ground: "bg-amber-600",
-  poison: "bg-purple-600",
-  steel: "bg-slate-400",
-  fairy: "bg-pink-300",
-  normal: "bg-gray-400",
-  fighting: "bg-red-700",
-  electric: "bg-yellow-400",
-};
 
 /**
  * Returns to the previous page (so the Pokédex keeps its filters and scroll
@@ -175,31 +118,14 @@ function PokemonDetail() {
           </p>
           <h1 className="mb-4 text-4xl font-bold capitalize">{pokemon.name}</h1>
           <div className="flex justify-center gap-2">
-            {pokemon.types.map((type) => {
-              const Icon = TYPE_ICONS[type] || Info;
-              return (
-                <span
-                  key={type}
-                  className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium text-white ${TYPE_COLORS[type] || "bg-gray-400"}`}
-                >
-                  <Icon className="mr-1 h-4 w-4" />
-                  {type}
-                </span>
-              );
-            })}
+            {pokemon.types.map((type) => (
+              <TypeBadge key={type} type={type} size="md" />
+            ))}
           </div>
         </div>
 
         <div className="mb-8 flex justify-center">
-          {pokemon.artwork ? (
-            <img src={pokemon.artwork} alt={pokemon.name} className="h-48 w-48 object-contain" />
-          ) : pokemon.sprite ? (
-            <img src={pokemon.sprite} alt={pokemon.name} className="h-48 w-48 object-contain" />
-          ) : (
-            <div className="flex h-48 w-48 items-center justify-center text-muted-foreground">
-              <Info className="h-16 w-16" />
-            </div>
-          )}
+          <PokemonImage src={pokemon.artwork ?? pokemon.sprite} name={pokemon.name} size="lg" />
         </div>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -270,10 +196,11 @@ function PokemonDetail() {
                     {stage.from !== undefined && <span className="text-2xl mx-1">→</span>}
                     <div className="text-center">
                       <Link to="/pokemon/$id" params={{ id: String(stage.id) }}>
-                        <img
+                        <PokemonImage
                           src={stage.sprite}
-                          alt={stage.name}
-                          className={`h-20 w-20 object-contain hover:scale-110 transition-transform ${stage.id === pokemonId ? "ring-2 ring-primary rounded-full" : ""}`}
+                          name={stage.name}
+                          size="sm"
+                          className={`mx-auto hover:scale-110 transition-transform ${stage.id === pokemonId ? "ring-2 ring-primary rounded-full" : ""}`}
                         />
                       </Link>
                       <p className="text-sm capitalize mt-1">{stage.name}</p>

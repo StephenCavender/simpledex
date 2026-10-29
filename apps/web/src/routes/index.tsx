@@ -2,27 +2,10 @@ import { api } from "@simpledex/backend/convex/_generated/api";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { GENERATIONS } from "@simpledex/backend/convex/generations";
 import { useQuery } from "convex/react";
+import { PokemonImage } from "@/components/pokemon-image";
+import { TypeBadge } from "@/components/type-badge";
 import { filterPokedex, type PokedexFilters } from "@/lib/pokedex";
-import {
-  Search,
-  Info,
-  Zap,
-  Flame as Fire,
-  Droplets as Water,
-  Leaf as Grass,
-  Snowflake as Ice,
-  Mountain,
-  Bug,
-  Ghost,
-  Skull,
-  Brain,
-  Bird,
-  Biohazard,
-  Anvil,
-  Sparkles,
-  Circle,
-  Swords,
-} from "lucide-react";
+import { Search } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>): PokedexFilters => ({
@@ -32,46 +15,6 @@ export const Route = createFileRoute("/")({
   }),
   component: HomeComponent,
 });
-
-const TYPE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  grass: Grass,
-  fire: Fire,
-  water: Water,
-  ice: Ice,
-  rock: Mountain,
-  bug: Bug,
-  ghost: Ghost,
-  dragon: Skull,
-  psychic: Brain,
-  flying: Bird,
-  ground: Mountain,
-  poison: Biohazard,
-  steel: Anvil,
-  fairy: Sparkles,
-  normal: Circle,
-  fighting: Swords,
-  electric: Zap,
-};
-
-const TYPE_COLORS: Record<string, string> = {
-  grass: "bg-green-500",
-  fire: "bg-red-500",
-  water: "bg-blue-500",
-  ice: "bg-cyan-500",
-  rock: "bg-yellow-700",
-  bug: "bg-green-700",
-  ghost: "bg-purple-700",
-  dragon: "bg-indigo-700",
-  psychic: "bg-pink-600",
-  flying: "bg-sky-300",
-  ground: "bg-amber-600",
-  poison: "bg-purple-600",
-  steel: "bg-slate-400",
-  fairy: "bg-pink-300",
-  normal: "bg-gray-400",
-  fighting: "bg-red-700",
-  electric: "bg-yellow-400",
-};
 
 function HomeComponent() {
   const filters = Route.useSearch();
@@ -167,18 +110,7 @@ function HomeComponent() {
               className="group block rounded-lg border bg-card p-4 transition-colors hover:bg-accent"
             >
               <div className="mb-2 text-center">
-                {p.image ? (
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    className="mx-auto h-24 w-24 object-contain"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="mx-auto flex h-24 w-24 items-center justify-center text-muted-foreground">
-                    <Info className="h-8 w-8" />
-                  </div>
-                )}
+                <PokemonImage src={p.image} name={p.name} size="md" className="mx-auto" />
               </div>
               <div className="text-center">
                 <span className="mb-1 block text-xs text-muted-foreground">
@@ -186,18 +118,9 @@ function HomeComponent() {
                 </span>
                 <span className="block font-medium capitalize">{p.name}</span>
                 <div className="mt-2 flex justify-center gap-1">
-                  {p.types.map((type: string) => {
-                    const Icon = TYPE_ICONS[type] || Info;
-                    return (
-                      <span
-                        key={type}
-                        className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium text-white ${TYPE_COLORS[type] || "bg-gray-400"}`}
-                      >
-                        <Icon className="mr-1 h-3 w-3" />
-                        {type}
-                      </span>
-                    );
-                  })}
+                  {p.types.map((type) => (
+                    <TypeBadge key={type} type={type} />
+                  ))}
                 </div>
               </div>
             </Link>

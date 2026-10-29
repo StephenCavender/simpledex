@@ -1,1 +1,26 @@
 @import "@simpledex/ui/globals.css";
+
+/*
+ * Type badge colours. One set for both themes: badges are solid pills with
+ * white text, and each value keeps white text at WCAG AA (≥ 4.5:1) or better.
+ */
+:root {
+  --type-normal: oklch(0.562 0.03 85); /* 4.6:1 on white text */
+  --type-fighting: oklch(0.5 0.16 30); /* 6.5:1 on white text */
+  --type-flying: oklch(0.568 0.11 275); /* 4.6:1 on white text */
+  --type-poison: oklch(0.5 0.16 320); /* 6.5:1 on white text */
+  --type-ground: oklch(0.568 0.1 65); /* 4.6:1 on white text */
+  --type-rock: oklch(0.563 0.08 85); /* 4.6:1 on white text */
+  --type-bug: oklch(0.553 0.14 125); /* 4.6:1 on white text */
+  --type-ghost: oklch(0.45 0.12 295); /* 7.8:1 on white text */
+  --type-steel: oklch(0.56 0.04 240); /* 4.6:1 on white text */
+  --type-fire: oklch(0.58 0.17 40); /* 4.6:1 on white text */
+  --type-water: oklch(0.564 0.14 255); /* 4.6:1 on white text */
+  --type-grass: oklch(0.548 0.14 145); /* 4.6:1 on white text */
+  --type-electric: oklch(0.564 0.11 88); /* 4.6:1 on white text */
+  --type-psychic: oklch(0.584 0.17 5); /* 4.6:1 on white text */
+  --type-ice: oklch(0.554 0.09 210); /* 4.6:1 on white text */
+  --type-dragon: oklch(0.45 0.17 280); /* 7.9:1 on white text */
+  --type-dark: oklch(0.38 0.03 50); /* 10.1:1 on white text */
+  --type-fairy: oklch(0.579 0.13 345); /* 4.6:1 on white text */
+}
