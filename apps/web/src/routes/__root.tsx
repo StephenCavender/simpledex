@@ -6,7 +6,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
 import "../index.css";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
-import { useBackgroundSync } from "@/hooks/use-background-sync";
 
 export interface RouterAppContext {}
 
@@ -44,8 +43,6 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootComponent() {
-  useBackgroundSync();
-
   return (
     <>
       <HeadContent />
