@@ -2,12 +2,17 @@ import { api } from "@simpledex/backend/convex/_generated/api";
 import { MAX_POKEDEX_NUMBER } from "@simpledex/backend/convex/generations";
 import { createFileRoute, Link, useCanGoBack, useRouter } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-import { Fragment } from "react";
+import { EVOLUTION_VARIANTS, EvolutionsPrototype } from "@/components/evolutions.prototype";
+import { PrototypeSwitcher } from "@/components/prototype-switcher";
 import { PokemonImage } from "@/components/pokemon-image";
 import { TypeBadge } from "@/components/type-badge";
 import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/pokemon/$id")({
+  // PROTOTYPE: ?variant= switches the Evolutions layout (branch prototype/evolution-layouts).
+  validateSearch: (search: Record<string, unknown>): { variant?: string } => ({
+    variant: typeof search.variant === "string" ? search.variant : undefined,
+  }),
   component: PokemonDetail,
 });
 
@@ -36,6 +41,7 @@ function BackLink({ className = "" }: { className?: string }) {
 
 function PokemonDetail() {
   const { id } = Route.useParams();
+  const { variant = "tree" } = Route.useSearch();
   const pokemonId = parseInt(id, 10);
 
   const pokemon = useQuery(api.pokemon.getById, { id: pokemonId });
@@ -92,6 +98,7 @@ function PokemonDetail() {
             <Link
               to="/pokemon/$id"
               params={{ id: String(prevId) }}
+              search={(prev) => prev}
               replace
               className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
             >
@@ -102,6 +109,7 @@ function PokemonDetail() {
             <Link
               to="/pokemon/$id"
               params={{ id: String(nextId) }}
+              search={(prev) => prev}
               replace
               className="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
             >
@@ -190,33 +198,18 @@ function PokemonDetail() {
           <div className="mt-6">
             <h2 className="text-lg font-semibold mb-3">Evolutions</h2>
             {evolutionStages ? (
-              <div className="flex items-center gap-2 flex-wrap">
-                {evolutionStages.map((stage) => (
-                  <Fragment key={stage.id}>
-                    {stage.from !== undefined && <span className="text-2xl mx-1">→</span>}
-                    <div className="text-center">
-                      <Link to="/pokemon/$id" params={{ id: String(stage.id) }}>
-                        <PokemonImage
-                          src={stage.sprite}
-                          name={stage.name}
-                          size="sm"
-                          className={`mx-auto hover:scale-110 transition-transform ${stage.id === pokemonId ? "ring-2 ring-primary rounded-full" : ""}`}
-                        />
-                      </Link>
-                      <p className="text-sm capitalize mt-1">{stage.name}</p>
-                      {stage.method && (
-                        <p className="text-xs text-muted-foreground">{stage.method}</p>
-                      )}
-                    </div>
-                  </Fragment>
-                ))}
-              </div>
+              <EvolutionsPrototype
+                stages={evolutionStages}
+                currentId={pokemonId}
+                variant={variant}
+              />
             ) : (
               <p className="text-sm text-muted-foreground">Loading evolutions...</p>
             )}
           </div>
         )}
       </div>
+      <PrototypeSwitcher variants={EVOLUTION_VARIANTS} current={variant} />
     </div>
   );
 }

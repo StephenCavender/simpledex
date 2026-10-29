@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
+    "prototype:evolutions": "VITE_CONVEX_URL=https://adept-labrador-868.convex.cloud vite dev --open /pokemon/133?variant=tree",
     "build": "vite build",
     "serve": "vite preview",
     "start": "vite",
