@@ -43,8 +43,16 @@ bun run build
 ```bash
 bun run check            # Lint + format (oxlint + oxfmt)
 bun run check-types      # TypeScript type checking
-bun test                 # Vitest tests
+bun run test             # Vitest tests
+bun run test:e2e         # Playwright tests (see below)
 ```
+
+### End-to-end tests
+
+The Playwright suite (`apps/web-e2e`) runs the web app against your dev Convex deployment, so that deployment needs:
+
+- **Current functions.** Keep `bun run dev` running, or push once with `bunx convex dev --once` from `packages/backend`. Stale functions fail with `Could not find public function`.
+- **The full Pokédex.** Tests use Pokémon from every Generation (up to #1025). Run `bun run sync` in `packages/backend` and wait until `bun run sync:status` shows `missing: 0` (see [packages/backend/README.md](../packages/backend/README.md#sync)).
 
 ## Environment variables
 
