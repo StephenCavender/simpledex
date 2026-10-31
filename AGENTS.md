@@ -13,4 +13,4 @@ Read when relevant:
 - UI/visual design: [docs/design.md](docs/design.md)
 - Product and architecture rationale: [docs/philosophy.md](docs/philosophy.md)
 - Domain terms: [GLOSSARY.md](GLOSSARY.md); decisions: [docs/adr/](docs/adr/) (see [docs/agents/domain.md](docs/agents/domain.md))
-- Issues (GitHub via `gh`): [docs/agents/issue-tracker.md](docs/agents/issue-tracker.md)
+- Issues (GitHub via `gh`): [docs/agents/issue-tracker.md](docs/agents/issue-tracker.md); triage labels: [docs/agents/triage-labels.md](docs/agents/triage-labels.md)
