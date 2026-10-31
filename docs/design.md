@@ -1,6 +1,6 @@
 # SimpleDex Design Language
 
-Clean, minimal, reference-first, like a well-organized field guide. Pokémon artwork and data are the hero; the UI gets out of the way. Dark mode is the default, and light mode is supported.
+Clean, minimal, reference-first, like a well-organized field guide. Pokémon artwork and data are the hero; the UI gets out of the way. The theme follows the device's light/dark setting, and both themes are first-class.
 
 Color, radius, and font tokens are CSS variables in `packages/ui/src/styles/globals.css`, imported by `apps/web/src/index.css`. Use tokens like `bg-card`, `text-muted-foreground`, and `border-border`, not literal colors. Each Pokémon Type has a badge color token, `--type-<name>`, in `apps/web/src/index.css`, chosen so white text meets WCAG AA.
 

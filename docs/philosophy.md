@@ -8,7 +8,7 @@ SimpleDex is a Pokemon reference app. The design philosophy is:
 
 **Minimal chrome** — Navigation, controls, and UI chrome recede into the background. Sticky header with backdrop blur keeps context available without taking visual priority. Cards use subtle borders rather than heavy containers.
 
-**Dark by default** — The app defaults to dark mode (a Pokedex should feel like a screen in a dim room). Light mode is supported for accessibility.
+**Match the system** — The app follows the device's light/dark setting by default, so it feels native wherever it runs. Both themes are first-class, and users can override the choice.
 
 **Responsive** — The grid adapts: 2 columns on mobile, 3 on tablet, 4 on desktop. Images are lazy-loaded. Touch targets are appropriately sized.
 
