@@ -2,14 +2,10 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { POKEMON_TYPES, TypeBadge } from "@/components/type-badge";
+import { POKEMON_TYPES } from "@simpledex/pokedex";
+import { TypeBadge } from "@/components/type-badge";
 
 describe("TypeBadge", () => {
-  it("covers all 18 Types", () => {
-    expect(POKEMON_TYPES).toHaveLength(18);
-    expect(POKEMON_TYPES).toContain("dark");
-  });
-
   it.each(POKEMON_TYPES)("renders %s with its label, colour token, and icon", (type) => {
     const { container } = render(<TypeBadge type={type} />);
 

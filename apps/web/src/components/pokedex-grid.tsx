@@ -3,7 +3,7 @@ import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { PokemonImage } from "@/components/pokemon-image";
 import { TypeBadge } from "@/components/type-badge";
-import type { PokedexEntry } from "@/lib/pokedex";
+import { formatPokedexNumber, type PokedexEntry } from "@simpledex/pokedex";
 
 /** Column counts by minimum viewport width, matching Tailwind's `sm` (40rem) and `md` (48rem). */
 const BREAKPOINTS = [
@@ -105,7 +105,7 @@ function PokedexCard({ entry }: { entry: PokedexEntry }): React.ReactElement {
       </div>
       <div className="text-center">
         <span className="mb-1 block text-xs text-muted-foreground">
-          #{String(entry.id).padStart(3, "0")}
+          {formatPokedexNumber(entry.id)}
         </span>
         <span className="block font-medium capitalize">{entry.name}</span>
         <div className="mt-2 flex justify-center gap-1">

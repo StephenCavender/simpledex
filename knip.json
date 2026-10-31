@@ -16,6 +16,9 @@
     "packages/env": {
       "entry": ["src/**/*.ts"],
       "project": ["src/**/*.ts"]
+    },
+    "packages/pokedex": {
+      "project": ["src/**/*.ts", "test/**/*.ts"]
     }
   },
   "ignoreExportsUsedInFile": true,

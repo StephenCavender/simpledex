@@ -1,0 +1,23 @@
+{
+  "name": "@simpledex/pokedex",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@simpledex/backend": "workspace:*",
+    "convex": "catalog:"
+  },
+  "devDependencies": {
+    "@simpledex/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

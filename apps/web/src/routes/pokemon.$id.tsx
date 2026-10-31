@@ -1,5 +1,6 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { MAX_POKEDEX_NUMBER } from "@simpledex/backend/convex/generations";
+import { formatPokedexNumber, formatSlug } from "@simpledex/pokedex";
 import { createFileRoute, Link, useCanGoBack, useRouter } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { Evolutions } from "@/components/evolutions";
@@ -108,9 +109,7 @@ function PokemonDetail() {
 
       <div className="rounded-lg border bg-card p-6">
         <div className="mb-6 text-center">
-          <p className="mb-1 text-sm text-muted-foreground">
-            #{String(pokemon.id).padStart(3, "0")}
-          </p>
+          <p className="mb-1 text-sm text-muted-foreground">{formatPokedexNumber(pokemon.id)}</p>
           <h1 className="mb-4 text-4xl font-bold capitalize">{pokemon.name}</h1>
           <div className="flex justify-center gap-2">
             {pokemon.types.map((type) => (
@@ -151,7 +150,7 @@ function PokemonDetail() {
                   key={ability.name}
                   className={`rounded-full px-3 py-1 text-sm capitalize ${ability.isHidden ? "bg-muted italic" : "bg-secondary"}`}
                 >
-                  {ability.name.replace(/-/g, " ")}
+                  {formatSlug(ability.name)}
                   {ability.isHidden && " (hidden)"}
                 </span>
               ))}
@@ -166,7 +165,7 @@ function PokemonDetail() {
               {pokemon.stats.map((stat) => (
                 <div key={stat.name} className="flex items-center gap-2">
                   <span className="w-24 text-xs capitalize text-muted-foreground">
-                    {stat.name.replace(/-/g, " ")}
+                    {formatSlug(stat.name)}
                   </span>
                   <div className="flex-1 rounded-full bg-muted p-0.5">
                     <div

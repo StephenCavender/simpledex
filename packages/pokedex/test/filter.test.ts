@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { filterPokedex, type PokedexEntry } from "@/lib/pokedex";
+import { filterPokedex, type PokedexEntry } from "../src";
 
 const entry = (id: number, name: string, types: string[], generation?: number): PokedexEntry => ({
   id,

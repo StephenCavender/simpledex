@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { GENERATIONS } from "@simpledex/backend/convex/generations";
 import { useQuery } from "convex/react";
 import { PokedexGrid } from "@/components/pokedex-grid";
-import { filterPokedex, type PokedexFilters } from "@/lib/pokedex";
+import { filterPokedex, type PokedexFilters } from "@simpledex/pokedex";
 import { Search } from "lucide-react";
 
 export const Route = createFileRoute("/")({

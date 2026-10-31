@@ -30,6 +30,7 @@
         "@clerk/clerk-react": "^5.61.3",
         "@simpledex/backend": "workspace:*",
         "@simpledex/env": "workspace:*",
+        "@simpledex/pokedex": "workspace:*",
         "@simpledex/ui": "workspace:*",
         "@tailwindcss/vite": "^4.3.3",
         "@tanstack/react-router": "^1.170.45",
@@ -94,6 +95,20 @@
       },
       "devDependencies": {
         "typescript": "catalog:",
+      },
+    },
+    "packages/pokedex": {
+      "name": "@simpledex/pokedex",
+      "version": "0.0.0",
+      "dependencies": {
+        "@simpledex/backend": "workspace:*",
+        "convex": "catalog:",
+      },
+      "devDependencies": {
+        "@simpledex/config": "workspace:*",
+        "@types/node": "catalog:",
+        "typescript": "catalog:",
+        "vitest": "catalog:",
       },
     },
     "packages/ui": {
@@ -780,6 +795,8 @@
     "@simpledex/env": ["@simpledex/env@workspace:packages/env"],
 
     "@simpledex/marketing": ["@simpledex/marketing@workspace:apps/marketing"],
+
+    "@simpledex/pokedex": ["@simpledex/pokedex@workspace:packages/pokedex"],
 
     "@simpledex/ui": ["@simpledex/ui@workspace:packages/ui"],
 
