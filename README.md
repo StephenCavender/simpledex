@@ -78,6 +78,7 @@ If you want to add app-specific blocks instead of shared primitives, run the sha
 simpledex/
 ├── apps/
 │   ├── web/         # Frontend application (React + TanStack Router)
+│   ├── mobile/      # iOS and Android app (Expo Router), see apps/mobile/README.md
 ├── packages/
 │   ├── ui/          # Shared shadcn/ui components and styles
 │   ├── backend/     # Convex backend functions and schema
@@ -88,6 +89,7 @@ simpledex/
 - `bun run dev`: Start all applications in development mode
 - `bun run build`: Build all applications
 - `bun run dev:web`: Start only the web application
+- `bun run dev:mobile`: Start Metro for the mobile development build
 - `bun run dev:setup`: Setup and configure your Convex project
 - `bun run check-types`: Check TypeScript types across all apps
 - `bun run check`: Run Oxlint and Oxfmt

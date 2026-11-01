@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "turbo run dev",
     "dev:web": "turbo run dev --filter=@simpledex/web",
+    "dev:mobile": "bun run --cwd apps/mobile start",
     "dev:backend": "turbo run dev --filter=@simpledex/backend",
     "dev:marketing": "turbo run dev --filter=@simpledex/marketing",
     "dev:setup": "turbo run dev:setup --filter=@simpledex/backend",

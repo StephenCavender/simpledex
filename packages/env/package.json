@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./native": "./src/native.ts",
     "./web": "./src/web.ts"
   },
   "dependencies": {

@@ -36,5 +36,5 @@
       "outputs": []
     }
   },
-  "globalEnv": ["VITE_CONVEX_URL", "CONVEX_DEPLOY_KEY"]
+  "globalEnv": ["VITE_CONVEX_URL", "EXPO_PUBLIC_CONVEX_URL", "CONVEX_DEPLOY_KEY"]
 }

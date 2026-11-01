@@ -1,6 +1,10 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "workspaces": {
+    "apps/mobile": {
+      "entry": ["src/app/**/*.tsx", "src/global.css", "test/**/*.test.tsx"],
+      "project": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.css", "test/**/*.tsx"]
+    },
     "apps/web": {
       "entry": ["src/routes/__root.tsx", "src/routes/**/*.tsx", "src/index.css"],
       "project": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.css"]
