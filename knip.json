@@ -2,12 +2,12 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "workspaces": {
     "apps/web": {
-      "entry": ["src/routes/__root.tsx", "src/routes/**/*.tsx"],
-      "project": ["src/**/*.ts", "src/**/*.tsx"]
+      "entry": ["src/routes/__root.tsx", "src/routes/**/*.tsx", "src/index.css"],
+      "project": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.css"]
     },
     "packages/ui": {
-      "entry": ["src/**/*.ts", "src/**/*.tsx"],
-      "project": ["src/**/*.ts", "src/**/*.tsx"]
+      "entry": ["src/**/*.ts", "src/**/*.tsx", "src/styles/*.css"],
+      "project": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.css"]
     },
     "packages/backend": {
       "entry": ["convex/*.ts", "scripts/*.ts"],
@@ -19,6 +19,9 @@
     },
     "packages/pokedex": {
       "project": ["src/**/*.ts", "test/**/*.ts"]
+    },
+    "packages/tokens": {
+      "project": ["test/**/*.ts"]
     }
   },
   "ignoreExportsUsedInFile": true,

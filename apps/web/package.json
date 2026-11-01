@@ -19,6 +19,7 @@
     "@simpledex/backend": "workspace:*",
     "@simpledex/env": "workspace:*",
     "@simpledex/pokedex": "workspace:*",
+    "@simpledex/tokens": "workspace:*",
     "@simpledex/ui": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-router": "^1.170.45",

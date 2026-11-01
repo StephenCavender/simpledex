@@ -31,6 +31,7 @@
         "@simpledex/backend": "workspace:*",
         "@simpledex/env": "workspace:*",
         "@simpledex/pokedex": "workspace:*",
+        "@simpledex/tokens": "workspace:*",
         "@simpledex/ui": "workspace:*",
         "@tailwindcss/vite": "^4.3.3",
         "@tanstack/react-router": "^1.170.45",
@@ -106,6 +107,17 @@
       },
       "devDependencies": {
         "@simpledex/config": "workspace:*",
+        "@types/node": "catalog:",
+        "typescript": "catalog:",
+        "vitest": "catalog:",
+      },
+    },
+    "packages/tokens": {
+      "name": "@simpledex/tokens",
+      "version": "0.0.0",
+      "devDependencies": {
+        "@simpledex/config": "workspace:*",
+        "@simpledex/pokedex": "workspace:*",
         "@types/node": "catalog:",
         "typescript": "catalog:",
         "vitest": "catalog:",
@@ -797,6 +809,8 @@
     "@simpledex/marketing": ["@simpledex/marketing@workspace:apps/marketing"],
 
     "@simpledex/pokedex": ["@simpledex/pokedex@workspace:packages/pokedex"],
+
+    "@simpledex/tokens": ["@simpledex/tokens@workspace:packages/tokens"],
 
     "@simpledex/ui": ["@simpledex/ui@workspace:packages/ui"],
 

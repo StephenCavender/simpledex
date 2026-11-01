@@ -1,7 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { POKEMON_TYPES } from "@simpledex/pokedex";
 import { TypeBadge } from "@/components/type-badge";
 
@@ -10,7 +8,7 @@ describe("TypeBadge", () => {
     const { container } = render(<TypeBadge type={type} />);
 
     const badge = screen.getByText(type);
-    expect(badge.style.backgroundColor).toBe(`var(--type-${type})`);
+    expect(badge.classList).toContain(`bg-type-${type}`);
     expect(container.querySelector("svg")).not.toBeNull();
     expect(container.querySelector("svg.lucide-info")).toBeNull();
   });
@@ -33,15 +31,7 @@ describe("TypeBadge", () => {
   it("falls back to a neutral colour and icon for an unknown Type", () => {
     const { container } = render(<TypeBadge type="stellar" />);
 
-    expect(screen.getByText("stellar").style.backgroundColor).toBe("var(--muted-foreground)");
+    expect(screen.getByText("stellar").classList).toContain("bg-muted-foreground");
     expect(container.querySelector("svg.lucide-info")).not.toBeNull();
-  });
-});
-
-describe("Type colour tokens", () => {
-  const css = readFileSync(resolve(import.meta.dirname, "../index.css"), "utf8");
-
-  it.each(POKEMON_TYPES)("index.css defines --type-%s", (type) => {
-    expect(css).toMatch(new RegExp(`--type-${type}:\\s*oklch\\(`));
   });
 });
