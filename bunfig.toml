@@ -1,0 +1,3 @@
+[install]
+# See docs/adr/0007-bun-hoisted-linker.md
+linker = "hoisted"
