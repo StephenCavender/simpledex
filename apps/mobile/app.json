@@ -40,6 +40,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f9dba1ee-9b03-43e3-afe9-b1e227e51f83"
+      }
+    },
+    "owner": "steve-cavender"
   }
 }
