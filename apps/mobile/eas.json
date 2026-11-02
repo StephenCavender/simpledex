@@ -11,6 +11,12 @@
       "ios": {
         "simulator": true
       }
+    },
+    "development-device": {
+      "extends": "development",
+      "ios": {
+        "simulator": false
+      }
     }
   }
 }

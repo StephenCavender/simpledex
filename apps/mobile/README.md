@@ -29,6 +29,17 @@ bun run dev:mobile
 
 The development build loads its JavaScript from Metro, so it uses the Convex URL in `.env.local`.
 
+### iPhone
+
+Physical iPhones need the `development-device` profile and an active Apple Developer membership:
+
+```sh
+bunx eas-cli device:create                                         # once per iPhone: register it for internal builds
+bunx eas-cli build --profile development-device --platform ios     # signs in to Apple and manages certificates
+```
+
+Install the build from the QR code on its EAS build page and turn on Developer Mode (Settings → Privacy & Security). The iPhone must reach Metro: put it on the same Wi-Fi and allow port 8081 through the firewall, or start Metro with `--tunnel`.
+
 ### Android emulator (Linux)
 
 With the Android SDK in `~/Android/Sdk` (`ANDROID_HOME`, with `emulator` and `platform-tools` on `PATH`) and an AVD named `pixel`:
