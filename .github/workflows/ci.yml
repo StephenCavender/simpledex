@@ -56,9 +56,12 @@ jobs:
       - name: Sync e2e Pokémon from PokeAPI
         working-directory: packages/backend
         run: |
-          bunx convex run sync:run '{"numbers":[1,25,133,1025]}'
-          for _ in $(seq 1 30); do
-            [ "$(bunx convex run pokemon:pokedex | jq length)" = 4 ] && exit 0
+          # Gen I (#1-151, includes Pikachu and Eevee) gives the virtualised grid more
+          # than a screen of entries; #906 and #1025 cover Gen IX and numbers above 1000.
+          # 153 Pokémon in total.
+          bunx convex run sync:run '{"gens":[1],"numbers":[906,1025]}'
+          for _ in $(seq 1 120); do
+            [ "$(bunx convex run pokemon:pokedex | jq length)" = 153 ] && exit 0
             sleep 2
           done
           echo "Sync did not finish"
