@@ -29,6 +29,18 @@ bun run dev:mobile
 
 The development build loads its JavaScript from Metro, so it uses the Convex URL in `.env.local`.
 
+### Android emulator (Linux)
+
+With the Android SDK in `~/Android/Sdk` (`ANDROID_HOME`, with `emulator` and `platform-tools` on `PATH`) and an AVD named `pixel`:
+
+```sh
+emulator -avd pixel &                                 # boot the emulator
+bunx eas-cli build:run -p android --latest            # install the latest dev build
+bun run dev:mobile                                    # then press `a` to open it
+```
+
+`eas build:run` needs `build-tools` installed (it uses `aapt`).
+
 ## Checks
 
 - `bun run check-types`: generates Uniwind's types, then runs `tsc`
