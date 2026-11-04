@@ -19,6 +19,7 @@ export default function PokedexScreen(): React.JSX.Element {
   const [filters, setFilters] = useState<TypeAndGenerationFilters>({});
   const [sheetOpen, setSheetOpen] = useState(false);
   const searchBar = useRef<SearchBarCommands>(null);
+  const activeFilters = Object.values(filters).filter((value) => value !== undefined).length;
   const entries = pokedex ? filterPokedex(pokedex, { ...filters, q }) : undefined;
 
   const clearAll = (): void => {
@@ -31,7 +32,9 @@ export default function PokedexScreen(): React.JSX.Element {
     <>
       <Stack.Screen
         options={{
-          headerRight: () => <FiltersButton onPress={() => setSheetOpen(true)} />,
+          headerRight: () => (
+            <FiltersButton active={activeFilters} onPress={() => setSheetOpen(true)} />
+          ),
         }}
       />
       <Stack.SearchBar
@@ -68,16 +71,28 @@ export default function PokedexScreen(): React.JSX.Element {
   );
 }
 
-function FiltersButton({ onPress }: { onPress: () => void }): React.JSX.Element {
+/** Opens the filter sheet; a dot shows when any filter is active. */
+function FiltersButton({
+  active,
+  onPress,
+}: {
+  /** How many filters are active. */
+  active: number;
+  onPress: () => void;
+}): React.JSX.Element {
   const foreground = useCSSVariable("--color-foreground");
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel="Filters"
+      accessibilityValue={active > 0 ? { text: `${active} active` } : undefined}
       hitSlop={8}
       onPress={onPress}
     >
       <SlidersHorizontal size={22} color={cssColor(foreground, undefined)} />
+      {active > 0 && (
+        <View className="absolute -right-1 -top-1 size-2.5 rounded-full border border-background bg-primary" />
+      )}
     </Pressable>
   );
 }

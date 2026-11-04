@@ -201,6 +201,23 @@ describe("PokedexScreen", () => {
     expect(screen.getByText("cyndaquil")).toBeOnTheScreen();
   });
 
+  it("shows on the Filters button how many filters are active", async () => {
+    await render(<PokedexScreen />);
+    const button = screen.getByRole("button", { name: "Filters" });
+
+    expect(button).not.toHaveAccessibilityValue({ text: expect.any(String) });
+
+    await openFilters();
+    await choose("fire");
+    expect(button).toHaveAccessibilityValue({ text: "1 active" });
+
+    await choose("Gen I Kanto");
+    expect(button).toHaveAccessibilityValue({ text: "2 active" });
+
+    await fireEvent.press(screen.getByRole("button", { name: "Clear all" }));
+    expect(button).not.toHaveAccessibilityValue({ text: expect.any(String) });
+  });
+
   it("shows a loading message while the query is loading", async () => {
     mockUseQuery.mockReturnValue(undefined);
 
