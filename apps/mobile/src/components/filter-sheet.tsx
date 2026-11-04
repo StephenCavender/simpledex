@@ -3,10 +3,11 @@ import { POKEMON_TYPES, type PokedexFilters } from "@simpledex/pokedex";
 import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { ClearAllButton } from "@/components/clear-all-button";
 import { TypeBadge } from "@/components/type-badge";
 
-/** The Type and Generation filters; search lives in the header. */
-export type SheetFilters = Omit<PokedexFilters, "q">;
+/** The filters other than search, which lives in the header. */
+export type TypeAndGenerationFilters = Omit<PokedexFilters, "q">;
 
 /**
  * A bottom sheet with the Type and Generation filters. Each choice applies as
@@ -20,12 +21,18 @@ export function FilterSheet({
   onClose,
 }: {
   visible: boolean;
-  filters: SheetFilters;
-  onChange: (filters: SheetFilters) => void;
+  filters: TypeAndGenerationFilters;
+  onChange: (filters: TypeAndGenerationFilters) => void;
   /** Clears search as well as these filters. */
   onClear: () => void;
   onClose: () => void;
 }): React.JSX.Element {
+  /** Chooses a value, or clears it if it's already chosen. */
+  const toggle = <Key extends keyof TypeAndGenerationFilters>(
+    key: Key,
+    value: TypeAndGenerationFilters[Key],
+  ): void => onChange({ ...filters, [key]: filters[key] === value ? undefined : value });
+
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <Pressable
@@ -41,55 +48,36 @@ export function FilterSheet({
           </View>
           <ScrollView contentContainerClassName="gap-3 p-4">
             <Section title="Type">
-              {POKEMON_TYPES.map((type) => {
-                const checked = filters.type === type;
-                return (
-                  <Choice
-                    key={type}
-                    label={type}
-                    checked={checked}
-                    onPress={() => onChange({ ...filters, type: checked ? undefined : type })}
-                  >
-                    <TypeBadge type={type} />
-                  </Choice>
-                );
-              })}
+              {POKEMON_TYPES.map((type) => (
+                <Choice
+                  key={type}
+                  label={type}
+                  checked={filters.type === type}
+                  onPress={() => toggle("type", type)}
+                >
+                  <TypeBadge type={type} />
+                </Choice>
+              ))}
             </Section>
             <Section title="Generation">
-              {GENERATIONS.map((generation) => {
-                const checked = filters.gen === generation.number;
-                return (
-                  <Choice
-                    key={generation.number}
-                    label={`${generation.label} ${generation.region}`}
-                    checked={checked}
-                    onPress={() =>
-                      onChange({ ...filters, gen: checked ? undefined : generation.number })
-                    }
-                  >
-                    <View className="flex-row gap-1 rounded-full bg-muted px-3 py-1">
-                      <Text className="text-sm font-medium text-foreground">
-                        {generation.label}
-                      </Text>
-                      <Text className="text-sm text-muted-foreground">{generation.region}</Text>
-                    </View>
-                  </Choice>
-                );
-              })}
+              {GENERATIONS.map((generation) => (
+                <Choice
+                  key={generation.number}
+                  label={`${generation.label} ${generation.region}`}
+                  checked={filters.gen === generation.number}
+                  onPress={() => toggle("gen", generation.number)}
+                >
+                  <View className="flex-row gap-1 rounded-full bg-muted px-3 py-1">
+                    <Text className="text-sm font-medium text-foreground">{generation.label}</Text>
+                    <Text className="text-sm text-muted-foreground">{generation.region}</Text>
+                  </View>
+                </Choice>
+              ))}
             </Section>
           </ScrollView>
         </SafeAreaView>
       </View>
     </Modal>
-  );
-}
-
-/** Clears search and every filter, restoring the full Pokédex. */
-export function ClearAllButton({ onPress }: { onPress: () => void }): React.JSX.Element {
-  return (
-    <Pressable accessibilityRole="button" hitSlop={8} onPress={onPress}>
-      <Text className="text-base font-medium text-primary">Clear all</Text>
-    </Pressable>
   );
 }
 

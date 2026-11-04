@@ -8,13 +8,15 @@ import { Pressable, Text, View } from "react-native";
 import type { SearchBarCommands } from "react-native-screens";
 import { useCSSVariable } from "uniwind";
 
-import { ClearAllButton, FilterSheet, type SheetFilters } from "@/components/filter-sheet";
+import { ClearAllButton } from "@/components/clear-all-button";
+import { FilterSheet, type TypeAndGenerationFilters } from "@/components/filter-sheet";
 import { PokedexList } from "@/components/pokedex-list";
+import { cssColor } from "@/lib/css-color";
 
 export default function PokedexScreen(): React.JSX.Element {
   const pokedex = useQuery(api.pokemon.pokedex);
   const [q, setQ] = useState("");
-  const [filters, setFilters] = useState<SheetFilters>({});
+  const [filters, setFilters] = useState<TypeAndGenerationFilters>({});
   const [sheetOpen, setSheetOpen] = useState(false);
   const searchBar = useRef<SearchBarCommands>(null);
   const entries = pokedex ? filterPokedex(pokedex, { ...filters, q }) : undefined;
@@ -75,10 +77,7 @@ function FiltersButton({ onPress }: { onPress: () => void }): React.JSX.Element 
       hitSlop={8}
       onPress={onPress}
     >
-      <SlidersHorizontal
-        size={22}
-        color={typeof foreground === "string" ? foreground : undefined}
-      />
+      <SlidersHorizontal size={22} color={cssColor(foreground, undefined)} />
     </Pressable>
   );
 }
