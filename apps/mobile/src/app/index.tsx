@@ -88,10 +88,12 @@ function FiltersButton({
       accessibilityValue={active > 0 ? { text: `${active} active` } : undefined}
       hitSlop={8}
       onPress={onPress}
+      // The native header clips its items, so pad the icon to keep the dot in bounds.
+      className="p-1"
     >
       <SlidersHorizontal size={22} color={cssColor(foreground, undefined)} />
       {active > 0 && (
-        <View className="absolute -right-1 -top-1 size-2.5 rounded-full border border-background bg-primary" />
+        <View className="absolute right-0 top-0 size-2.5 rounded-full border border-background bg-destructive" />
       )}
     </Pressable>
   );
