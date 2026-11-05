@@ -1,9 +1,9 @@
 import { formatPokedexNumber, type PokedexEntry } from "@simpledex/pokedex";
 import { FlashList } from "@shopify/flash-list";
-import { Link } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 
 import { PokemonImage } from "@/components/pokemon-image";
+import { PokemonLink } from "@/components/pokemon-link";
 import { TypeBadge } from "@/components/type-badge";
 
 const ARTWORK_SIZE = 64;
@@ -35,7 +35,7 @@ export function PokedexList({
 /** A Pokédex entry; tapping it pushes the Pokémon's detail screen. */
 function PokedexRow({ entry }: { entry: PokedexEntry }): React.JSX.Element {
   return (
-    <Link href={{ pathname: "/pokemon/[id]", params: { id: String(entry.id) } }} asChild>
+    <PokemonLink pokedexNumber={entry.id}>
       <Pressable
         accessibilityRole="link"
         className="flex-row items-center gap-4 border-b border-border px-4 py-2 active:bg-accent"
@@ -51,6 +51,6 @@ function PokedexRow({ entry }: { entry: PokedexEntry }): React.JSX.Element {
           </View>
         </View>
       </Pressable>
-    </Link>
+    </PokemonLink>
   );
 }

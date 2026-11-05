@@ -124,6 +124,15 @@ async function renderApp(initialUrl: string): ReturnType<typeof renderRouter> {
   );
 }
 
+/** Types into the header's native search bar, which has no text input in Jest. */
+async function search(text: string): Promise<void> {
+  const [searchBar] = screen.container.queryAll(
+    (instance) => instance.props.placeholder === "Search by name or number",
+  );
+  if (!searchBar) throw new Error("No search bar");
+  await fireEvent(searchBar, "changeText", { nativeEvent: { text } });
+}
+
 describe("PokemonScreen", () => {
   // FlashList reports its first layout on a timer; fake timers keep that out of act().
   beforeAll(() => jest.useFakeTimers());
@@ -165,6 +174,16 @@ describe("PokemonScreen", () => {
     expect(screen.getByText("brown")).toBeOnTheScreen();
   });
 
+  it("doesn't call species information unknown while it's loading", async () => {
+    answer = (name, args) =>
+      name === "pokemon:getSpecies" ? undefined : defaultAnswer(name, args);
+
+    await renderApp("/pokemon/133");
+
+    expect(screen.queryByText("Unknown")).not.toBeOnTheScreen();
+    expect(screen.getAllByText("…")).toHaveLength(2);
+  });
+
   it("says when species information is unknown", async () => {
     await renderApp("/pokemon/135");
 
@@ -181,8 +200,8 @@ describe("PokemonScreen", () => {
   it("shows each base stat with its value", async () => {
     await renderApp("/pokemon/133");
 
-    expect(screen.getByLabelText("hp")).toHaveAccessibilityValue({ now: 55 });
-    expect(screen.getByLabelText("special attack")).toHaveAccessibilityValue({ now: 65 });
+    expect(screen.getByLabelText("hp")).toHaveAccessibilityValue({ text: "55" });
+    expect(screen.getByLabelText("special attack")).toHaveAccessibilityValue({ text: "65" });
   });
 
   it("shows a branching Evolution Chain", async () => {
@@ -248,9 +267,17 @@ describe("PokemonScreen", () => {
   it("opens from a tapped Pokédex entry, and goes back to the list as it was", async () => {
     const router = await renderApp("/");
 
+    await search("eon");
     await fireEvent.press(screen.getByRole("button", { name: "Filters" }));
     await fireEvent.press(screen.getByRole("radio", { name: "electric" }));
     await fireEvent.press(screen.getByLabelText("Close filters"));
+    const listAsItWas = (): void => {
+      expect(screen.getByText("jolteon")).toBeOnTheScreen();
+      expect(screen.queryByText("flareon")).not.toBeOnTheScreen();
+      expect(screen.queryByText("eevee")).not.toBeOnTheScreen();
+    };
+    listAsItWas();
+
     await fireEvent.press(screen.getByRole("link", { name: /jolteon/ }));
 
     expect(router.getPathname()).toBe("/pokemon/135");
@@ -258,7 +285,6 @@ describe("PokemonScreen", () => {
 
     await testRouter.back("/");
 
-    expect(screen.getByText("jolteon")).toBeOnTheScreen();
-    expect(screen.queryByText("eevee")).not.toBeOnTheScreen();
+    listAsItWas();
   });
 });

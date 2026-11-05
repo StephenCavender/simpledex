@@ -1,8 +1,8 @@
 import { evolutionLinks, type EvolutionLink, type EvolutionStage } from "@simpledex/pokedex";
-import { Link } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 
 import { PokemonImage } from "@/components/pokemon-image";
+import { PokemonLink } from "@/components/pokemon-link";
 
 const SPRITE_SIZE = 48;
 
@@ -24,32 +24,33 @@ export function Evolutions({
   const { from, into, chain } = evolutionLinks(stages, pokedexNumber);
   return (
     <View className="gap-5">
-      <Section label="Evolves from">
+      <Group label="Evolves from">
         {from ? (
           <LinkRow link={from} />
         ) : (
           <Text className="text-sm text-muted-foreground">Nothing: this is the first stage.</Text>
         )}
-      </Section>
-      <Section label="Evolves into">
+      </Group>
+      <Group label="Evolves into">
         {into.length > 0 ? (
           into.map((link) => <LinkRow key={link.stage.id} link={link} />)
         ) : (
           <Text className="text-sm text-muted-foreground">Nothing: this is a final stage.</Text>
         )}
-      </Section>
-      <Section label="Evolution chain">
+      </Group>
+      <Group label="Evolution chain">
         <View className="flex-row flex-wrap gap-3">
           {chain.map((stage) => (
             <ChainStage key={stage.id} stage={stage} current={stage.id === pokedexNumber} />
           ))}
         </View>
-      </Section>
+      </Group>
     </View>
   );
 }
 
-function Section({
+/** A labelled part of the section, e.g. "Evolves into". */
+function Group({
   label,
   children,
 }: {
@@ -61,21 +62,6 @@ function Section({
       <Text className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Text>
       {children}
     </View>
-  );
-}
-
-/** Pushes the Pokémon's detail screen, so back returns here. */
-function PokemonLink({
-  pokedexNumber,
-  children,
-}: {
-  pokedexNumber: number;
-  children: React.ReactElement;
-}): React.JSX.Element {
-  return (
-    <Link href={{ pathname: "/pokemon/[id]", params: { id: String(pokedexNumber) } }} push asChild>
-      {children}
-    </Link>
   );
 }
 
