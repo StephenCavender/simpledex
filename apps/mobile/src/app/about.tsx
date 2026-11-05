@@ -27,6 +27,15 @@ export default function AboutScreen(): React.JSX.Element {
           .
         </Text>
       </Card>
+      <Card title="Developer">
+        <Text className="text-base text-muted-foreground">
+          Built by{" "}
+          <Link href="https://cavender.foo" className="text-primary">
+            Stephen Cavender
+          </Link>
+          .
+        </Text>
+      </Card>
       <Card title="Theme">
         <ThemePicker />
       </Card>

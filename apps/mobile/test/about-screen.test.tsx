@@ -63,6 +63,16 @@ describe("AboutScreen", () => {
     expect(screen.getByRole("link", { name: "PokeAPI" })).toHaveProp("href", "https://pokeapi.co");
   });
 
+  it("credits the developer with a link to his website", async () => {
+    await renderApp("/about");
+
+    expect(screen.getByRole("header", { name: "Developer" })).toBeOnTheScreen();
+    expect(screen.getByRole("link", { name: "Stephen Cavender" })).toHaveProp(
+      "href",
+      "https://cavender.foo",
+    );
+  });
+
   it("follows the device's light or dark setting when no theme has been chosen", async () => {
     await renderApp("/about");
 
