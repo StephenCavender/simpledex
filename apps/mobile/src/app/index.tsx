@@ -1,9 +1,9 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { filterPokedex } from "@simpledex/pokedex";
-import { Stack } from "expo-router";
-import { SlidersHorizontal } from "lucide-react-native";
+import { Link, Stack } from "expo-router";
+import { Info, SlidersHorizontal } from "lucide-react-native";
 import { useRef, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, View, type ColorValue } from "react-native";
 import type { SearchBarCommands } from "react-native-screens";
 import { useCSSVariable } from "uniwind";
 
@@ -33,6 +33,7 @@ export default function PokedexScreen(): React.JSX.Element {
     <>
       <Stack.Screen
         options={{
+          headerLeft: () => <AboutButton />,
           headerRight: () => (
             <FiltersButton active={activeFilters} onPress={() => setSheetOpen(true)} />
           ),
@@ -76,6 +77,18 @@ export default function PokedexScreen(): React.JSX.Element {
   );
 }
 
+/** Pushes the About screen. */
+function AboutButton(): React.JSX.Element {
+  const iconColor = useHeaderIconColor();
+  return (
+    <Link href="/about" push asChild>
+      <Pressable accessibilityLabel="About" hitSlop={8} className="p-1">
+        <Info size={22} color={iconColor} />
+      </Pressable>
+    </Link>
+  );
+}
+
 /** Opens the filter sheet; a dot shows when any filter is active. */
 function FiltersButton({
   active,
@@ -85,7 +98,7 @@ function FiltersButton({
   active: number;
   onPress: () => void;
 }): React.JSX.Element {
-  const foreground = useCSSVariable("--color-foreground");
+  const iconColor = useHeaderIconColor();
   return (
     <Pressable
       accessibilityRole="button"
@@ -96,12 +109,17 @@ function FiltersButton({
       // The native header clips its items, so pad the icon to keep the dot in bounds.
       className="p-1"
     >
-      <SlidersHorizontal size={22} color={cssColor(foreground, undefined)} />
+      <SlidersHorizontal size={22} color={iconColor} />
       {active > 0 && (
         <View className="absolute right-0 top-0 size-2.5 rounded-full border border-background bg-destructive" />
       )}
     </Pressable>
   );
+}
+
+/** Header icons use the foreground colour of the active theme. */
+function useHeaderIconColor(): ColorValue | undefined {
+  return cssColor(useCSSVariable("--color-foreground"), undefined);
 }
 
 function Message({ children }: { children: string }): React.JSX.Element {
