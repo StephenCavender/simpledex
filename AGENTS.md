@@ -7,6 +7,12 @@ A Pokémon reference app: React web app, Eleventy marketing site, and Convex bac
 - Never commit with `--no-verify`. If the hook fails, fix the cause.
 - Never push without explicit instruction. Use Conventional Commits.
 
+## Parallel sessions
+
+Several agent sessions may share this checkout. Leave its branch and working tree to whoever started there; do your ticket in its own worktree: `git worktree add -b <branch> ../simpledex-<issue> master`, then `bun install` in it. Remove it with `git worktree remove` once merged.
+
+Worktrees still share two things. Metro's port 8081: start a second Expo server with `--port <n>`. The Convex dev deployment: only one session at a time should run `dev:backend` or push Convex changes.
+
 Read when relevant:
 
 - Coding conventions (React, TypeScript, Convex): [docs/agents/coding-standards.md](docs/agents/coding-standards.md)
