@@ -4,6 +4,8 @@ Clean, minimal, reference-first, like a well-organized field guide. Pokémon art
 
 Colour tokens live in `packages/tokens/theme.css` (`@simpledex/tokens`, format in [ADR-0006](adr/0006-one-token-file-in-uniwind-format.md)); radius and font tokens are in `packages/ui/src/styles/globals.css`. `apps/web/src/index.css` imports both. Use tokens like `bg-card`, `text-muted-foreground`, and `border-border`, not literal colors. Each Pokémon Type has a badge color token, `--color-type-<name>` (class `bg-type-<name>`), chosen so white text meets WCAG AA.
 
+The logo lives in `packages/brand/logo.svg`. Every app icon, splash image, and favicon is generated from it; don't edit those by hand (see [setup.md](setup.md#logo-and-icons)).
+
 ## Patterns
 
 - **Cards**: `bg-card text-card-foreground`, `rounded` via `--radius`, light `border-border`.

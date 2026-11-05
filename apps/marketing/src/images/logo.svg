@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>SimpleDex</title>
+  <g id="fill">
+    <path fill="#69D7F9" d="M95 126V50a8 8 0 0 1 8-8h335v40h-69l-49 44z"/>
+    <path fill="#FFE800" d="M101 153h228l45-41h64v328l-8 42H101z"/>
+    <circle cx="189.5" cy="73.5" r="7" fill="#CC0D0D"/>
+    <circle cx="210.5" cy="73.5" r="7" fill="#FFDE17"/>
+    <circle cx="231.5" cy="73.5" r="7" fill="#8DC63F"/>
+  </g>
+  <g id="outline" fill="none" stroke="#EF4136" stroke-width="17">
+    <path d="M73.5 308V49a27.5 27.5 0 0 1 27.5-27.5h309.5a27.5 27.5 0 0 1 27.5 27.5v226.5"/>
+    <path d="M438 308v154.5a27.5 27.5 0 0 1-27.5 27.5H101a27.5 27.5 0 0 1-27.5-27.5V339.5"/>
+    <path d="M73.5 126H320l49-44h69"/>
+    <path d="M398 82v193.5M398 308v182"/>
+    <circle cx="131.5" cy="74" r="23"/>
+    <path d="M438 267H258.6A73 73 0 0 1 319 235v-52.5A125.5 125.5 0 0 0 193.5 308H318A125.5 125.5 0 0 1 192.5 433.5V381A73 73 0 0 0 252.9 349H73.5"/>
+  </g>
+  <path fill="#EF4136" d="M100.5 239.75 134.5 258.5 100.5 277.25z"/>
+</svg>
