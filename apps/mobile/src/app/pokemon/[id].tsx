@@ -108,32 +108,35 @@ export default function PokemonScreen(): React.JSX.Element {
         </Section>
       )}
 
-      {!(evolutions.status === "loaded" && evolutions.data === null) && (
+      {evolutions.status !== "loaded" ? (
         <Section title="Evolutions">
-          {evolutions.status === "loaded" && evolutions.data ? (
-            <Evolutions stages={evolutions.data} pokedexNumber={pokemon.id} />
-          ) : (
-            <Text className="text-sm text-muted-foreground">
-              {evolutions.status === "offline"
-                ? "Evolutions need a connection to load"
-                : "Loading evolutions…"}
-            </Text>
-          )}
+          <Text className="text-sm text-muted-foreground">
+            {evolutions.status === "offline"
+              ? "Evolutions need a connection to load"
+              : "Loading evolutions…"}
+          </Text>
         </Section>
+      ) : (
+        evolutions.data && (
+          <Section title="Evolutions">
+            <Evolutions stages={evolutions.data} pokedexNumber={pokemon.id} />
+          </Section>
+        )
       )}
     </ScrollView>
   );
 }
 
 /**
- * A species fact: "…" while species is loading or needs a connection, or
- * "Unknown" when it isn't synced.
+ * A species fact: "…" while species is loading, "Offline" when it needs a
+ * connection, or "Unknown" when it isn't synced.
  */
 function speciesFact(
   species: CachedQuery<FunctionReturnType<typeof api.pokemon.getSpecies>>,
   fact: "habitat" | "color",
 ): string {
-  if (species.status !== "loaded") return "…";
+  if (species.status === "loading") return "…";
+  if (species.status === "offline") return "Offline";
   return species.data?.[fact] || "Unknown";
 }
 

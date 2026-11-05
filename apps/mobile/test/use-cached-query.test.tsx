@@ -27,7 +27,7 @@ const mockConnectionState = jest.mocked(useConvexConnectionState);
 
 type ConnectionState = ReturnType<typeof useConvexConnectionState>;
 
-const CONNECTION: ConnectionState = {
+const ONLINE: ConnectionState = {
   hasInflightRequests: false,
   isWebSocketConnected: true,
   timeOfOldestInflightRequest: null,
@@ -38,10 +38,9 @@ const CONNECTION: ConnectionState = {
   inflightActions: 0,
 };
 
-const ONLINE: ConnectionState = CONNECTION;
 /** First launch with no signal: never connected, and has tried and failed. */
 const NEVER_CONNECTED: ConnectionState = {
-  ...CONNECTION,
+  ...ONLINE,
   isWebSocketConnected: false,
   hasEverConnected: false,
   connectionCount: 0,
@@ -49,18 +48,18 @@ const NEVER_CONNECTED: ConnectionState = {
 };
 /** Still opening the first connection. */
 const CONNECTING: ConnectionState = {
-  ...CONNECTION,
+  ...ONLINE,
   isWebSocketConnected: false,
   hasEverConnected: false,
   connectionCount: 0,
 };
 /** Was connected, then lost signal. */
-const DISCONNECTED: ConnectionState = { ...CONNECTION, isWebSocketConnected: false };
+const DISCONNECTED: ConnectionState = { ...ONLINE, isWebSocketConnected: false };
 
 const PIKACHU = { id: 25, name: "pikachu" };
 const PIKACHU_KEY = 'pokemon:getById:{"id":25}';
 
-function useEevee(): ReturnType<typeof useCachedQuery<typeof api.pokemon.getById>> {
+function useUncachedEevee(): ReturnType<typeof useCachedQuery<typeof api.pokemon.getById>> {
   return useCachedQuery(api.pokemon.getById, { id: 133 });
 }
 
@@ -74,7 +73,7 @@ describe("useCachedQuery", () => {
   it("reports that it needs a connection when nothing is cached and it's offline", async () => {
     mockConnectionState.mockReturnValue(NEVER_CONNECTED);
 
-    const { result } = await renderHook(useEevee);
+    const { result } = await renderHook(useUncachedEevee);
 
     expect(result.current).toEqual({ status: "offline" });
   });
@@ -82,7 +81,7 @@ describe("useCachedQuery", () => {
   it("is loading while it connects with nothing cached", async () => {
     mockConnectionState.mockReturnValue(CONNECTING);
 
-    const { result } = await renderHook(useEevee);
+    const { result } = await renderHook(useUncachedEevee);
 
     expect(result.current).toEqual({ status: "loading" });
   });
@@ -90,7 +89,7 @@ describe("useCachedQuery", () => {
   it("reports that it needs a connection when it lost signal before anything was cached", async () => {
     mockConnectionState.mockReturnValue(DISCONNECTED);
 
-    const { result } = await renderHook(useEevee);
+    const { result } = await renderHook(useUncachedEevee);
 
     expect(result.current).toEqual({ status: "offline" });
   });
@@ -127,7 +126,7 @@ describe("useCachedQuery", () => {
     expect(JSON.parse(Storage.getItemSync(PIKACHU_KEY) ?? "null")).toEqual(PIKACHU);
   });
 
-  it("keeps returning the data after going offline", async () => {
+  it("returns the saved data when reopened offline", async () => {
     mockUseQuery.mockReturnValue(PIKACHU);
     const online = await renderHook(() => useCachedQuery(api.pokemon.getById, { id: 25 }));
     await online.unmount();
@@ -139,7 +138,7 @@ describe("useCachedQuery", () => {
     expect(result.current).toEqual({ status: "loaded", data: PIKACHU });
   });
 
-  it("keeps returning the latest data if Convex drops it while offline", async () => {
+  it("keeps returning the data after going offline, even if Convex drops it", async () => {
     await Storage.setItem(PIKACHU_KEY, JSON.stringify({ ...PIKACHU, name: "stale" }));
     mockUseQuery.mockReturnValue(PIKACHU);
     const { result, rerender } = await renderHook(() =>

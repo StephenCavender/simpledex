@@ -97,7 +97,7 @@ const OFFLINE = Symbol("offline");
  */
 let answer: (name: string, args: Record<string, number>) => unknown;
 
-function cached(value: unknown): CachedQuery<unknown> {
+function asCachedQuery(value: unknown): CachedQuery<unknown> {
   if (value === undefined) return { status: "loading" };
   if (value === OFFLINE) return { status: "offline" };
   return { status: "loaded", data: value };
@@ -121,7 +121,7 @@ function defaultAnswer(name: string, args: Record<string, number>): unknown {
 jest
   .mocked(useCachedQuery)
   .mockImplementation(((query: FunctionReference<"query">, args: Record<string, number> | "skip") =>
-    cached(
+    asCachedQuery(
       args === "skip" ? undefined : answer(getFunctionName(query), args),
     )) as typeof useCachedQuery);
 
@@ -277,6 +277,14 @@ describe("PokemonScreen", () => {
 
     expect(screen.getByText("SimpleDex needs a connection to load this Pokémon")).toBeOnTheScreen();
     expect(screen.queryByText("Loading…")).not.toBeOnTheScreen();
+  });
+
+  it("says species information is offline when it isn't cached", async () => {
+    answer = (name, args) => (name === "pokemon:getSpecies" ? OFFLINE : defaultAnswer(name, args));
+
+    await renderApp("/pokemon/133");
+
+    expect(screen.getAllByText("Offline")).toHaveLength(2);
   });
 
   it("says when the Evolution Chain needs a connection", async () => {

@@ -29,13 +29,16 @@ export function useCachedQuery<Query extends FunctionReference<"query">>(
 ): CachedQuery<FunctionReturnType<Query>> {
   const live = useQuery(query, args);
   const connection = useConvexConnectionState();
-  const key = args === "skip" ? undefined : `${getFunctionName(query)}:${JSON.stringify(args)}`;
+  const key = args === "skip" ? undefined : cacheKey(query, args);
   // The last data known for this key: read from the store once, then kept up
   // to date with live data, so Convex dropping a result while offline loses nothing.
-  const [known, setKnown] = useState(() => ({ key, entry: read<FunctionReturnType<Query>>(key) }));
-  let entry = known.key === key ? known.entry : read<FunctionReturnType<Query>>(key);
+  const [lastKnown, setLastKnown] = useState(() => ({
+    key,
+    entry: readStored<FunctionReturnType<Query>>(key),
+  }));
+  let entry = lastKnown.key === key ? lastKnown.entry : readStored<FunctionReturnType<Query>>(key);
   if (live !== undefined && entry?.data !== live) entry = { data: live };
-  if (known.key !== key || known.entry !== entry) setKnown({ key, entry });
+  if (lastKnown.key !== key || lastKnown.entry !== entry) setLastKnown({ key, entry });
 
   useEffect(() => {
     if (key !== undefined && live !== undefined) void Storage.setItem(key, JSON.stringify(live));
@@ -46,7 +49,16 @@ export function useCachedQuery<Query extends FunctionReference<"query">>(
   return { status: "loading" };
 }
 
-function read<T>(key: string | undefined): { data: T } | undefined {
+/** The store key for a query and its arguments, e.g. `pokemon:getById:{"id":25}`. */
+function cacheKey<Query extends FunctionReference<"query">>(
+  query: Query,
+  args: FunctionArgs<Query>,
+): string {
+  return `${getFunctionName(query)}:${JSON.stringify(args)}`;
+}
+
+/** What the store holds for a key, wrapped so that a stored `null` isn't "nothing stored". */
+function readStored<T>(key: string | undefined): { data: T } | undefined {
   const stored = key === undefined ? null : Storage.getItemSync(key);
   return stored === null ? undefined : { data: JSON.parse(stored) };
 }
