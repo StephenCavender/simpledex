@@ -1,10 +1,7 @@
 import { DarkTheme, DefaultTheme, type Theme } from "expo-router";
-import type { ColorValue } from "react-native";
 import { useCSSVariable, useUniwind } from "uniwind";
 
-function color(value: string | number | undefined, fallback: ColorValue): ColorValue {
-  return typeof value === "string" ? value : fallback;
-}
+import { cssColor as color } from "@/lib/css-color";
 
 /**
  * The navigation theme (header, screen background) built from the shared
