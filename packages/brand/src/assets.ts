@@ -9,6 +9,19 @@ const VIEWBOX = 512;
 
 const WHITE = "#FFFFFF";
 
+/** Edge of every generated mobile image. */
+const ICON_SIZE = 1024;
+
+/** The logo on the iOS icon: about 80% of its height, clear of the corner mask. */
+const IOS_LOGO_SIZE = 860;
+
+/**
+ * The logo on Android adaptive icon layers. Android masks them to shapes that
+ * always contain the centre 66dp of 108dp; at this size the artwork's farthest
+ * corner sits just inside that circle.
+ */
+const ADAPTIVE_LOGO_SIZE = 512;
+
 /** The logo without its `<g id="fill">` colour fills: just the outline. */
 function outlineOnly(svg: string): string {
   return svg.replace(/<g id="fill">[\s\S]*?<\/g>/, "");
@@ -61,22 +74,23 @@ export async function generateAssets(root: string): Promise<void> {
   const svg = await readFile(LOGO_PATH, "utf8");
   const mobile = join(root, "apps/mobile/assets/images");
 
-  await write(join(mobile, "icon.png"), await placeLogo(svg, 1024, 760, WHITE));
-  // Android masks adaptive icons to the centre 66dp of 108dp; at 512px the
-  // artwork's farthest corner sits just inside that circle.
-  await write(join(mobile, "android-icon-foreground.png"), await placeLogo(svg, 1024, 512, null));
+  await write(join(mobile, "icon.png"), await placeLogo(svg, ICON_SIZE, IOS_LOGO_SIZE, WHITE));
+  await write(
+    join(mobile, "android-icon-foreground.png"),
+    await placeLogo(svg, ICON_SIZE, ADAPTIVE_LOGO_SIZE, null),
+  );
   await write(
     join(mobile, "android-icon-background.png"),
-    await canvas(1024, WHITE).png().toBuffer(),
+    await canvas(ICON_SIZE, WHITE).png().toBuffer(),
   );
   // Android themed icons use only the alpha channel, so the fills would
   // flatten the artwork into a silhouette.
   await write(
     join(mobile, "android-icon-monochrome.png"),
-    await placeLogo(outlineOnly(svg), 1024, 512, null),
+    await placeLogo(outlineOnly(svg), ICON_SIZE, ADAPTIVE_LOGO_SIZE, null),
   );
   // The splash screen plugin sizes and centres this itself (`imageWidth`).
-  await write(join(mobile, "splash-icon.png"), await renderLogo(svg, 1024));
+  await write(join(mobile, "splash-icon.png"), await renderLogo(svg, ICON_SIZE));
 
   // The web builds its PWA icons from this copy (apps/web/pwa-assets.config.ts).
   await write(join(root, "apps/web/public/logo.svg"), svg);

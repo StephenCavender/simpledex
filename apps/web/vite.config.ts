@@ -30,6 +30,8 @@ export default defineConfig({
         start_url: "/",
         id: "/",
       },
+      // Generates the icons, favicon, and apple-touch icon from public/logo.svg
+      // (pwa-assets.config.ts) and injects them into the manifest and index.html.
       pwaAssets: { disabled: false, config: true },
       devOptions: { enabled: true },
     }),

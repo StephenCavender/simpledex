@@ -32,6 +32,16 @@
       "cache": false,
       "persistent": true
     },
+    "@simpledex/brand#test": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/apps/mobile/assets/images/**",
+        "$TURBO_ROOT$/apps/web/public/logo.svg",
+        "$TURBO_ROOT$/apps/marketing/src/images/logo.svg"
+      ],
+      "outputs": []
+    },
     "@simpledex/backend#build": {
       "outputs": []
     }

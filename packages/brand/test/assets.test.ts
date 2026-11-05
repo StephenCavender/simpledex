@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import sharp from "sharp";
@@ -82,7 +82,8 @@ describe("generateAssets", () => {
     const path = "apps/mobile/assets/images/android-icon-monochrome.png";
     await expectWithinSafeZone(path);
 
-    // A point in the logo's yellow fill: painted in the foreground, not here.
+    // The logo's yellow fill at (150, 400) in its 512px viewBox, which these
+    // layers centre at 512px on 1024px: painted in the foreground, not here.
     const [x, y] = [256 + 150, 256 + 400];
     const foreground = await alphaOf("apps/mobile/assets/images/android-icon-foreground.png");
     const monochrome = await alphaOf(path);
@@ -105,4 +106,21 @@ describe("generateAssets", () => {
       expect(await readFile(join(root, path), "utf8")).toBe(source);
     },
   );
+
+  it("matches the assets committed to the repo", async () => {
+    const repo = join(import.meta.dirname, "../../..");
+    const generated = await readdir(root, { recursive: true, withFileTypes: true });
+    const files = generated
+      .filter((entry) => entry.isFile())
+      .map((entry) => join(entry.parentPath, entry.name).slice(root.length + 1));
+
+    expect(files.length).toBeGreaterThan(0);
+    for (const file of files) {
+      const committed = await readFile(join(repo, file));
+      const fresh = await readFile(join(root, file));
+      expect(committed.equals(fresh), `${file} is stale: run \`bun run generate:assets\``).toBe(
+        true,
+      );
+    }
+  });
 });
