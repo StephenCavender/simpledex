@@ -1,36 +1,6 @@
-import type { api } from "@simpledex/backend/convex/_generated/api";
+import { evolutionLinks, type EvolutionLink, type EvolutionStage } from "@simpledex/pokedex";
 import { Link } from "@tanstack/react-router";
-import type { FunctionReturnType } from "convex/server";
 import { PokemonImage } from "@/components/pokemon-image";
-
-export type EvolutionStage = NonNullable<
-  FunctionReturnType<typeof api.pokemon.getEvolutions>
->[number];
-
-interface EvolutionLink {
-  stage: EvolutionStage;
-  /** How the later stage evolves from the earlier one, e.g. "Level 16". */
-  method?: string;
-}
-
-interface EvolutionLinks {
-  from?: EvolutionLink;
-  into: EvolutionLink[];
-  chain: EvolutionStage[];
-}
-
-/** What a Pokémon evolves from and into within its Evolution Chain. */
-export function evolutionLinks(stages: EvolutionStage[], pokedexNumber: number): EvolutionLinks {
-  const current = stages.find((s) => s.id === pokedexNumber);
-  const parent = stages.find((s) => s.id === current?.from);
-  return {
-    ...(parent ? { from: { stage: parent, method: current?.method } } : {}),
-    into: stages
-      .filter((s) => s.from === pokedexNumber)
-      .map((stage) => ({ stage, method: stage.method })),
-    chain: stages,
-  };
-}
 
 /** The detail page's Evolutions section: this Pokémon's links, then its whole Evolution Chain. */
 export function Evolutions({
