@@ -16,7 +16,7 @@ SimpleDex is a Pokemon reference app. The design philosophy is:
 
 **Monorepo** — Turborepo manages the workspace. Shared packages for UI components, backend functions, and environment config. Each app and package has a single responsibility.
 
-**Convex for state** — All server state flows through Convex queries and mutations. No REST endpoints, no manual caching, no polling. React components use `useQuery` directly.
+**Convex for state** — All server state flows through Convex queries and mutations. No REST endpoints, no manual caching, no polling. React components use `useQuery` directly; the mobile app wraps it in one offline-cache hook because Convex's client doesn't persist results (ADR-0003).
 
 **TypeScript everywhere** — End-to-end type safety from Convex backend to React frontend. The `convex/_generated` API provides fully typed function references.
 

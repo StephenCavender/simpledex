@@ -1,6 +1,5 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { filterPokedex } from "@simpledex/pokedex";
-import { useQuery } from "convex/react";
 import { Stack } from "expo-router";
 import { SlidersHorizontal } from "lucide-react-native";
 import { useRef, useState } from "react";
@@ -12,15 +11,17 @@ import { ClearAllButton } from "@/components/clear-all-button";
 import { FilterSheet, type TypeAndGenerationFilters } from "@/components/filter-sheet";
 import { PokedexList } from "@/components/pokedex-list";
 import { cssColor } from "@/lib/css-color";
+import { useCachedQuery } from "@/lib/use-cached-query";
 
 export default function PokedexScreen(): React.JSX.Element {
-  const pokedex = useQuery(api.pokemon.pokedex);
+  const pokedex = useCachedQuery(api.pokemon.pokedex, {});
   const [q, setQ] = useState("");
   const [filters, setFilters] = useState<TypeAndGenerationFilters>({});
   const [sheetOpen, setSheetOpen] = useState(false);
   const searchBar = useRef<SearchBarCommands>(null);
   const activeFilters = Object.values(filters).filter((value) => value !== undefined).length;
-  const entries = pokedex ? filterPokedex(pokedex, { ...filters, q }) : undefined;
+  const entries =
+    pokedex.status === "loaded" ? filterPokedex(pokedex.data, { ...filters, q }) : undefined;
 
   const clearAll = (): void => {
     searchBar.current?.clearText();
@@ -56,7 +57,11 @@ export default function PokedexScreen(): React.JSX.Element {
           />
         ) : (
           <View className="py-12">
-            <Message>Loading…</Message>
+            <Message>
+              {pokedex.status === "offline"
+                ? "SimpleDex needs a connection to load the Pokédex"
+                : "Loading…"}
+            </Message>
           </View>
         )}
       </View>

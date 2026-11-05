@@ -16,6 +16,7 @@
 ## Convex (packages/backend)
 
 - All server state goes through Convex queries/mutations; components use `useQuery` directly. No REST, manual caching, or polling.
+- The one exception is mobile offline: `apps/mobile` screens use `useCachedQuery` (`src/lib/use-cached-query.ts`), which wraps `useQuery` with the `expo-sqlite` key-value store, because Convex's client doesn't persist query results (ADR-0003).
 - Validate args and keep `schema.ts` in sync. `convex/_generated` is generated; run `bun run codegen` instead of editing.
 
 ## Marketing (apps/marketing)
