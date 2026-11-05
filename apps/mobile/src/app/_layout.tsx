@@ -8,6 +8,7 @@ import { convex } from "@/lib/convex";
 import { useNavigationTheme } from "@/lib/navigation-theme";
 import { restoreThemePreference } from "@/lib/theme-preference";
 
+// Runs at import, before the first render, so the saved theme shows without a flash.
 restoreThemePreference();
 
 export default function RootLayout(): React.JSX.Element {

@@ -10,18 +10,23 @@ import { useCachedQuery } from "@/lib/use-cached-query";
 
 jest.mock("@/lib/use-cached-query", () => ({ useCachedQuery: jest.fn() }));
 
-// An in-memory key-value store in place of SQLite.
-jest.mock("expo-sqlite/kv-store", () => {
-  const items = new Map<string, string>();
-  return {
-    __esModule: true,
-    default: {
-      getItemSync: (key: string) => items.get(key) ?? null,
-      setItemSync: (key: string, value: string) => items.set(key, value),
-      clearSync: () => items.clear(),
-    },
-  };
-});
+// Uniwind's bundler plugin compiles the stylesheet; Jest can't load it.
+jest.mock("../src/global.css", () => ({}));
+
+// The real client needs a deployment URL; these tests never talk to Convex.
+jest.mock("@/lib/convex", () => ({ convex: {} }));
+
+// An in-memory key-value store in place of SQLite, shared across module registries
+// so a simulated relaunch sees what the previous launch saved.
+const mockItems = new Map<string, string>();
+jest.mock("expo-sqlite/kv-store", () => ({
+  __esModule: true,
+  default: {
+    getItemSync: (key: string) => mockItems.get(key) ?? null,
+    setItemSync: (key: string, value: string) => mockItems.set(key, value),
+    clearSync: () => mockItems.clear(),
+  },
+}));
 
 jest.mocked(useCachedQuery).mockReturnValue({ status: "loading" });
 
@@ -65,39 +70,53 @@ describe("AboutScreen", () => {
     expect(Uniwind.hasAdaptiveThemes).toBe(true);
   });
 
-  it.each(["light", "dark"] as const)(
-    "applies the %s theme as soon as it's chosen",
-    async (theme) => {
-      await renderApp("/about");
+  it.each([
+    ["Light", "light"],
+    ["Dark", "dark"],
+  ] as const)("applies the %s theme as soon as it's chosen", async (label, theme) => {
+    await renderApp("/about");
 
-      await chooseTheme(theme === "light" ? "Light" : "Dark");
+    await chooseTheme(label);
 
-      expect(
-        screen.getByRole("radio", { name: theme === "light" ? "Light" : "Dark" }),
-      ).toBeChecked();
-      expect(screen.getByRole("radio", { name: "System" })).not.toBeChecked();
-      expect(Uniwind.hasAdaptiveThemes).toBe(false);
-      expect(Uniwind.currentTheme).toBe(theme);
-    },
-  );
+    expect(screen.getByRole("radio", { name: label })).toBeChecked();
+    expect(screen.getByRole("radio", { name: "System" })).not.toBeChecked();
+    expect(Uniwind.hasAdaptiveThemes).toBe(false);
+    expect(Uniwind.currentTheme).toBe(theme);
+  });
 
   it.each([
-    ["Light", "light", false],
-    ["Dark", "dark", false],
-    ["System", "light", true],
-  ] as const)("keeps %s chosen at the next launch", async (name, theme, followsDevice) => {
+    // [choice, a different theme to start the relaunch from, expected theme, follows device]
+    ["Light", "dark", "light", false],
+    ["Dark", "light", "dark", false],
+    ["System", "dark", "light", true],
+  ] as const)("keeps %s chosen at the next launch", async (name, stale, theme, followsDevice) => {
     await renderApp("/about");
     await chooseTheme(name === "System" ? "Dark" : "Light");
     await chooseTheme(name);
     await screen.unmount();
 
-    // A fresh launch starts out following the device, then restores the choice.
-    Uniwind.setTheme("system");
+    // Start the relaunch from a different theme so only the saved choice can explain the result.
+    Uniwind.setTheme(stale);
     restoreThemePreference();
     await renderApp("/about");
 
     expect(screen.getByRole("radio", { name })).toBeChecked();
     expect(Uniwind.hasAdaptiveThemes).toBe(followsDevice);
     expect(Uniwind.currentTheme).toBe(theme);
+  });
+
+  it("applies the saved theme when the app's root layout loads, before anything renders", () => {
+    Storage.setItemSync("theme", "dark");
+
+    // Load the real root layout in a fresh module registry, as on a cold launch.
+    jest.isolateModules(() => {
+      const { Uniwind: freshUniwind } = jest.requireActual<typeof import("uniwind")>("uniwind");
+      expect(freshUniwind.currentTheme).not.toBe("dark");
+
+      require("@/app/_layout");
+
+      expect(freshUniwind.currentTheme).toBe("dark");
+      expect(freshUniwind.hasAdaptiveThemes).toBe(false);
+    });
   });
 });
