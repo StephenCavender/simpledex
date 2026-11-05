@@ -1,7 +1,7 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { filterPokedex } from "@simpledex/pokedex";
-import { Stack } from "expo-router";
-import { SlidersHorizontal } from "lucide-react-native";
+import { Link, Stack } from "expo-router";
+import { Info, SlidersHorizontal } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { SearchBarCommands } from "react-native-screens";
@@ -33,6 +33,7 @@ export default function PokedexScreen(): React.JSX.Element {
     <>
       <Stack.Screen
         options={{
+          headerLeft: () => <AboutButton />,
           headerRight: () => (
             <FiltersButton active={activeFilters} onPress={() => setSheetOpen(true)} />
           ),
@@ -73,6 +74,18 @@ export default function PokedexScreen(): React.JSX.Element {
         onClose={() => setSheetOpen(false)}
       />
     </>
+  );
+}
+
+/** Pushes the About screen. */
+function AboutButton(): React.JSX.Element {
+  const foreground = useCSSVariable("--color-foreground");
+  return (
+    <Link href="/about" push asChild>
+      <Pressable accessibilityLabel="About" hitSlop={8} className="p-1">
+        <Info size={22} color={cssColor(foreground, undefined)} />
+      </Pressable>
+    </Link>
   );
 }
 
