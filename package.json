@@ -15,6 +15,7 @@
     "dev:setup": "turbo run dev:setup --filter=@simpledex/backend",
     "build": "turbo run build",
     "codegen": "turbo run codegen",
+    "generate:assets": "bun run --cwd packages/brand generate",
     "ci:check": "rm -rf node_modules .turbo && bun install --frozen-lockfile && bun run build",
     "check-types": "turbo run check-types",
     "test": "turbo run test",

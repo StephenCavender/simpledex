@@ -17,6 +17,10 @@
       "entry": ["convex/*.ts", "scripts/*.ts"],
       "project": ["convex/**/*.ts", "scripts/**/*.ts", "test/**/*.ts"]
     },
+    "packages/brand": {
+      "entry": ["scripts/*.ts"],
+      "project": ["src/**/*.ts", "scripts/**/*.ts", "test/**/*.ts"]
+    },
     "packages/env": {
       "entry": ["src/**/*.ts"],
       "project": ["src/**/*.ts"]

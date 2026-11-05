@@ -9,7 +9,7 @@ function AboutComponent() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-6">
       <div className="mb-8 text-center">
-        <img src="/logo.png" alt="SimpleDex" className="h-32 w-auto mx-auto mb-4" />
+        <img src="/logo.svg" alt="SimpleDex" className="h-32 w-auto mx-auto mb-4" />
         <h1 className="text-3xl font-bold mb-2">SimpleDex</h1>
         <p className="text-muted-foreground">Your quick reference for Pokemon</p>
       </div>

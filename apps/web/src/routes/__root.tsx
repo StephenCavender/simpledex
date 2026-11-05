@@ -29,16 +29,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         content: "black-translucent",
       },
     ],
-    links: [
-      {
-        rel: "icon",
-        href: "/favicon.ico",
-      },
-      {
-        rel: "apple-touch-icon",
-        href: "/apple-touch-icon-180x180.png",
-      },
-    ],
+    // Icon links are injected into index.html by vite-plugin-pwa (pwa-assets.config.ts).
   }),
 });
 

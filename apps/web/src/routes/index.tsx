@@ -31,7 +31,7 @@ function HomeComponent() {
       <div className="mb-8 text-center">
         <a href="/about" className="inline-block mb-2">
           <img
-            src="/logo.png"
+            src="/logo.svg"
             alt="SimpleDex"
             className="h-16 w-auto mx-auto hover:opacity-80 transition-opacity"
           />

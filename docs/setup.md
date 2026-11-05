@@ -38,6 +38,16 @@ bun run dev:marketing    # Marketing site only
 bun run build
 ```
 
+## Logo and icons
+
+`packages/brand/logo.svg` is the single source for the logo. After editing it, regenerate everything derived from it:
+
+```bash
+bun run generate:assets
+```
+
+This writes the mobile app icon, Android adaptive icon layers (foreground, background, monochrome), and splash image to `apps/mobile/assets/images/`, and copies the SVG to `apps/web/public/logo.svg` and `apps/marketing/src/images/logo.svg`. Commit the results. The web's PWA icons, favicon, and apple-touch icon aren't committed: `vite-plugin-pwa` builds them from `apps/web/public/logo.svg` (`apps/web/pwa-assets.config.ts`).
+
 ## Quality checks
 
 ```bash
