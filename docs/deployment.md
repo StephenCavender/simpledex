@@ -41,6 +41,10 @@ cd packages/backend
 npx convex deploy
 ```
 
+## Deploying Mobile
+
+The iOS and Android app builds on EAS, started by hand from the maintainer's machine. `preview` builds use the dev Convex deployment and `production` builds use prod. JS-only fixes ship through EAS Update. Commands and store submission: [apps/mobile/README.md](../apps/mobile/README.md#releasing).
+
 ## Data Sync
 
 Data is copied from PokeAPI by the internal Sync module. After a deploy that changes the synced data's shape, run a forced Sync:

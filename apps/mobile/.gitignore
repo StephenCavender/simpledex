@@ -20,3 +20,6 @@ src/uniwind-types.d.ts
 
 # Metro
 .metro-health-check*
+
+# EAS Submit: Google Play service account key
+google-service-account.json
