@@ -1,6 +1,5 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { formatPokedexNumber, formatSlug } from "@simpledex/pokedex";
-import { useQuery } from "convex/react";
 import type { FunctionReturnType } from "convex/server";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
@@ -8,6 +7,7 @@ import { ScrollView, Text, View } from "react-native";
 import { Evolutions } from "@/components/evolutions";
 import { PokemonImage } from "@/components/pokemon-image";
 import { TypeBadge } from "@/components/type-badge";
+import { useCachedQuery, type CachedQuery } from "@/lib/use-cached-query";
 
 const ARTWORK_SIZE = 240;
 const POKEDEX_NUMBER = /^\d+$/;
@@ -20,19 +20,29 @@ export default function PokemonScreen(): React.JSX.Element {
   const pokedexNumber = POKEDEX_NUMBER.test(id) ? Number(id) : undefined;
   const args = pokedexNumber === undefined ? "skip" : { id: pokedexNumber };
 
-  // Each is undefined while loading; null when there's nothing synced.
-  const pokemon = useQuery(api.pokemon.getById, args);
-  const species = useQuery(api.pokemon.getSpecies, args);
-  const evolutions = useQuery(
+  // Each query's data is null when there's nothing synced.
+  const pokemonQuery = useCachedQuery(api.pokemon.getById, args);
+  const species = useCachedQuery(api.pokemon.getSpecies, args);
+  const evolutions = useCachedQuery(
     api.pokemon.getEvolutions,
     pokedexNumber === undefined ? "skip" : { pokemon: pokedexNumber },
   );
 
-  if (pokedexNumber === undefined || pokemon === null) {
+  if (pokedexNumber === undefined) {
     return <Message title="Not found">Pokémon not found</Message>;
   }
-  if (pokemon === undefined) {
-    return <Message title={formatPokedexNumber(pokedexNumber)}>Loading…</Message>;
+  if (pokemonQuery.status !== "loaded") {
+    return (
+      <Message title={formatPokedexNumber(pokedexNumber)}>
+        {pokemonQuery.status === "offline"
+          ? "SimpleDex needs a connection to load this Pokémon"
+          : "Loading…"}
+      </Message>
+    );
+  }
+  const pokemon = pokemonQuery.data;
+  if (pokemon === null) {
+    return <Message title="Not found">Pokémon not found</Message>;
   }
 
   return (
@@ -98,12 +108,16 @@ export default function PokemonScreen(): React.JSX.Element {
         </Section>
       )}
 
-      {evolutions !== null && (
+      {!(evolutions.status === "loaded" && evolutions.data === null) && (
         <Section title="Evolutions">
-          {evolutions ? (
-            <Evolutions stages={evolutions} pokedexNumber={pokemon.id} />
+          {evolutions.status === "loaded" && evolutions.data ? (
+            <Evolutions stages={evolutions.data} pokedexNumber={pokemon.id} />
           ) : (
-            <Text className="text-sm text-muted-foreground">Loading evolutions…</Text>
+            <Text className="text-sm text-muted-foreground">
+              {evolutions.status === "offline"
+                ? "Evolutions need a connection to load"
+                : "Loading evolutions…"}
+            </Text>
           )}
         </Section>
       )}
@@ -111,13 +125,16 @@ export default function PokemonScreen(): React.JSX.Element {
   );
 }
 
-/** A species fact, "…" while species is loading, or "Unknown" when it isn't synced. */
+/**
+ * A species fact: "…" while species is loading or needs a connection, or
+ * "Unknown" when it isn't synced.
+ */
 function speciesFact(
-  species: FunctionReturnType<typeof api.pokemon.getSpecies> | undefined,
+  species: CachedQuery<FunctionReturnType<typeof api.pokemon.getSpecies>>,
   fact: "habitat" | "color",
 ): string {
-  if (species === undefined) return "…";
-  return species?.[fact] || "Unknown";
+  if (species.status !== "loaded") return "…";
+  return species.data?.[fact] || "Unknown";
 }
 
 function Message({ title, children }: { title: string; children: string }): React.JSX.Element {

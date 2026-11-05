@@ -1,14 +1,14 @@
 import type { api } from "@simpledex/backend/convex/_generated/api";
 import type { EvolutionStage, PokedexEntry } from "@simpledex/pokedex";
-import { useQuery } from "convex/react";
 import { getFunctionName, type FunctionReference, type FunctionReturnType } from "convex/server";
 import { Stack } from "expo-router";
 import { fireEvent, renderRouter, screen, testRouter, within } from "expo-router/testing-library";
 
 import PokedexScreen from "@/app/index";
 import PokemonScreen from "@/app/pokemon/[id]";
+import { useCachedQuery, type CachedQuery } from "@/lib/use-cached-query";
 
-jest.mock("convex/react", () => ({ useQuery: jest.fn() }));
+jest.mock("@/lib/use-cached-query", () => ({ useCachedQuery: jest.fn() }));
 
 type Pokemon = NonNullable<FunctionReturnType<typeof api.pokemon.getById>>;
 type Species = NonNullable<FunctionReturnType<typeof api.pokemon.getSpecies>>;
@@ -88,8 +88,20 @@ const POKEDEX: PokedexEntry[] = Object.values(POKEMON).map((p) => ({
   generation: 1,
 }));
 
-/** Answers each Convex query from the fixtures above; `undefined` means still loading. */
+/** Nothing cached and offline. */
+const OFFLINE = Symbol("offline");
+
+/**
+ * Answers each query from the fixtures above; `undefined` means still loading,
+ * and `OFFLINE` means it needs a connection.
+ */
 let answer: (name: string, args: Record<string, number>) => unknown;
+
+function cached(value: unknown): CachedQuery<unknown> {
+  if (value === undefined) return { status: "loading" };
+  if (value === OFFLINE) return { status: "offline" };
+  return { status: "loaded", data: value };
+}
 
 function defaultAnswer(name: string, args: Record<string, number>): unknown {
   switch (name) {
@@ -107,11 +119,11 @@ function defaultAnswer(name: string, args: Record<string, number>): unknown {
 }
 
 jest
-  .mocked(useQuery)
-  .mockImplementation(((
-    query: FunctionReference<"query">,
-    args: Record<string, number> | "skip" = {},
-  ) => (args === "skip" ? undefined : answer(getFunctionName(query), args))) as typeof useQuery);
+  .mocked(useCachedQuery)
+  .mockImplementation(((query: FunctionReference<"query">, args: Record<string, number> | "skip") =>
+    cached(
+      args === "skip" ? undefined : answer(getFunctionName(query), args),
+    )) as typeof useCachedQuery);
 
 async function renderApp(initialUrl: string): ReturnType<typeof renderRouter> {
   return renderRouter(
@@ -256,6 +268,24 @@ describe("PokemonScreen", () => {
     await renderApp("/pokemon/133");
 
     expect(screen.getByText("Loading…")).toBeOnTheScreen();
+  });
+
+  it("says it needs a connection when the Pokémon isn't cached and it's offline", async () => {
+    answer = () => OFFLINE;
+
+    await renderApp("/pokemon/133");
+
+    expect(screen.getByText("SimpleDex needs a connection to load this Pokémon")).toBeOnTheScreen();
+    expect(screen.queryByText("Loading…")).not.toBeOnTheScreen();
+  });
+
+  it("says when the Evolution Chain needs a connection", async () => {
+    answer = (name, args) =>
+      name === "pokemon:getEvolutions" ? OFFLINE : defaultAnswer(name, args);
+
+    await renderApp("/pokemon/133");
+
+    expect(screen.getByText("Evolutions need a connection to load")).toBeOnTheScreen();
   });
 
   it.each(["9999", "pikachu"])("says so when there is no Pokémon %s", async (id) => {

@@ -1,10 +1,10 @@
 import type { PokedexEntry } from "@simpledex/pokedex";
 import { fireEvent, render, screen } from "@testing-library/react-native";
-import { useQuery } from "convex/react";
 
 import PokedexScreen from "@/app/index";
+import { useCachedQuery } from "@/lib/use-cached-query";
 
-jest.mock("convex/react", () => ({ useQuery: jest.fn() }));
+jest.mock("@/lib/use-cached-query", () => ({ useCachedQuery: jest.fn() }));
 
 // The native header renders nothing in Jest. Render the header's right-hand
 // items in place, and stand in a text input for the search bar that reports
@@ -47,7 +47,7 @@ jest.mock("expo-router", () => {
   };
 });
 
-const mockUseQuery = jest.mocked(useQuery);
+const mockUseCachedQuery = jest.mocked(useCachedQuery);
 
 const POKEDEX: PokedexEntry[] = [
   {
@@ -92,7 +92,7 @@ describe("PokedexScreen", () => {
   afterAll(() => jest.useRealTimers());
 
   beforeEach(() => {
-    mockUseQuery.mockReturnValue(POKEDEX);
+    mockUseCachedQuery.mockReturnValue({ status: "loaded", data: POKEDEX });
   });
 
   it("shows each Pokédex entry's number, name, Types, and artwork", async () => {
@@ -221,10 +221,19 @@ describe("PokedexScreen", () => {
   });
 
   it("shows a loading message while the query is loading", async () => {
-    mockUseQuery.mockReturnValue(undefined);
+    mockUseCachedQuery.mockReturnValue({ status: "loading" });
 
     await render(<PokedexScreen />);
 
     expect(screen.getByText("Loading…")).toBeOnTheScreen();
+  });
+
+  it("says it needs a connection when nothing is cached and it's offline", async () => {
+    mockUseCachedQuery.mockReturnValue({ status: "offline" });
+
+    await render(<PokedexScreen />);
+
+    expect(screen.getByText("SimpleDex needs a connection to load the Pokédex")).toBeOnTheScreen();
+    expect(screen.queryByText("Loading…")).not.toBeOnTheScreen();
   });
 });
