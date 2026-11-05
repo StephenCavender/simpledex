@@ -13,6 +13,8 @@ jest.mock("expo-router", () => {
   const React = jest.requireActual<typeof import("react")>("react");
   const { TextInput } = jest.requireActual<typeof import("react-native")>("react-native");
   return {
+    // Navigating from a Pokédex entry is covered in pokemon-screen.test.tsx.
+    Link: ({ children }: { children: React.ReactNode }) => children,
     Stack: {
       Screen: ({ options }: { options?: { headerRight?: () => React.ReactNode } }) => (
         <>{options?.headerRight?.()}</>

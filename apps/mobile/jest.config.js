@@ -8,6 +8,6 @@ module.exports = {
     "^lucide-react-native$": require.resolve("lucide-react-native"),
   },
   transformIgnorePatterns: [
-    "node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|uniwind|@shopify/flash-list))",
+    "node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|uniwind|@shopify/flash-list|standard-navigation))",
   ],
 };
