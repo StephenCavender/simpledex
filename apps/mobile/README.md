@@ -54,7 +54,7 @@ bun run dev:mobile                                    # then press `a` to open i
 
 ## Build profiles
 
-`eas.json` has three build profiles. Builds run on EAS when you start them from your machine; there's no CI.
+`eas.json` has three kinds of build: development (`development` for simulators and emulators, `development-device` for iPhones), `preview`, and `production`. Builds run on EAS when you start them from your machine; there's no CI.
 
 | Profile                             | For                                           | Convex deployment | Update channel |
 | ----------------------------------- | --------------------------------------------- | ----------------- | -------------- |
@@ -91,7 +91,7 @@ bunx eas-cli submit --profile production --platform android   # to Play internal
 Submission needs the store accounts (#15):
 
 - **iOS**: the first `eas submit` signs in with your Apple ID and creates the App Store Connect app. Afterwards, add its `ascAppId` to `submit.production.ios` in `eas.json` so later submissions don't prompt.
-- **Android**: Google Play only accepts API uploads once the app exists in the Play Console and one build has been uploaded by hand. Upload the first production `.aab` in the Play Console, then put a Google service account key with release permissions at `apps/mobile/google-service-account.json` (gitignored) for `eas submit`. Releases stay drafts (`releaseStatus` in `eas.json`) until the app's first review is done.
+- **Android**: Google Play only accepts API uploads once the app exists in the Play Console and one build has been uploaded by hand. Upload the first production `.aab` in the Play Console, then put a Google service account key with release permissions at `apps/mobile/google-service-account.json` (gitignored) for `eas submit`. Play only accepts draft releases until the app's first review is done, so `releaseStatus` in `eas.json` is `draft`; once the app is approved, change it to `completed` to roll out on submit.
 
 ### JS-only fixes with EAS Update
 
