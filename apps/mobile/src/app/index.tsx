@@ -43,6 +43,9 @@ export default function PokedexScreen(): React.JSX.Element {
         ref={searchBar}
         placeholder="Search by name or number"
         autoCapitalize="none"
+        // iOS 26 would move search into a bottom toolbar, which UIKit then leaves behind,
+        // empty, over pushed detail screens (#20). Keep it in the header on every platform.
+        allowToolbarIntegration={false}
         onChangeText={(event) => setQ(event.nativeEvent.text)}
       />
       <View className="flex-1 bg-background">
