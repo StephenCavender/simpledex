@@ -4,7 +4,7 @@
   "private": true,
   "main": "expo-router/entry",
   "scripts": {
-    "start": "expo start --dev-client",
+    "start": "./scripts/metro.sh",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "check-types": "uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts && tsc --noEmit",
