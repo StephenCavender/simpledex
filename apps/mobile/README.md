@@ -29,6 +29,17 @@ bun run dev:mobile
 
 The development build loads its JavaScript from Metro, so it uses the Convex URL in `.env.local`.
 
+### Metro
+
+- **Logs:** `dev:mobile` copies Metro's output, including the app's `console` logs and red-box errors, to `apps/mobile/.metro.log`. Strip its colour codes with `sed 's/\x1b\[[0-9;]*m//g'`.
+- **One server:** the maintainer usually has Metro running on 8081 in their own terminal. Check with `curl -s localhost:8081/status` and reuse it; stopping it also kills their terminal session.
+- **Stale styles:** Uniwind generates styles inside the running Metro. If classes from newly added files render unstyled, restart with `bun run dev:mobile -- --clear`.
+
+### What an agent can check
+
+- **Android:** the emulator below, with screenshots (`adb exec-out screencap -p`) and the accessibility tree (`adb shell uiautomator dump`).
+- **iOS:** nothing. There's no iOS simulator on Linux, so iOS-only bugs (iOS 26 header, toolbar and Liquid Glass behaviour) can't be reproduced. State the suspected cause and ask the maintainer to test on their iPhone before changing code, or file it as an issue.
+
 ### iPhone
 
 Physical iPhones need the `development-device` profile and an active Apple Developer membership:
@@ -45,12 +56,14 @@ Install the build from the QR code on its EAS build page and turn on Developer M
 With the Android SDK in `~/Android/Sdk` (`ANDROID_HOME`, with `emulator` and `platform-tools` on `PATH`) and an AVD named `pixel`:
 
 ```sh
-emulator -avd pixel &                                 # boot the emulator
+emulator -avd pixel -gpu host &                       # boot the emulator (see the GPU note below)
 bunx eas-cli build:run -p android --latest            # install the latest dev build
 bun run dev:mobile                                    # then press `a` to open it
 ```
 
 `eas build:run` needs `build-tools` installed (it uses `aapt`).
+
+The default GPU mode (`auto`) picks the `lavapipe` software renderer here, which has crashed the emulator with a segfault in its graphics cleanup. `-gpu host` uses the Intel GPU instead; if that fails, use `-gpu swiftshader_indirect`. If `adb devices` comes up empty mid-session, check `coredumpctl list qemu-system-x86_64` before blaming your own commands.
 
 ## Build profiles
 
