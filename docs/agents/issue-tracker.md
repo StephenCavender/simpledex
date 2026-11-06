@@ -10,7 +10,11 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 - **Make an issue a sub-issue of a parent**: `gh issue create --parent <parent> ...`, or `gh issue edit <parent> --add-sub-issue <child>` afterwards (`gh` 2.94+). Older `gh`: `gh api --method POST repos/<owner>/<repo>/issues/<parent>/sub_issues -F sub_issue_id=<child-db-id>` (database id, as in **Blocking** below). Without sub-issues, put `Part of #<parent>` at the top of the child body.
 - **Comment on an issue**: `gh issue comment <number> --body "..."`
 - **Apply / remove labels**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`
-- **Close**: `gh issue close <number> --comment "..."`
+- **Close**: `gh issue close <number> --comment "..."`, for issues closed without code (won't-fix, duplicate). Code changes close their issue on push; see **Landing work**.
+
+## Landing work
+
+No PRs. Once checks pass, merge the branch into `master` with `--no-ff`, then push `master` when the user says so. A `Closes #<n>` line in the commit message closes the issue when the merge reaches `origin/master`, so leave issues open until then.
 
 Infer the repo from `git remote -v`; `gh` does this automatically when run inside a clone.
 
