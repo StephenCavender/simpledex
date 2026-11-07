@@ -5,8 +5,8 @@ Research notes, gathered November 7, 2026. **This is research, not legal advice.
 ## Bottom line
 
 - **PokeAPI doesn't have, or pass on, any rights to Pokémon intellectual property.** Its code is BSD-3-licensed, and its sprites repository says outright that "All image contents within are Copyright The Pokémon Company". The repository's CC0 dedication only waives rights PokeAPI itself holds, and explicitly disclaims clearing anyone else's rights ([sprites LICENCE.txt][sprites-licence]). No source found shows PokeAPI has permission from Nintendo, Game Freak, Creatures or The Pokémon Company. PokeAPI operates on tolerance, not a license.
-- **The data SimpleDex uses is the safest part.** Names, numbers, Types, stats, abilities, habitat, color and evolution conditions are facts, and facts aren't copyrightable ([*Feist*][feist]); names and short phrases aren't either ([37 CFR 202.1(a)][cfr]). Pokémon names are trademarks, though ([PokeAPI LICENSE][pokeapi-licence]), so how they're used matters (see 4c).
-- **The artwork is the real risk.** It's copyrighted by The Pokémon Company ([sprites LICENCE.txt][sprites-licence]), which has used DMCA takedowns against projects that merely included Pokémon character images ([2016 TPCi notice][dmca-2016]) and declines permission requests as a matter of policy ([pokemon.com Terms of Use][tpc-terms]). SimpleDex links to the images rather than hosting them; whether that avoids "displaying" them under copyright law is unsettled and depends on the court ([*Hunley v. Instagram*][hunley]).
+- **The data SimpleDex uses is the safest part.** Names, numbers, Types, stats, abilities, habitat, color and evolution conditions are facts, and facts aren't copyrightable ([_Feist_][feist]); names and short phrases aren't either ([37 CFR 202.1(a)][cfr]). Pokémon names are trademarks, though ([PokeAPI LICENSE][pokeapi-licence]), so how they're used matters (see 4c).
+- **The artwork is the real risk.** It's copyrighted by The Pokémon Company ([sprites LICENCE.txt][sprites-licence]), which has used DMCA takedowns against projects that merely included Pokémon character images ([2016 TPCi notice][dmca-2016]) and declines permission requests as a matter of policy ([pokemon.com Terms of Use][tpc-terms]). SimpleDex links to the images rather than hosting them; whether that avoids "displaying" them under copyright law is unsettled and depends on the court ([_Hunley v. Instagram_][hunley]).
 - **Both app stores require rights to what's in the app and the listing.** Apple: "Make sure your app only includes content that you created or that you have a license to use", and you are "responsible for securing the rights to use all materials in your app icons, screenshots, and previews" ([App Review Guidelines 5.2, 2.3.9][apple]). Google Play lists "Artwork or images from … video games" as a common violation ([Play IP policy][play]). Strictly read, SimpleDex has no license for the artwork, so its acceptance depends on the reviewer and on the rights holders not objecting. That matches the earlier app's history: approved, but with screenshots rejected for showing Pokémon artwork.
 
 ## 1. PokeAPI's own stance
@@ -21,6 +21,7 @@ Research notes, gathered November 7, 2026. **This is research, not legal advice.
   - "Affirmer disclaims responsibility for clearing rights of other persons that may apply to the Work … Further, Affirmer disclaims responsibility for obtaining any necessary consents, permissions or other rights required for any use of the Work." (4c)
 
   So the CC0 covers PokeAPI's own contribution (the collection, file organisation), not the images, which it attributes to The Pokémon Company.
+
 - **Fan-made sprites:** some sprites are Smogon's custom B&W-style sprites for Pokémon above #650, used "for allowing us to use and serve" them ([sprites README][sprites-readme]). That permission is Smogon's for its fan art; the characters depicted are still The Pokémon Company's.
 
 ## 2. Permission or takedowns involving PokeAPI
@@ -43,7 +44,7 @@ Research notes, gathered November 7, 2026. **This is research, not legal advice.
 
 ### a. Facts and names
 
-- "Facts are not copyrightable", though original selection and arrangement of a compilation can be ([*Feist Publications v. Rural Telephone Service*, 499 U.S. 340 (1991)][feist]). A Pokémon's stats, Types, numbers, abilities, height and weight are facts about the games.
+- "Facts are not copyrightable", though original selection and arrangement of a compilation can be ([_Feist Publications v. Rural Telephone Service_, 499 U.S. 340 (1991)][feist]). A Pokémon's stats, Types, numbers, abilities, height and weight are facts about the games.
 - "Words and short phrases such as names, titles, and slogans" are not subject to copyright ([37 CFR 202.1(a)][cfr]).
 - Not covered here: written game text such as Pokédex flavor text is expression, not fact. SimpleDex doesn't show it (its schema stores habitat and color, not descriptions; `packages/backend/convex/schema.ts`).
 
@@ -54,13 +55,13 @@ Research notes, gathered November 7, 2026. **This is research, not legal advice.
 ### c. Trademarks
 
 - "Pokémon and Pokémon character names are trademarks of Nintendo" ([PokeAPI LICENSE][pokeapi-licence]).
-- Trademark law generally targets use that is likely to cause confusion about who makes or endorses a product ([Google Play IP policy][play], which frames trademark infringement the same way). Courts have recognised "nominative fair use", using a mark to refer to the trademarked thing itself (*New Kids on the Block v. News America Publishing*, 971 F.2d 302 (9th Cir. 1992)). **Unverified:** no primary copy of that opinion could be fetched for this research. Referring to Pokémon by name to describe them, with a clear "unofficial, not affiliated" notice, fits that idea; using "Pokémon" in SimpleDex's own name, icon or branding would not.
+- Trademark law generally targets use that is likely to cause confusion about who makes or endorses a product ([Google Play IP policy][play], which frames trademark infringement the same way). Courts have recognised "nominative fair use", using a mark to refer to the trademarked thing itself (_New Kids on the Block v. News America Publishing_, 971 F.2d 302 (9th Cir. 1992)). **Unverified:** no primary copy of that opinion could be fetched for this research. Referring to Pokémon by name to describe them, with a clear "unofficial, not affiliated" notice, fits that idea; using "Pokémon" in SimpleDex's own name, icon or branding would not.
 
 ### d. Linking to images instead of hosting them
 
-- **Ninth Circuit (California and the West):** under the "Server Test", embedding an image hosted on someone else's server does not "display a copy" of it, because the image is not fixed in the embedding site's memory ([*Hunley v. Instagram*, 9th Cir. 2023][hunley], following *Perfect 10 v. Amazon*, 508 F.3d 1146 (9th Cir. 2007)).
-- **Elsewhere:** "Although no circuit has disapproved of Perfect 10, several district courts have either rejected or limited the Server Test", including *Goldman v. Breitbart*, 302 F. Supp. 3d 585 (S.D.N.Y. 2018), which held that embedding was enough for direct infringement ([*Hunley*, p. 23][hunley]).
-- So linking helps in some courts and not in others; it's unsettled. It also doesn't change the app stores' rules, which are about what the app and listing *include* or *display*, not where files are hosted ([Apple 5.2.1][apple], [Play IP policy][play]).
+- **Ninth Circuit (California and the West):** under the "Server Test", embedding an image hosted on someone else's server does not "display a copy" of it, because the image is not fixed in the embedding site's memory ([_Hunley v. Instagram_, 9th Cir. 2023][hunley], following _Perfect 10 v. Amazon_, 508 F.3d 1146 (9th Cir. 2007)).
+- **Elsewhere:** "Although no circuit has disapproved of Perfect 10, several district courts have either rejected or limited the Server Test", including _Goldman v. Breitbart_, 302 F. Supp. 3d 585 (S.D.N.Y. 2018), which held that embedding was enough for direct infringement ([_Hunley_, p. 23][hunley]).
+- So linking helps in some courts and not in others; it's unsettled. It also doesn't change the app stores' rules, which are about what the app and listing _include_ or _display_, not where files are hosted ([Apple 5.2.1][apple], [Play IP policy][play]).
 
 ## 5. App store rules
 
@@ -83,18 +84,18 @@ Research notes, gathered November 7, 2026. **This is research, not legal advice.
 
 **What PokeAPI's licenses pass on:** BSD-3 rights in PokeAPI's code, and CC0 on PokeAPI's own contributions. Neither gives SimpleDex any right to Pokémon artwork or trademarks; the CC0 text says users must clear those rights themselves (section 1).
 
-| Part of SimpleDex | Assessment | Why |
-| --- | --- | --- |
-| Data: numbers, stats, Types, abilities, habitat, color, evolution conditions | **Clearly fine (copyright)** | Facts aren't copyrightable ([*Feist*][feist]); SimpleDex shows no game flavor text. |
-| Pokémon names in the app | **Low risk** | Not copyrightable ([37 CFR 202.1(a)][cfr]); they're trademarks, used to refer to the Pokémon themselves, with an "unofficial, not affiliated" notice (4c). |
-| "Pokémon" in the app name, icon or branding | **Avoid** | Implies affiliation; trademark and Apple 2.3.7 / Play confusion rules. SimpleDex's name and logo are its own. |
-| Artwork shown in the apps (linked from GitHub) | **Risk** | Copyrighted by The Pokémon Company; no license; TPCi enforces against character images; linking's legal effect is unsettled (4d); both stores require a license for app content (5). In practice, Pokédex apps depend on reviewers and rights holders not objecting. |
-| Artwork in store screenshots, icons or previews | **Avoid** | Apple 2.3.9 and Play's listing rules apply directly, and the earlier app was rejected for this. Screenshot mode exists for it. |
-| Store listing text | **Low risk if factual** | Describe what the app does; avoid packing keywords with Pokémon trademarks (Apple 2.3.7); include the unofficial notice. |
-| Marketing site artwork (`apps/marketing/src/images/screen.png`) | **Risk, lower stakes** | Same copyright issue as the apps, but no store review applies. A store reviewer may visit it if it's listed as the Marketing or Support URL. |
-| PokeAPI's own requirements | **Fine** | Fair use policy asks for caching and reasonable request volume ([PokeAPI docs][pokeapi-docs]); SimpleDex syncs into Convex rather than calling PokeAPI from devices. |
+| Part of SimpleDex                                                            | Assessment                   | Why                                                                                                                                                                                                                                                                  |
+| ---------------------------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Data: numbers, stats, Types, abilities, habitat, color, evolution conditions | **Clearly fine (copyright)** | Facts aren't copyrightable ([_Feist_][feist]); SimpleDex shows no game flavor text.                                                                                                                                                                                  |
+| Pokémon names in the app                                                     | **Low risk**                 | Not copyrightable ([37 CFR 202.1(a)][cfr]); they're trademarks, used to refer to the Pokémon themselves, with an "unofficial, not affiliated" notice (4c).                                                                                                           |
+| "Pokémon" in the app name, icon or branding                                  | **Avoid**                    | Implies affiliation; trademark and Apple 2.3.7 / Play confusion rules. SimpleDex's name and logo are its own.                                                                                                                                                        |
+| Artwork shown in the apps (linked from GitHub)                               | **Risk**                     | Copyrighted by The Pokémon Company; no license; TPCi enforces against character images; linking's legal effect is unsettled (4d); both stores require a license for app content (5). In practice, Pokédex apps depend on reviewers and rights holders not objecting. |
+| Artwork in store screenshots, icons or previews                              | **Avoid**                    | Apple 2.3.9 and Play's listing rules apply directly, and the earlier app was rejected for this. Screenshot mode exists for it.                                                                                                                                       |
+| Store listing text                                                           | **Low risk if factual**      | Describe what the app does; avoid packing keywords with Pokémon trademarks (Apple 2.3.7); include the unofficial notice.                                                                                                                                             |
+| Marketing site artwork (`apps/marketing/src/images/screen.png`)              | **Risk, lower stakes**       | Same copyright issue as the apps, but no store review applies. A store reviewer may visit it if it's listed as the Marketing or Support URL.                                                                                                                         |
+| PokeAPI's own requirements                                                   | **Fine**                     | Fair use policy asks for caching and reasonable request volume ([PokeAPI docs][pokeapi-docs]); SimpleDex syncs into Convex rather than calling PokeAPI from devices.                                                                                                 |
 
-**Unknowns:** whether The Pokémon Company has ever acted against PokeAPI or Pokédex apps outside GitHub; pokemon.com pages beyond its Terms of Use (blocked); the *New Kids on the Block* opinion's exact text; how either store treats Pokédex apps in practice (no primary source).
+**Unknowns:** whether The Pokémon Company has ever acted against PokeAPI or Pokédex apps outside GitHub; pokemon.com pages beyond its Terms of Use (blocked); the _New Kids on the Block_ opinion's exact text; how either store treats Pokédex apps in practice (no primary source).
 
 ## Sources
 
@@ -111,9 +112,9 @@ All accessed November 7, 2026.
 - [2017 TPCi DMCA notice (PokiiMap)][dmca-2017]
 - [The Pokémon Company International, Terms of Use][tpc-terms]
 - [Nintendo Game Content Guidelines for Online Video & Image Sharing Platforms][nintendo]
-- [*Feist Publications, Inc. v. Rural Telephone Service Co.*, 499 U.S. 340 (1991)][feist]
+- [_Feist Publications, Inc. v. Rural Telephone Service Co._, 499 U.S. 340 (1991)][feist]
 - [37 CFR 202.1, Material not subject to copyright][cfr]
-- [*Hunley v. Instagram, LLC*, No. 22-15293 (9th Cir. July 17, 2023)][hunley]
+- [_Hunley v. Instagram, LLC_, No. 22-15293 (9th Cir. July 17, 2023)][hunley]
 - [Apple App Review Guidelines][apple]
 - [Google Play Intellectual Property policy][play]
 
