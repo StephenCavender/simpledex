@@ -79,7 +79,7 @@ describe("AboutScreen", () => {
     expect(screen.getByRole("header", { name: "Privacy" })).toBeOnTheScreen();
     expect(screen.getByRole("link", { name: "Privacy Policy" })).toHaveProp(
       "href",
-      "https://simpledex-marketing.vercel.app/privacy",
+      "https://mkt.simpledex.cavender.dev/privacy",
     );
   });
 
