@@ -106,6 +106,16 @@ Submission needs the store accounts (#15):
 - **iOS**: the first `eas submit` signs in with your Apple ID and creates the App Store Connect app. Afterwards, add its `ascAppId` to `submit.production.ios` in `eas.json` so later submissions don't prompt.
 - **Android**: Google Play only accepts API uploads once the app exists in the Play Console and one build has been uploaded by hand. Upload the first production `.aab` in the Play Console, then put a Google service account key with release permissions at `apps/mobile/google-service-account.json` (gitignored) for `eas submit`. Play only accepts draft releases until the app's first review is done, so `releaseStatus` in `eas.json` is `draft`; once the app is approved, change it to `completed` to roll out on submit.
 
+### Store screenshots
+
+Store screenshots must not show recognisable Pokémon artwork: App Store review rejected the earlier app's screenshots for it. Screenshot mode draws each piece of artwork at 8 points and scales it up inside a circle, so only a soft orb of its colours shows. Start Metro with it, in a development build:
+
+```sh
+EXPO_PUBLIC_SCREENSHOT_MODE=1 bun run dev:mobile -- --clear   # --clear, or Metro reuses bundles built without it
+```
+
+It has no effect in `preview` or `production` builds. Restart Metro without the variable (and with `--clear`) to get the artwork back.
+
 ### JS-only fixes with EAS Update
 
 When a fix changes only JavaScript or assets, publish it as an update instead of a new build:
