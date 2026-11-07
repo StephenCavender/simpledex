@@ -94,3 +94,15 @@ simpledex/
 - `bun run check-types`: Check TypeScript types across all apps
 - `bun run check`: Run Oxlint and Oxfmt
 - `cd apps/web && bun run generate-pwa-assets`: Generate PWA assets
+
+## License
+
+The code is released under the [MIT License](LICENSE).
+
+The license doesn't cover:
+
+- the SimpleDex name and logo, including the app icons and splash screens generated from it, and the marketing site's header and other images
+- the App Store and Google Play badges, which belong to Apple and Google
+- Pokémon names, artwork, and other Pokémon material, which belong to Nintendo, Game Freak, Creatures, and The Pokémon Company
+
+SimpleDex is an unofficial fan app, not affiliated with any of them. Pokémon data comes from [PokeAPI](https://pokeapi.co).
