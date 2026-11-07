@@ -3,6 +3,9 @@ import { ScrollView, Text, View } from "react-native";
 
 import { ThemePicker } from "@/components/theme-picker";
 
+/** The privacy policy on the marketing site; the stores link to the same page. */
+const PRIVACY_POLICY_URL = "https://simpledex-marketing.vercel.app/privacy";
+
 /** What SimpleDex is and where its data comes from, with the theme picker. */
 export default function AboutScreen(): React.JSX.Element {
   return (
@@ -38,6 +41,15 @@ export default function AboutScreen(): React.JSX.Element {
       </Card>
       <Card title="Theme">
         <ThemePicker />
+      </Card>
+      <Card title="Privacy">
+        <Text className="text-base text-muted-foreground">
+          SimpleDex has no accounts, ads, or tracking. Read the{" "}
+          <Link href={PRIVACY_POLICY_URL} className="text-primary">
+            Privacy Policy
+          </Link>
+          .
+        </Text>
       </Card>
     </ScrollView>
   );
