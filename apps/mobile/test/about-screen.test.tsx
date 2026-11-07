@@ -73,6 +73,16 @@ describe("AboutScreen", () => {
     );
   });
 
+  it("links to the privacy policy", async () => {
+    await renderApp("/about");
+
+    expect(screen.getByRole("header", { name: "Privacy" })).toBeOnTheScreen();
+    expect(screen.getByRole("link", { name: "Privacy Policy" })).toHaveProp(
+      "href",
+      "https://simpledex-marketing.vercel.app/privacy",
+    );
+  });
+
   it("follows the device's light or dark setting when no theme has been chosen", async () => {
     await renderApp("/about");
 

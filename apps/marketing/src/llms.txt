@@ -25,7 +25,7 @@ SimpleDex is a web application for browsing the National Pokédex (Pokemon #1–
 
 - Web App: https://simpledex.cavender.dev
 - API: PokeAPI (https://pokeapi.co)
-- GitHub: https://github.com/anomalyco/simpledex
+- GitHub: https://github.com/StephenCavender/simpledex
 
 ## Legal
 
