@@ -4,7 +4,7 @@ import { ScrollView, Text, View } from "react-native";
 import { ThemePicker } from "@/components/theme-picker";
 
 /** The privacy policy on the marketing site; the stores link to the same page. */
-const PRIVACY_POLICY_URL = "https://simpledex-marketing.vercel.app/privacy";
+const PRIVACY_POLICY_URL = "https://mkt.simpledex.cavender.dev/privacy";
 
 /** What SimpleDex is and where its data comes from, with the theme picker. */
 export default function AboutScreen(): React.JSX.Element {
