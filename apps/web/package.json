@@ -20,9 +20,9 @@
     "@simpledex/pokedex": "workspace:*",
     "@simpledex/tokens": "workspace:*",
     "@simpledex/ui": "workspace:*",
-    "@tailwindcss/vite": "^4.3.3",
-    "@tanstack/react-router": "^1.170.45",
-    "@tanstack/react-virtual": "^3.14.24",
+    "@tailwindcss/vite": "^4.3.5",
+    "@tanstack/react-router": "^1.170.46",
+    "@tanstack/react-virtual": "^3.14.26",
     "convex": "catalog:",
     "lucide-react": "catalog:",
     "next-themes": "catalog:",
@@ -31,18 +31,18 @@
     "vite-plugin-pwa": "^2.0.0"
   },
   "devDependencies": {
-    "@tanstack/react-router-devtools": "^1.167.2",
-    "@tanstack/router-plugin": "^1.168.47",
+    "@tanstack/react-router-devtools": "^1.167.3",
+    "@tanstack/router-plugin": "^1.169.0",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vite-pwa/assets-generator": "^2.0.0",
-    "@vitejs/plugin-react": "^6.1.2",
-    "happy-dom": "^21.0.3",
+    "@vitejs/plugin-react": "^6.2.1",
+    "happy-dom": "^21.0.4",
     "typescript": "catalog:",
-    "vite": "^8.3.4",
+    "vite": "^8.3.6",
     "vitest": "catalog:"
   }
 }
