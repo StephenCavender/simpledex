@@ -10,6 +10,10 @@ export default defineConfig({
   },
   resolve: {
     tsconfigPaths: true,
+    // Always bundle one React, however node_modules is laid out. A second copy
+    // (e.g. one reached through a stale install) has no active renderer, so
+    // hooks called through it throw "can't access property 'useReducer'".
+    dedupe: ["react", "react-dom"],
   },
   plugins: [
     tailwindcss(),

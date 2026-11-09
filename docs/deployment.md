@@ -21,7 +21,9 @@ This runs Turborepo, which builds all packages and apps. Output:
 
 ### Deploy to Vercel
 
-Production deploys from the `prod` branch (`git push origin master:prod`). The `simpledex-web` Vercel project uses Root Directory `apps/web` and framework Vite; its build command comes from [`apps/web/vercel.json`](../apps/web/vercel.json), which overrides the dashboard setting.
+Production deploys from the `prod` branch (`git push origin master:prod`). The `simpledex-web` Vercel project uses Root Directory `apps/web` and framework Vite; its install and build commands come from [`apps/web/vercel.json`](../apps/web/vercel.json), which override the dashboard settings. Install runs `bun install --frozen-lockfile`, so a build fails rather than resolving different versions than `bun.lock`.
+
+Vercel restores `node_modules` from the previous deployment's build cache. If a deployment behaves differently from a local build of the same commit (for example, the web app throws `can't access property "useReducer"`, a sign of two bundled Reacts), redeploy without the build cache: `vercel --prod --force`, or untick "Use existing Build Cache" when redeploying from the dashboard.
 
 Environment variables:
 
