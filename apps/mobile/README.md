@@ -103,7 +103,7 @@ bunx eas-cli submit --profile production --platform android   # to Play internal
 
 Submission needs the store accounts (#15):
 
-- **iOS**: the first `eas submit` signs in with your Apple ID and creates the App Store Connect app. Afterwards, add its `ascAppId` to `submit.production.ios` in `eas.json` so later submissions don't prompt.
+- **iOS**: `submit.production.ios.ascAppId` in `eas.json` is the App Store Connect app's Apple ID (the number in its App Store Connect URL), so `eas submit` uploads to it without prompting. It's the earlier SimpleDex app's record, which 3.0.0 continues.
 - **Android**: Google Play only accepts API uploads once the app exists in the Play Console and one build has been uploaded by hand. Upload the first production `.aab` in the Play Console, then put a Google service account key with release permissions at `apps/mobile/google-service-account.json` (gitignored) for `eas submit`. Play only accepts draft releases until the app's first review is done, so `releaseStatus` in `eas.json` is `draft`; once the app is approved, change it to `completed` to roll out on submit.
 
 ### Android sideload release (GitHub Releases)
