@@ -1,5 +1,6 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
-import { filterPokedex } from "@simpledex/pokedex";
+import { filterPokedex, type PokedexEntry } from "@simpledex/pokedex";
+import type { FlashListRef } from "@shopify/flash-list";
 import { Link, Stack } from "expo-router";
 import { Info, SlidersHorizontal } from "lucide-react-native";
 import { useRef, useState } from "react";
@@ -19,12 +20,27 @@ export default function PokedexScreen(): React.JSX.Element {
   const [filters, setFilters] = useState<TypeAndGenerationFilters>({});
   const [sheetOpen, setSheetOpen] = useState(false);
   const searchBar = useRef<SearchBarCommands>(null);
+  const list = useRef<FlashListRef<PokedexEntry>>(null);
   const searchColors = useSearchBarColors();
   const activeFilters = Object.values(filters).filter((value) => value !== undefined).length;
   const entries =
     pokedex.status === "loaded" ? filterPokedex(pokedex.data, { ...filters, q }) : undefined;
 
+  // New results start from the top, not wherever the previous ones were scrolled to.
+  const scrollToTop = (): void => list.current?.scrollToOffset({ offset: 0, animated: false });
+
+  const search = (text: string): void => {
+    scrollToTop();
+    setQ(text);
+  };
+
+  const filter = (next: TypeAndGenerationFilters): void => {
+    scrollToTop();
+    setFilters(next);
+  };
+
   const clearAll = (): void => {
+    scrollToTop();
     searchBar.current?.clearText();
     setQ("");
     setFilters({});
@@ -48,11 +64,12 @@ export default function PokedexScreen(): React.JSX.Element {
         // empty, over pushed detail screens (#20). Keep it in the header on every platform.
         allowToolbarIntegration={false}
         {...searchColors}
-        onChangeText={(event) => setQ(event.nativeEvent.text)}
+        onChangeText={(event) => search(event.nativeEvent.text)}
       />
       <View className="flex-1 bg-background">
         {entries ? (
           <PokedexList
+            ref={list}
             entries={entries}
             empty={
               <View className="items-center gap-4 py-12">
@@ -74,7 +91,7 @@ export default function PokedexScreen(): React.JSX.Element {
       <FilterSheet
         visible={sheetOpen}
         filters={filters}
-        onChange={setFilters}
+        onChange={filter}
         onClear={clearAll}
         onClose={() => setSheetOpen(false)}
       />
