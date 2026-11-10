@@ -29,6 +29,14 @@ describe("EAS Submit", () => {
   });
 });
 
+describe("iOS", () => {
+  // Supporting iPad would require iPad screenshots in the App Store listing,
+  // which can't be taken without an iPad or a Mac. iPads run it as an iPhone app.
+  it("is iPhone only", () => {
+    expect(appJson.expo.ios.supportsTablet).toBe(false);
+  });
+});
+
 describe("EAS Update", () => {
   const { expo } = appJson;
 

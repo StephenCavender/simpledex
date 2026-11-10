@@ -105,10 +105,9 @@ Answer **None** or **No** to every question, including unrestricted web access (
 
 ### Screenshots
 
-Required sizes, in light and dark, from screenshot mode:
+Required size, from screenshot mode: iPhone 6.9" (1320 × 2868 or 1290 × 2796). A framing tool can export an iPhone 16 Pro's 1206 × 2622 captures at that size.
 
-- iPhone 6.9" (1320 × 2868 or 1290 × 2796)
-- iPad 13" (2064 × 2752 or 2048 × 2732), because `supportsTablet` is on
+The app is iPhone only (`supportsTablet` is off, as for 2.0.0), so no iPad screenshots are needed.
 
 Suggested set, in order: the Pokédex list; a search by number; the filter sheet with a Type and a Generation chosen; a detail screen with stats; the Evolution Chain; About with the theme picker.
 
