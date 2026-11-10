@@ -10,9 +10,13 @@ Copy for the App Store and Google Play listings (#15). Paste it into App Store C
 
 ## App Store (App Store Connect)
 
+The listing continues the earlier app's App Store Connect record (`ascAppId` 1570043348), which already has users. "SimpleDex" is taken on the App Store, so its store name is **Simple-Dex**; the name under the icon stays SimpleDex (`app.json`).
+
+Version 3.0.0 replaces the record's unsubmitted 2.0.1: App Store Connect allows only one version in progress, so rename 2.0.1 to 3.0.0 rather than adding a version.
+
 | Field              | Value                                      |
 | ------------------ | ------------------------------------------ |
-| Name (30)          | SimpleDex                                  |
+| Name (30)          | Simple-Dex                                 |
 | Subtitle (30)      | Stats, types & evolutions                  |
 | Primary category   | Reference                                  |
 | Secondary category | Entertainment                              |
