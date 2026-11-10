@@ -1,5 +1,6 @@
 import type { PokedexEntry } from "@simpledex/pokedex";
 import { fireEvent, render, screen } from "@testing-library/react-native";
+import { ScrollView } from "react-native";
 
 import PokedexScreen from "@/app/index";
 import { useCachedQuery } from "@/lib/use-cached-query";
@@ -226,6 +227,46 @@ describe("PokedexScreen", () => {
     await render(<PokedexScreen />);
 
     expect(screen.getByText("Loading…")).toBeOnTheScreen();
+  });
+
+  describe("returns the list to the top", () => {
+    // The list otherwise keeps its scroll position, so clearing a search left it
+    // scrolled to where the last match had been.
+    const scrollTo = jest.spyOn(ScrollView.prototype, "scrollTo");
+    const toTop = expect.objectContaining({ y: 0 });
+
+    beforeEach(() => scrollTo.mockClear());
+
+    it("when the search changes", async () => {
+      await render(<PokedexScreen />);
+
+      await search("pika");
+      expect(scrollTo).toHaveBeenLastCalledWith(toTop);
+
+      scrollTo.mockClear();
+      await search("");
+      expect(scrollTo).toHaveBeenLastCalledWith(toTop);
+    });
+
+    it("when a filter changes", async () => {
+      await render(<PokedexScreen />);
+
+      await openFilters();
+      await choose("fire");
+
+      expect(scrollTo).toHaveBeenLastCalledWith(toTop);
+    });
+
+    it("when everything is cleared", async () => {
+      await render(<PokedexScreen />);
+      await openFilters();
+      await choose("fire");
+      scrollTo.mockClear();
+
+      await fireEvent.press(screen.getByRole("button", { name: "Clear all" }));
+
+      expect(scrollTo).toHaveBeenLastCalledWith(toTop);
+    });
   });
 
   it("says it needs a connection when nothing is cached and it's offline", async () => {

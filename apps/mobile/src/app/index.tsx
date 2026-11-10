@@ -1,10 +1,11 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
-import { filterPokedex } from "@simpledex/pokedex";
+import { filterPokedex, type PokedexEntry } from "@simpledex/pokedex";
+import type { FlashListRef } from "@shopify/flash-list";
 import { Link, Stack } from "expo-router";
 import { Info, SlidersHorizontal } from "lucide-react-native";
 import { useRef, useState } from "react";
-import { Pressable, Text, View, type ColorValue } from "react-native";
-import type { SearchBarCommands } from "react-native-screens";
+import { Platform, Pressable, Text, View, type ColorValue } from "react-native";
+import type { SearchBarCommands, SearchBarProps } from "react-native-screens";
 import { useCSSVariable } from "uniwind";
 
 import { ClearAllButton } from "@/components/clear-all-button";
@@ -19,11 +20,27 @@ export default function PokedexScreen(): React.JSX.Element {
   const [filters, setFilters] = useState<TypeAndGenerationFilters>({});
   const [sheetOpen, setSheetOpen] = useState(false);
   const searchBar = useRef<SearchBarCommands>(null);
+  const list = useRef<FlashListRef<PokedexEntry>>(null);
+  const searchColors = useSearchBarColors();
   const activeFilters = Object.values(filters).filter((value) => value !== undefined).length;
   const entries =
     pokedex.status === "loaded" ? filterPokedex(pokedex.data, { ...filters, q }) : undefined;
 
+  // New results start from the top, not wherever the previous ones were scrolled to.
+  const scrollToTop = (): void => list.current?.scrollToOffset({ offset: 0, animated: false });
+
+  const search = (text: string): void => {
+    scrollToTop();
+    setQ(text);
+  };
+
+  const filter = (next: TypeAndGenerationFilters): void => {
+    scrollToTop();
+    setFilters(next);
+  };
+
   const clearAll = (): void => {
+    scrollToTop();
     searchBar.current?.clearText();
     setQ("");
     setFilters({});
@@ -46,11 +63,13 @@ export default function PokedexScreen(): React.JSX.Element {
         // iOS 26 would move search into a bottom toolbar, which UIKit then leaves behind,
         // empty, over pushed detail screens (#20). Keep it in the header on every platform.
         allowToolbarIntegration={false}
-        onChangeText={(event) => setQ(event.nativeEvent.text)}
+        {...searchColors}
+        onChangeText={(event) => search(event.nativeEvent.text)}
       />
       <View className="flex-1 bg-background">
         {entries ? (
           <PokedexList
+            ref={list}
             entries={entries}
             empty={
               <View className="items-center gap-4 py-12">
@@ -72,7 +91,7 @@ export default function PokedexScreen(): React.JSX.Element {
       <FilterSheet
         visible={sheetOpen}
         filters={filters}
-        onChange={setFilters}
+        onChange={filter}
         onClear={clearAll}
         onClose={() => setSheetOpen(false)}
       />
@@ -118,6 +137,30 @@ function FiltersButton({
       )}
     </Pressable>
   );
+}
+
+/**
+ * Search bar colours for the active theme. Android's search view doesn't
+ * follow an in-app theme change by itself: its text, hint, and icons keep the
+ * device theme's colours unless they're set. The hint's magnifier and the
+ * field's underline can't be coloured, so on Android they're removed.
+ */
+function useSearchBarColors(): Pick<
+  SearchBarProps,
+  "textColor" | "hintTextColor" | "headerIconColor" | "tintColor" | "shouldShowHintSearchIcon"
+> {
+  const [foreground, mutedForeground] = useCSSVariable([
+    "--color-foreground",
+    "--color-muted-foreground",
+  ]);
+  return {
+    textColor: cssColor(foreground, undefined),
+    hintTextColor: cssColor(mutedForeground, undefined),
+    headerIconColor: cssColor(foreground, undefined),
+    // On Android this is the field's background, which replaces the underline; on iOS it's the caret.
+    tintColor: Platform.OS === "android" ? "transparent" : undefined,
+    shouldShowHintSearchIcon: false,
+  };
 }
 
 /** Header icons use the foreground colour of the active theme. */
