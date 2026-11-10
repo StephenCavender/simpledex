@@ -106,6 +106,21 @@ Submission needs the store accounts (#15):
 - **iOS**: the first `eas submit` signs in with your Apple ID and creates the App Store Connect app. Afterwards, add its `ascAppId` to `submit.production.ios` in `eas.json` so later submissions don't prompt.
 - **Android**: Google Play only accepts API uploads once the app exists in the Play Console and one build has been uploaded by hand. Upload the first production `.aab` in the Play Console, then put a Google service account key with release permissions at `apps/mobile/google-service-account.json` (gitignored) for `eas submit`. Play only accepts draft releases until the app's first review is done, so `releaseStatus` in `eas.json` is `draft`; once the app is approved, change it to `completed` to roll out on submit.
 
+### Android sideload release (GitHub Releases)
+
+Until SimpleDex is on Google Play, Android users install an APK from GitHub Releases, following the marketing site's [`/android`](https://mkt.simpledex.cavender.dev/android) page (#23). Push the commit you're releasing first, then:
+
+```sh
+bun run release:android              # builds the `production-apk` profile on EAS, then publishes the release
+bun run release:android <build-id>   # publishes an existing finished `production-apk` build instead
+```
+
+The script tags the release `android-v<version>-build.<n>` at the build's commit, attaches the APK as `simpledex.apk`, and marks it latest, so `releases/latest/download/simpledex.apk` always serves the newest build. It needs `gh` signed in with write access to the repo, plus `jq` and `curl`.
+
+- `production-apk` is `production` built as an APK: production Convex, the `production` update channel, and the same build number sequence. JS-only fixes reach sideloaded installs through EAS Update like store installs.
+- Every APK must be signed with the same EAS-managed keystore, or it won't install over the previous one. Don't reset the Android credentials in EAS.
+- Google's developer verification for sideloaded apps may require registering the package name and signing key in the Android developer console once the account is verified.
+
 ### Store screenshots
 
 Store screenshots must not show recognisable Pokémon artwork: App Store review rejected the earlier app's screenshots for it. Screenshot mode draws each piece of artwork at 8 points and scales it up inside a circle, so only a soft orb of its colours shows. Start Metro with it, in a development build:

@@ -7,6 +7,7 @@
     "start": "./scripts/metro.sh",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "release:android": "./scripts/release-android.sh",
     "check-types": "uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts && tsc --noEmit",
     "test": "jest"
   },
