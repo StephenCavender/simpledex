@@ -8,7 +8,12 @@ export function formatSlug(slug: string): string {
   return slug.replace(/-/g, " ");
 }
 
-/** A base stat's name as words; HP is an abbreviation, so it's spelled out in capitals. */
+/**
+ * A base stat's name, ready to show: each word capitalised, and HP as an
+ * abbreviation. Done here rather than with a capitalise style, because iOS's
+ * lowercases the rest of each word ("Hp").
+ */
 export function formatStatName(slug: string): string {
-  return slug === "hp" ? "HP" : formatSlug(slug);
+  if (slug === "hp") return "HP";
+  return formatSlug(slug).replace(/\b\w/g, (letter) => letter.toUpperCase());
 }

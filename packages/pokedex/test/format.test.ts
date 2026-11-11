@@ -20,12 +20,14 @@ describe("formatSlug", () => {
 });
 
 describe("formatStatName", () => {
+  // Display-ready, because iOS's capitalize text transform lowercases the rest of
+  // each word and turned HP into "Hp".
   it("spells HP as an abbreviation", () => {
     expect(formatStatName("hp")).toBe("HP");
   });
 
-  it("turns other stats' hyphens into spaces, leaving capitalisation to the UI", () => {
-    expect(formatStatName("special-attack")).toBe("special attack");
-    expect(formatStatName("speed")).toBe("speed");
+  it("capitalises each word of other stats", () => {
+    expect(formatStatName("special-attack")).toBe("Special Attack");
+    expect(formatStatName("speed")).toBe("Speed");
   });
 });

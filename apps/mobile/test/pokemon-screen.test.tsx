@@ -213,7 +213,7 @@ describe("PokemonScreen", () => {
     await renderApp("/pokemon/133");
 
     expect(screen.getByLabelText("HP")).toHaveAccessibilityValue({ text: "55" });
-    expect(screen.getByLabelText("special attack")).toHaveAccessibilityValue({ text: "65" });
+    expect(screen.getByLabelText("Special Attack")).toHaveAccessibilityValue({ text: "65" });
   });
 
   it("shows a branching Evolution Chain", async () => {

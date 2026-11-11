@@ -194,7 +194,7 @@ function Fact({
 function Stat({ name, value }: { name: string; value: number }): React.JSX.Element {
   return (
     <View className="flex-row items-center gap-2">
-      <Text className="w-28 text-xs capitalize text-muted-foreground">{name}</Text>
+      <Text className="w-28 text-xs text-muted-foreground">{name}</Text>
       <View
         role="progressbar"
         accessibilityLabel={name}
