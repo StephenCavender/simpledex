@@ -109,7 +109,7 @@ Required size, from screenshot mode: iPhone 6.9" (1320 × 2868 or 1290 × 2796).
 
 The app is iPhone only (`supportsTablet` is off, as for 2.0.0), so no iPad screenshots are needed.
 
-Suggested set, in order: the Pokédex list; a search by number; the filter sheet with a Type and a Generation chosen; a detail screen with stats; the Evolution Chain; About with the theme picker.
+The raw captures (iPhone 16 Pro, 1206 × 2622, dark theme, screenshot mode) are in `apps/mobile/store/screenshots/ios/`, numbered in listing order: the Pokédex list; a search by number; the filter sheet with a Type and a Generation chosen; Charmander's detail screen; its stats and abilities; Eevee's Evolution Chain; About with the theme picker. `extra-filters-unselected.png` is a spare. Frame and caption them with a mockup tool, which exports the 6.9" size, and keep the exports beside them in `framed/`. Retake a screen when its UI changes, or all of them if a store rejects the blurred artwork and screenshot mode switches to Type-coloured circles.
 
 ## Google Play (Play Console)
 
