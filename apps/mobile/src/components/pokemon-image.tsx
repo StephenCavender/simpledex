@@ -41,24 +41,7 @@ function LoadingImage({ src, name, size }: PokemonImageProps): React.JSX.Element
     );
   }
   if (isScreenshotMode()) {
-    return (
-      <View
-        role="img"
-        aria-label={name}
-        testID="pokemon-image-obscured"
-        className="items-center justify-center overflow-hidden rounded-full"
-        style={{ width: size, height: size }}
-      >
-        {/* A heavy blur over the full-size artwork. expo-image halves blurRadius on iOS and caps it at 25 on Android, where outlines stay sharper. */}
-        <Image
-          source={src}
-          cachePolicy="disk"
-          contentFit="contain"
-          blurRadius={SCREENSHOT_BLUR_RADIUS}
-          style={{ width: size, height: size }}
-        />
-      </View>
-    );
+    return <BlurredImage src={src} name={name} size={size} />;
   }
   return (
     <Image
@@ -75,8 +58,46 @@ function LoadingImage({ src, name, size }: PokemonImageProps): React.JSX.Element
 }
 
 /**
- * How strongly screenshot mode blurs artwork. Chosen from a prototype of three
- * treatments (branch prototype/screenshot-artwork, #15); if a store rejects the
- * screenshots, its Type-coloured circles are the fallback.
+ * Screenshot mode's artwork: blurred by a fixed share of the image's own width,
+ * so official artwork (475px) and small sprites (96px) are blurred alike. It's
+ * hidden until it has loaded and its width is known, so it never shows sharp.
+ * Chosen from a prototype of three treatments (branch
+ * prototype/screenshot-artwork, #15); if a store rejects the screenshots, its
+ * Type-coloured circles are the fallback. expo-image halves blurRadius on iOS
+ * and caps it at 25 on Android, where outlines stay sharper.
  */
-const SCREENSHOT_BLUR_RADIUS = 160;
+function BlurredImage({
+  src,
+  name,
+  size,
+}: {
+  src: string;
+  name: string;
+  size: number;
+}): React.JSX.Element {
+  const [sourceWidth, setSourceWidth] = useState<number>();
+  return (
+    <View
+      role="img"
+      aria-label={name}
+      testID="pokemon-image-obscured"
+      className="items-center justify-center overflow-hidden rounded-full"
+      style={{ width: size, height: size }}
+    >
+      <Image
+        testID="pokemon-image-blurred"
+        source={src}
+        cachePolicy="disk"
+        contentFit="contain"
+        blurRadius={
+          sourceWidth === undefined ? undefined : Math.round(sourceWidth * SCREENSHOT_BLUR_SHARE)
+        }
+        onLoad={(event) => setSourceWidth(event.source.width)}
+        style={{ width: size, height: size, opacity: sourceWidth === undefined ? 0 : 1 }}
+      />
+    </View>
+  );
+}
+
+/** How much of an image's width screenshot mode blurs it by: 475px artwork gets about 160. */
+const SCREENSHOT_BLUR_SHARE = 1 / 3;
