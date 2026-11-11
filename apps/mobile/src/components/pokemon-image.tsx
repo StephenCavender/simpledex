@@ -49,17 +49,13 @@ function LoadingImage({ src, name, size }: PokemonImageProps): React.JSX.Element
         className="items-center justify-center overflow-hidden rounded-full"
         style={{ width: size, height: size }}
       >
-        {/* Drawn tiny and scaled up, so even the outline is only a soft blob. */}
+        {/* A heavy blur over the full-size artwork. expo-image halves blurRadius on iOS and caps it at 25 on Android, where outlines stay sharper. */}
         <Image
           source={src}
           cachePolicy="disk"
           contentFit="contain"
-          blurRadius={1}
-          style={{
-            width: SCREENSHOT_DRAW_SIZE,
-            height: SCREENSHOT_DRAW_SIZE,
-            transform: [{ scale: size / SCREENSHOT_DRAW_SIZE }],
-          }}
+          blurRadius={SCREENSHOT_BLUR_RADIUS}
+          style={{ width: size, height: size }}
         />
       </View>
     );
@@ -78,5 +74,9 @@ function LoadingImage({ src, name, size }: PokemonImageProps): React.JSX.Element
   );
 }
 
-/** The size, in points, screenshot mode draws artwork at before scaling it up to fit. */
-const SCREENSHOT_DRAW_SIZE = 8;
+/**
+ * How strongly screenshot mode blurs artwork. Chosen from a prototype of three
+ * treatments (branch prototype/screenshot-artwork, #15); if a store rejects the
+ * screenshots, its Type-coloured circles are the fallback.
+ */
+const SCREENSHOT_BLUR_RADIUS = 160;

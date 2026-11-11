@@ -123,7 +123,7 @@ The script tags the release `android-v<version>-build.<n>` at the build's commit
 
 ### Store screenshots
 
-Store screenshots must not show recognisable Pokémon artwork: App Store review rejected the earlier app's screenshots for it. Screenshot mode draws each piece of artwork at 8 points and scales it up inside a circle, so only a soft orb of its colours shows. Start Metro with it, in a development build:
+Store screenshots must not show recognisable Pokémon artwork: App Store review rejected the earlier app's screenshots for it. Screenshot mode blurs each piece of artwork heavily (`blurRadius` 160) inside a circle. On Android the blur is capped and outlines stay sharper, so check Android screenshots for recognisable shapes. If a store rejects the screenshots, switch to the Type-coloured circles on branch `prototype/screenshot-artwork`. Start Metro with it, in a development build:
 
 ```sh
 EXPO_PUBLIC_SCREENSHOT_MODE=1 bun run dev:mobile -- --clear   # --clear, or Metro reuses bundles built without it
