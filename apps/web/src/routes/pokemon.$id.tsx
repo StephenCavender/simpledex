@@ -1,6 +1,6 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
 import { MAX_POKEDEX_NUMBER } from "@simpledex/backend/convex/generations";
-import { formatPokedexNumber, formatSlug } from "@simpledex/pokedex";
+import { formatPokedexNumber, formatSlug, formatStatName } from "@simpledex/pokedex";
 import { createFileRoute, Link, useCanGoBack, useRouter } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { Evolutions } from "@/components/evolutions";
@@ -165,7 +165,7 @@ function PokemonDetail() {
               {pokemon.stats.map((stat) => (
                 <div key={stat.name} className="flex items-center gap-2">
                   <span className="w-24 text-xs capitalize text-muted-foreground">
-                    {formatSlug(stat.name)}
+                    {formatStatName(stat.name)}
                   </span>
                   <div className="flex-1 rounded-full bg-muted p-0.5">
                     <div

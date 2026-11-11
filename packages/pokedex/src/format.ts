@@ -7,3 +7,8 @@ export function formatPokedexNumber(id: number): string {
 export function formatSlug(slug: string): string {
   return slug.replace(/-/g, " ");
 }
+
+/** A base stat's name as words; HP is an abbreviation, so it's spelled out in capitals. */
+export function formatStatName(slug: string): string {
+  return slug === "hp" ? "HP" : formatSlug(slug);
+}

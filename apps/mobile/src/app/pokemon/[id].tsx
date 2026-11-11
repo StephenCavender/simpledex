@@ -1,5 +1,5 @@
 import { api } from "@simpledex/backend/convex/_generated/api";
-import { formatPokedexNumber, formatSlug } from "@simpledex/pokedex";
+import { formatPokedexNumber, formatSlug, formatStatName } from "@simpledex/pokedex";
 import type { FunctionReturnType } from "convex/server";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
@@ -75,8 +75,12 @@ export default function PokemonScreen(): React.JSX.Element {
       <View className="flex-row flex-wrap gap-3">
         <Fact label="Height">{`${pokemon.height} m`}</Fact>
         <Fact label="Weight">{`${pokemon.weight} kg`}</Fact>
-        <Fact label="Habitat">{speciesFact(species, "habitat")}</Fact>
-        <Fact label="Color">{speciesFact(species, "color")}</Fact>
+        <Fact label="Habitat" capitalize>
+          {speciesFact(species, "habitat")}
+        </Fact>
+        <Fact label="Color" capitalize>
+          {speciesFact(species, "color")}
+        </Fact>
       </View>
 
       {pokemon.abilities.length > 0 && (
@@ -102,7 +106,7 @@ export default function PokemonScreen(): React.JSX.Element {
         <Section title="Base Stats">
           <View className="gap-2">
             {pokemon.stats.map((stat) => (
-              <Stat key={stat.name} name={formatSlug(stat.name)} value={stat.value} />
+              <Stat key={stat.name} name={formatStatName(stat.name)} value={stat.value} />
             ))}
           </View>
         </Section>
@@ -166,12 +170,22 @@ function Section({
   );
 }
 
-/** Two to a row, like the web's grid on a phone. */
-function Fact({ label, children }: { label: string; children: string }): React.JSX.Element {
+/** Two to a row, like the web's grid on a phone. Only word values are capitalised, so units stay as written (`0.7 m`). */
+function Fact({
+  label,
+  capitalize = false,
+  children,
+}: {
+  label: string;
+  capitalize?: boolean;
+  children: string;
+}): React.JSX.Element {
   return (
     <View className="min-w-[45%] flex-1 items-center rounded-lg bg-muted p-4">
       <Text className="mb-1 text-xs text-muted-foreground">{label}</Text>
-      <Text className="text-lg font-semibold capitalize text-foreground">{children}</Text>
+      <Text className={`text-lg font-semibold text-foreground ${capitalize ? "capitalize" : ""}`}>
+        {children}
+      </Text>
     </View>
   );
 }

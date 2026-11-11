@@ -212,7 +212,7 @@ describe("PokemonScreen", () => {
   it("shows each base stat with its value", async () => {
     await renderApp("/pokemon/133");
 
-    expect(screen.getByLabelText("hp")).toHaveAccessibilityValue({ text: "55" });
+    expect(screen.getByLabelText("HP")).toHaveAccessibilityValue({ text: "55" });
     expect(screen.getByLabelText("special attack")).toHaveAccessibilityValue({ text: "65" });
   });
 
